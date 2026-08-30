@@ -1,0 +1,12 @@
+{
+  "name": "@dre/ai",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.97.1",
+    "undici": "^7.27.0"
+  }
+}

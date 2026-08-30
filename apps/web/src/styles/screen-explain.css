@@ -1,0 +1,511 @@
+/*
+ * screen-explain.css — Painel lateral "Explica pra mim" (F3-002)
+ * Componente: ExplainPanel.tsx
+ * Usado em: qualquer tela que tenha KpiCard com metricKey
+ * Nao toca em global.css. Usa apenas tokens de tokens.css.
+ *
+ * Animacoes (wireframe §2.5):
+ *   Abertura: translateX(100%) → translateX(0) em 350ms --mkv-ease-enter
+ *   Fechamento: translateX(0) → translateX(100%) em 200ms --mkv-ease-exit
+ *   Overlay: opacity 0 → 1 em 150ms
+ */
+
+/* ===================================================================
+   OVERLAY
+   =================================================================== */
+
+.explain-panel-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(28, 27, 25, 0.20);
+  z-index: 200;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--mkv-dur-short) var(--mkv-ease-standard);
+}
+
+.explain-panel-overlay--visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ===================================================================
+   PAINEL
+   =================================================================== */
+
+.explain-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 400px;
+  max-width: 100vw;
+  background: var(--md-surface-bright);
+  box-shadow: var(--md-elev-modal);
+  z-index: 201;
+  display: flex;
+  flex-direction: column;
+  transform: translateX(100%);
+  /* Sem transition por default — controlado pelas classes abaixo */
+}
+
+.explain-panel--open {
+  transform: translateX(0);
+  transition: transform var(--mkv-dur-slow) var(--mkv-ease-enter);
+}
+
+.explain-panel--closing {
+  transform: translateX(100%);
+  transition: transform 200ms var(--mkv-ease-exit);
+}
+
+/* ===================================================================
+   HEADER DO PAINEL
+   =================================================================== */
+
+.explain-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--mkv-space-5) var(--mkv-space-6);
+  flex-shrink: 0;
+}
+
+.explain-panel-heading {
+  font-family: var(--mkv-font-display);
+  font-size: var(--mkv-text-sm);
+  font-weight: 700;
+  color: var(--md-on-surface-variant);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin: 0;
+}
+
+.explain-panel-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: transparent;
+  color: var(--md-on-surface-variant);
+  border-radius: var(--md-shape-full);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background var(--mkv-dur-short) var(--mkv-ease-standard),
+              color var(--mkv-dur-short) var(--mkv-ease-standard);
+}
+
+.explain-panel-close:hover {
+  background: var(--md-state-hover-surface);
+  color: var(--md-on-surface);
+}
+
+.explain-panel-close:focus-visible {
+  outline: 2.5px solid var(--md-primary);
+  outline-offset: 2px;
+}
+
+/* ===================================================================
+   DIVISOR
+   =================================================================== */
+
+.explain-panel-divider {
+  border: none;
+  border-top: 1px solid var(--md-outline-variant);
+  margin: 0;
+}
+
+/* ===================================================================
+   CORPO DO PAINEL — scroll
+   =================================================================== */
+
+.explain-panel-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--mkv-space-5) var(--mkv-space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--mkv-space-5);
+}
+
+/* ===================================================================
+   ESTADO: loading (skeleton)
+   =================================================================== */
+
+.explain-panel-loading {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mkv-space-3);
+  padding-top: var(--mkv-space-2);
+}
+
+/* ===================================================================
+   ESTADO: ready — conteudo
+   =================================================================== */
+
+.explain-panel-ready {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mkv-space-5);
+}
+
+/* Cabecalho da metrica: nome + chip [kb:] */
+.explain-panel-metric-header {
+  display: flex;
+  align-items: center;
+  gap: var(--mkv-space-2);
+  flex-wrap: wrap;
+}
+
+.explain-panel-metric-name {
+  font-family: var(--mkv-font-display);
+  font-size: var(--mkv-text-xl);
+  font-weight: 700;
+  color: var(--md-on-surface);
+  margin: 0;
+  line-height: 1.2;
+}
+
+/* Definicao */
+.explain-panel-definition {
+  font-size: var(--mkv-text-base);
+  color: var(--md-on-surface);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Formula */
+.explain-panel-formula-block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mkv-space-2);
+}
+
+.explain-panel-formula-label {
+  font-size: var(--mkv-text-sm);
+  font-weight: 600;
+  color: var(--md-on-surface-variant);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.explain-panel-formula {
+  font-family: var(--mkv-font-mono);
+  font-size: var(--mkv-text-sm);
+  background: var(--md-surface-container);
+  color: var(--md-on-surface);
+  border-radius: var(--md-shape-sm);
+  padding: var(--mkv-space-2) var(--mkv-space-3);
+  display: block;
+}
+
+/* Benchmark */
+.explain-panel-benchmark {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mkv-space-2);
+}
+
+.explain-panel-benchmark-label {
+  font-size: var(--mkv-text-sm);
+  font-weight: 600;
+  color: var(--md-on-surface-variant);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.explain-panel-benchmark-text {
+  font-size: var(--mkv-text-sm);
+  color: var(--md-on-surface-variant);
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Valor atual */
+.explain-panel-current-value {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mkv-space-2);
+}
+
+.explain-panel-current-label {
+  font-size: var(--mkv-text-sm);
+  font-weight: 700;
+  color: var(--md-on-surface-variant);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.explain-panel-current-row {
+  display: flex;
+  align-items: center;
+  gap: var(--mkv-space-2);
+  flex-wrap: wrap;
+}
+
+.explain-panel-current-number {
+  font-family: var(--mkv-font-display);
+  font-size: var(--mkv-text-2xl);
+  font-weight: 700;
+  color: var(--md-on-surface);
+}
+
+.explain-panel-ref-note {
+  font-size: var(--mkv-text-xs);
+  color: var(--md-on-surface-variant);
+}
+
+/* Chip [ref:] — azul/secundario (distinto do [kb:] roxo) */
+.ref-chip {
+  display: inline-flex;
+  align-items: center;
+  background: var(--md-secondary-container);
+  color: var(--md-on-secondary-container);
+  border-radius: var(--md-shape-xs);
+  font-size: var(--mkv-text-xs);
+  font-family: var(--mkv-font-primary);
+  padding: 2px var(--mkv-space-2);
+  font-weight: 500;
+  cursor: default;
+  vertical-align: middle;
+}
+
+/* ===================================================================
+   ESTADO: no-value — "sem dados"
+   =================================================================== */
+
+.explain-panel-no-value {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--mkv-space-3);
+}
+
+.explain-panel-no-value-icon {
+  font-size: 32px;
+  color: var(--md-on-surface-variant);
+  opacity: 0.4;
+}
+
+.explain-panel-no-value-text {
+  font-size: var(--mkv-text-sm);
+  color: var(--md-on-surface-variant);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.explain-panel-cta-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--mkv-space-1);
+  color: var(--md-primary);
+  font-size: var(--mkv-text-sm);
+  font-weight: 600;
+  text-decoration: none;
+  transition: opacity var(--mkv-dur-short) var(--mkv-ease-standard);
+}
+
+.explain-panel-cta-link:hover {
+  opacity: 0.78;
+}
+
+.explain-panel-cta-link:focus-visible {
+  outline: 2.5px solid var(--md-primary);
+  outline-offset: 2px;
+  border-radius: var(--md-shape-xs);
+}
+
+/* ===================================================================
+   ESTADO: sem-definicao
+   =================================================================== */
+
+.explain-panel-sem-definicao {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--mkv-space-4);
+  padding-top: var(--mkv-space-2);
+}
+
+.explain-panel-state-icon {
+  font-size: 40px;
+  color: var(--md-on-surface-variant);
+  opacity: 0.4;
+}
+
+.explain-panel-sem-definicao-text {
+  font-size: var(--mkv-text-base);
+  color: var(--md-on-surface-variant);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ===================================================================
+   ESTADO: error
+   =================================================================== */
+
+.explain-panel-error {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--mkv-space-4);
+  padding-top: var(--mkv-space-2);
+}
+
+.explain-panel-error-text {
+  font-size: var(--mkv-text-base);
+  color: var(--md-on-surface-variant);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ===================================================================
+   CTAs FINAIS (comuns a ready-with-value e ready-no-value)
+   =================================================================== */
+
+.explain-panel-ctas {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mkv-space-3);
+}
+
+.explain-panel-ctas-label {
+  font-size: var(--mkv-text-sm);
+  font-weight: 700;
+  color: var(--md-on-surface-variant);
+  margin: 0;
+}
+
+/* Botao/link CTA primario */
+.explain-panel-cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--mkv-space-2);
+  padding: var(--mkv-space-3) var(--mkv-space-5);
+  background: var(--md-primary);
+  color: var(--md-on-primary);
+  border: none;
+  border-radius: var(--md-shape-sm);
+  font-size: var(--mkv-text-sm);
+  font-weight: 600;
+  font-family: var(--mkv-font-primary);
+  cursor: pointer;
+  text-decoration: none;
+  width: 100%;
+  justify-content: center;
+  transition: opacity var(--mkv-dur-short) var(--mkv-ease-standard);
+}
+
+.explain-panel-cta-btn:hover {
+  opacity: 0.88;
+}
+
+.explain-panel-cta-btn:focus-visible {
+  outline: 2.5px solid var(--md-primary);
+  outline-offset: 2px;
+}
+
+/* Link CTA secundario */
+.explain-panel-cta-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--mkv-space-2);
+  padding: var(--mkv-space-3) var(--mkv-space-5);
+  background: transparent;
+  color: var(--md-primary);
+  border: 1px solid var(--md-primary);
+  border-radius: var(--md-shape-sm);
+  font-size: var(--mkv-text-sm);
+  font-weight: 600;
+  font-family: var(--mkv-font-primary);
+  text-decoration: none;
+  width: 100%;
+  justify-content: center;
+  transition: background var(--mkv-dur-short) var(--mkv-ease-standard);
+}
+
+.explain-panel-cta-secondary:hover {
+  background: var(--md-primary-container);
+}
+
+.explain-panel-cta-secondary:focus-visible {
+  outline: 2.5px solid var(--md-primary);
+  outline-offset: 2px;
+}
+
+/* ===================================================================
+   ICONE [?] NO KPI CARD
+   Spec: wireframe §2.5
+   - Idle: opacity 0.4, icone 'help' 16px, cor --md-on-surface-variant
+   - Hover no CARD (nao so icone): opacity 1 em 150ms
+   - Focus no proprio icone: opacity 1 + outline
+   - Ativo (painel aberto): opacity 1 + cor --md-primary
+   =================================================================== */
+
+.kpi-card-title-row {
+  display: flex;
+  align-items: center;
+  gap: var(--mkv-space-2);
+  justify-content: space-between;
+}
+
+.kpi-card-title-row h3 {
+  margin: 0;
+  flex: 1;
+}
+
+.kpi-card-help-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: transparent;
+  color: var(--md-on-surface-variant);
+  border-radius: var(--md-shape-full);
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+  opacity: 0.4;
+  transition: opacity var(--mkv-dur-short) var(--mkv-ease-standard),
+              color var(--mkv-dur-short) var(--mkv-ease-standard),
+              background var(--mkv-dur-short) var(--mkv-ease-standard);
+}
+
+/* Hover no CARD inteiro — opacity 1 para o [?] */
+.kpi-card:hover .kpi-card-help-btn,
+.kpi-card-clickable:hover .kpi-card-help-btn {
+  opacity: 1;
+}
+
+/* Focus no proprio icone */
+.kpi-card-help-btn:focus-visible {
+  opacity: 1;
+  outline: 2.5px solid var(--md-primary);
+  outline-offset: 2px;
+}
+
+/* Estado ativo: painel aberto para este card */
+.kpi-card-help-btn[data-active="true"] {
+  opacity: 1;
+  color: var(--md-primary);
+  background: var(--md-primary-container);
+}
+
+/* ===================================================================
+   RESPONSIVIDADE MOBILE — painel 100% de largura
+   =================================================================== */
+
+@media (max-width: 480px) {
+  .explain-panel {
+    width: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 0;
+  }
+}

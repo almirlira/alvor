@@ -1,0 +1,9 @@
+node_modules/
+dist/
+dist-types/
+.env
+data/*.json
+samples/*
+!samples/.gitkeep
+!samples/dre_exemplo_12m.xlsx
+.DS_Store

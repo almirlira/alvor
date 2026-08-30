@@ -1,0 +1,217 @@
+/*
+ * tokens.css — Design tokens CROSS M3 (v3.0)
+ * Fonte da verdade: docs/execucao-projetos/_local/design/sistema-visual/design-tokens.new.md
+ * Gerado para: src/apps/web (F3 — Onda 1)
+ * Nao editar manualmente — sincronizar com design-tokens.new.md
+ */
+
+:root {
+  /* ===================================================================
+     1. PALETA DE MARCA CROSS (identidade)
+     =================================================================== */
+  --cross-purple: #3F2570;
+  --cross-blue:   #0079DC;
+  --cross-pink:   #F9005C;
+  --cross-cream:  #F3F2EE;
+
+  /* ===================================================================
+     2. SISTEMA DE COR M3 CROSS (tema claro)
+     =================================================================== */
+
+  /* 2.1 Primary — Roxo profundo CROSS */
+  /* Contraste branco/roxo: 12.1:1 — AAA */
+  --md-primary:                  #3F2570;
+  --md-on-primary:               #FFFFFF;
+  --md-primary-container:        #EADDFF;
+  --md-on-primary-container:     #21005D;
+
+  /* 2.2 Secondary — Azul CROSS */
+  /* #0079DC: 3.9:1 — AA-lg; container para texto pequeno */
+  --md-secondary:                #0079DC;
+  --md-on-secondary:             #FFFFFF;
+  --md-secondary-container:      #D4E7FF;
+  --md-on-secondary-container:   #00344F;
+
+  /* 2.2.1 Link — azul de texto clicavel (contraste 5.0:1 sobre branco — AA) */
+  /* Uso: links inline, CTAs de texto, referencias citadas no chat e relatorio */
+  --cross-link:                  #0061B0;
+
+  /* 2.3 Tertiary — Rosa CROSS (acento de energia) */
+  /* #F9005C: 3.5:1 — AA-lg; container para texto pequeno */
+  --md-tertiary:                 #F9005C;
+  --md-on-tertiary:              #FFFFFF;
+  --md-tertiary-container:       #FFD9E1;
+  --md-on-tertiary-container:    #5C0026;
+
+  /* 2.4 Error — Vermelho M3 (distinto do rosa da marca) */
+  /* Contraste branco/vermelho: 5.2:1 — AA */
+  --md-error:                    #BA1A1A;
+  --md-on-error:                 #FFFFFF;
+  --md-error-container:          #FFDAD6;
+  --md-on-error-container:       #410002;
+
+  /* 2.5 Surface — familia creme quente CROSS */
+  /* #1C1B19 sobre #FBFAF7: 17.6:1 — AAA */
+  --md-surface:                        #FBFAF7;
+  --md-surface-dim:                    #F3F2EE;
+  --md-surface-bright:                 #FFFFFF;
+  --md-surface-container-lowest:       #FFFFFF;
+  --md-surface-container-low:          #F5F3EF;
+  --md-surface-container:              #EFEDE8;
+  --md-surface-container-high:         #E9E7E1;
+  --md-surface-container-highest:      #E3E1DB;
+  --md-on-surface:                     #1C1B19;
+  --md-on-surface-variant:             #4A4640;
+  --md-outline:                        #7A7570;
+  --md-outline-variant:                #D8D4CC;
+
+  /* 2.6 Semanticas */
+  --sem-success:                 #2E7D52;
+  --sem-success-container:       #C8F5E6;
+  --sem-warning:                 #B45309;
+  --sem-warning-container:       #FFFBEB;
+  --sem-info:                    #1D4ED8;
+  --sem-info-container:          #EFF6FF;
+
+  /* 2.7 Platform colors */
+  --cross-platform-instagram:    #E1306C;
+  --cross-platform-meta-ads:     #0866FF;
+  --cross-platform-google-drive: var(--md-primary);
+  --cross-platform-google-ads:   #4285F4;
+
+  /* 2.8 Superficie de fundo do shell */
+  /* [OWNER — aprovado 2026-06-04: gradiente creme quente] */
+  --cross-surface-shell:         #FDFCFA;
+  --cross-bg-gradient-page:      linear-gradient(160deg, #FDFCFA 0%, var(--md-surface-dim) 55%, #FDFCFA 100%);
+
+  /* ===================================================================
+     3. GRADIENTES NOMEADOS
+     =================================================================== */
+
+  /* 3.1 Gradiente-assinatura CROSS (tricolor) */
+  --cross-gradient-brand:        linear-gradient(90deg,  #3F2570 0%, #0079DC 50%, #F9005C 100%);
+  --cross-gradient-brand-135:    linear-gradient(135deg, #3F2570 0%, #0079DC 55%, #F9005C 100%);
+  --cross-gradient-brand-180:    linear-gradient(180deg, #3F2570 0%, #0079DC 55%, #F9005C 100%);
+
+  /* 3.2 Gradiente de progresso de onboarding */
+  --cross-gradient-progress:     linear-gradient(90deg, #3F2570 0%, #0079DC 100%);
+
+  /* 3.3 Glow soft */
+  --mkv-gradient-glow-soft:      radial-gradient(ellipse at center, rgba(63,37,112,0.12) 0%, rgba(63,37,112,0.00) 65%);
+
+  /* ===================================================================
+     4. TIPOGRAFIA
+     =================================================================== */
+
+  /* 4.1 Familias */
+  --mkv-font-primary:  'Roboto Flex', system-ui, sans-serif;
+  --mkv-font-display:  'Space Grotesk', 'Roboto Flex', sans-serif;
+  --mkv-font-mono:     'JetBrains Mono', ui-monospace, 'Courier New', monospace;
+
+  /* 4.2 Escala tipografica M3 CROSS */
+  --mkv-text-xs:   11px;  /* metadata, timestamps, label "via Instagram" */
+  --mkv-text-sm:   13px;  /* label de campo, badge, descricao muted, nav item */
+  --mkv-text-base: 15px;  /* texto de corpo, mensagem de chat */
+  --mkv-text-md:   17px;  /* subtitulo de secao, label de card KPI */
+  --mkv-text-lg:   20px;  /* titulo de pagina H2, titulo de modal */
+  --mkv-text-xl:   24px;  /* heading H1, valor de destaque M3 */
+  --mkv-text-2xl:  28px;  /* valor principal de KPI card (Space Grotesk) */
+  --mkv-text-3xl:  36px;  /* valor de KPI hero / faturamento (Space Grotesk) */
+
+  /* ===================================================================
+     5. FORMAS E RAIOS DE BORDA (escala M3 compacta)
+     =================================================================== */
+  --md-shape-xs:   4px;    /* badges, tags, chips, input de codigo */
+  --md-shape-sm:   8px;    /* inputs, selects, botoes, segmented button */
+  --md-shape-md:   12px;   /* cards comuns de KPI */
+  --md-shape-lg:   16px;   /* card-heroi, modal/dialog, paineis grandes */
+  --md-shape-xl:   16px;   /* alias -> lg (escala compacta) */
+  --md-shape-full: 9999px; /* avatar, status dot, ponto circular */
+
+  /* ===================================================================
+     6. ELEVACAO (sombras M3)
+     =================================================================== */
+  --md-elev-0:     none;
+  --md-elev-1:     0 1px 2px rgba(0,0,0,.10), 0 1px 3px 1px rgba(0,0,0,.07);
+  --md-elev-2:     0 1px 2px rgba(0,0,0,.10), 0 2px 6px 2px rgba(0,0,0,.07);
+  --md-elev-3:     0 4px 8px 3px rgba(0,0,0,.07), 0 1px 3px rgba(0,0,0,.10);
+  --md-elev-modal: 0 6px 10px 4px rgba(0,0,0,.09), 0 2px 3px rgba(0,0,0,.12);
+
+  /* Sombras soft glass complementares (tint roxo CROSS) */
+  --mkv-shadow-float:       0 2px 8px 0 rgba(63,37,112,0.06), 0 1px 3px 0 rgba(15,23,42,0.04);
+  --mkv-shadow-float-hover: 0 8px 24px 0 rgba(63,37,112,0.10), 0 2px 8px 0 rgba(15,23,42,0.06);
+  --mkv-shadow-soft-inner:  inset 0 2px 4px 0 rgba(63,37,112,0.05);
+
+  /* ===================================================================
+     7. GLASSMORPHISM (uso limitado — sidebar/header no layout sidebar)
+     =================================================================== */
+  --mkv-glass-bg:         rgba(255,255,255,0.72);
+  --mkv-glass-bg-strong:  rgba(255,255,255,0.88);
+  --mkv-glass-border:     rgba(255,255,255,0.40);
+  --mkv-glass-blur:       blur(16px);
+  --mkv-glass-blur-modal: blur(24px);
+
+  /* ===================================================================
+     8. ESPACAMENTO
+     =================================================================== */
+  --mkv-space-0:  0px;
+  --mkv-space-1:  4px;
+  --mkv-space-2:  8px;
+  --mkv-space-3:  12px;
+  --mkv-space-4:  16px;
+  --mkv-space-5:  20px;
+  --mkv-space-6:  24px;
+  --mkv-space-8:  32px;
+  --mkv-space-10: 40px;
+  --mkv-space-12: 48px;
+  --mkv-space-16: 64px;
+  --mkv-space-20: 80px;
+  --mkv-space-24: 96px;
+
+  /* Layout */
+  --cross-layout-rail:        80px;
+  --cross-layout-header:      64px;
+  --cross-layout-header-welcome: 108px;
+  --cross-layout-content-max: 1280px;
+  --cross-layout-card-gap:    20px;
+  --cross-layout-modal-sm:    440px;
+  --cross-layout-modal-md:    640px;
+
+  /* ===================================================================
+     9. MOTION
+     =================================================================== */
+
+  /* 9.1 Duracoes */
+  --mkv-dur-instant:    80ms;
+  --mkv-dur-short:      150ms;
+  --mkv-dur-normal:     250ms;
+  --mkv-dur-medium:     300ms;
+  --mkv-dur-slow:       350ms;
+  --mkv-dur-deliberate: 500ms;
+
+  /* 9.2 Easings */
+  --mkv-ease-standard: cubic-bezier(0.2, 0.0, 0.0, 1.0);
+  --mkv-ease-enter:    cubic-bezier(0.05, 0.7, 0.1, 1.0);
+  --mkv-ease-exit:     cubic-bezier(0.3, 0.0, 0.8, 0.15);
+  --mkv-ease-spring:   cubic-bezier(0.34, 1.45, 0.5, 1.0);
+  --mkv-ease-glass:    cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+  /* 9.4 State layers M3 */
+  --md-state-hover-primary: rgba(63,37,112,0.08);
+  --md-state-press-primary: rgba(63,37,112,0.12);
+  --md-state-hover-surface: rgba(28,27,25,0.08);
+  --md-state-press-surface: rgba(28,27,25,0.12);
+}
+
+/* ===================================================================
+   9.5 prefers-reduced-motion (obrigatorio F3)
+   =================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    transition-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

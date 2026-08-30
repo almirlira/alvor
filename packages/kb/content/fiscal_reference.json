@@ -1,0 +1,45 @@
+{
+  "_nota": "Referencias fiscais VERIFICADAS em fonte oficial durante a construcao (2026-08-30). Entram no prompt como fonte citavel [ref:fiscal#id]. So entra aqui o que foi lido em pagina oficial; nada de memoria.",
+  "items": [
+    {
+      "id": "cbs_teste_2026",
+      "label": "Aliquota-teste da CBS em 2026 (reforma tributaria)",
+      "value": 0.9,
+      "unit": "%",
+      "description": "Em 2026, ano de teste da reforma tributaria do consumo, a CBS e destacada nas notas com aliquota-teste de 0,9%; o montante e compensado com o PIS/COFINS devido no mesmo periodo. Impacto pratico: o contador precisa preencher os campos de CBS/IBS nas notas desde 2026, mesmo sem custo adicional.",
+      "source_url": "https://www.gov.br/receitafederal/pt-br/acesso-a-informacao/acoes-e-programas/programas-e-atividades/reforma-tributaria-do-consumo/entenda",
+      "vigencia": "2026",
+      "verified_at": "2026-08-30"
+    },
+    {
+      "id": "ibs_teste_2026",
+      "label": "Aliquota-teste do IBS em 2026 (reforma tributaria)",
+      "value": 0.1,
+      "unit": "%",
+      "description": "Em 2026 o IBS e destacado nas notas com aliquota-teste de 0,1%, compensada com PIS/COFINS no mesmo periodo (ano de teste).",
+      "source_url": "https://www.gov.br/receitafederal/pt-br/acesso-a-informacao/acoes-e-programas/programas-e-atividades/reforma-tributaria-do-consumo/entenda",
+      "vigencia": "2026",
+      "verified_at": "2026-08-30"
+    },
+    {
+      "id": "cbs_inicio_2027",
+      "label": "Ano em que a CBS passa a ser cobrada e PIS/COFINS sao extintos",
+      "value": 2027,
+      "unit": "ano",
+      "description": "A partir de 2027 a CBS passa a ser cobrada (com aliquota reduzida em 0,1 ponto percentual em 2027-2028), o PIS e a COFINS sao extintos, o IPI e reduzido a zero (exceto Zona Franca de Manaus) e o Imposto Seletivo entra em vigor. Impacto pratico: a linha de deducoes/impostos sobre vendas da DRE muda de composicao em 2027.",
+      "source_url": "https://www.gov.br/receitafederal/pt-br/acesso-a-informacao/acoes-e-programas/programas-e-atividades/reforma-tributaria-do-consumo/entenda",
+      "vigencia": "2027",
+      "verified_at": "2026-08-30"
+    },
+    {
+      "id": "ibs_transicao_fim_2033",
+      "label": "Ano da vigencia integral do IBS (fim do ICMS e ISS)",
+      "value": 2033,
+      "unit": "ano",
+      "description": "De 2029 a 2032 o IBS substitui gradualmente ICMS e ISS (10%, 20%, 30% e 40% ao ano); em 2033 o novo modelo vigora integralmente e ICMS/ISS sao extintos.",
+      "source_url": "https://www.gov.br/receitafederal/pt-br/acesso-a-informacao/acoes-e-programas/programas-e-atividades/reforma-tributaria-do-consumo/entenda",
+      "vigencia": "2029-2033",
+      "verified_at": "2026-08-30"
+    }
+  ]
+}

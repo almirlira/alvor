@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AIVOR — Swiss Bento & Standardized Liquid Shader Semáforo</title>
+
+  <!-- Google Fonts: Space Grotesk, Plus Jakarta Sans, JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400..800;1,400..800&family=Space+Grotesk:wght@500;700;800&family=JetBrains+Mono:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    /* ==========================================================================
+       AIVOR SWISS BENTO TOKENS & STANDARDIZED LIQUID SHADER CONTAINER
+       ========================================================================== */
+    :root {
+      /* Primary Color Blocks */
+      --block-orange: #FF5500;       /* Vivid AIVOR Coral / Orange */
+      --block-orange-hover: #E04B00;
+      --block-cream: #F4F1EA;        /* Swiss Warm Off-White / Milk */
+      --block-cream-text: #161616;
+      --block-yellow: #F5C211;       /* Canary Yellow */
+      --block-yellow-text: #161616;
+      --block-mint: #A3B8AD;         /* Mint Slate / Pale Sage */
+      --block-mint-text: #161616;
+      --block-emerald: #034D35;      /* Dark Forest Green */
+
+      /* Neutral Dark Canvas */
+      --bg-canvas: #0D0D0E;
+      --bg-card-dark: #161618;
+      --bg-card-elevated: #222225;
+      --border-dark: #2B2B2E;
+      --border-light: #E2DFD7;
+
+      /* Typography & Text */
+      --text-primary-dark: #FAFAFA;
+      --text-secondary-dark: #A1A1AA;
+      --text-muted-dark: #71717A;
+
+      /* Semáforo Alarm Colors */
+      --alarm-p1-red: #FF3B30;
+      --alarm-p2-yellow: #F5C211;
+      --alarm-p3-green: #10B981;
+
+      /* Radius & Shadows */
+      --radius-bento: 28px;
+      --radius-pill: 9999px;
+      --radius-sm: 12px;
+
+      /* Fonts */
+      --font-display: 'Space Grotesk', 'Plus Jakarta Sans', sans-serif;
+      --font-sans: 'Plus Jakarta Sans', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    html.light {
+      --bg-canvas: #EBE8E1;
+      --bg-card-dark: #FFFFFF;
+      --bg-card-elevated: #F8F6F0;
+      --border-dark: #DCD8CD;
+      --text-primary-dark: #161616;
+      --text-secondary-dark: #555555;
+      --text-muted-dark: #777777;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-sans);
+      background-color: var(--bg-canvas);
+      color: var(--text-primary-dark);
+      line-height: 1.4;
+      -webkit-font-smoothing: antialiased;
+      padding: 32px 24px;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .app-viewport {
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    /* HEADER & BRAND BAR */
+    .app-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 36px;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .brand-svg {
+      height: 38px;
+      width: auto;
+    }
+
+    .header-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: var(--radius-pill);
+      background: var(--block-orange);
+      color: #FFFFFF;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .theme-toggle-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border-radius: var(--radius-pill);
+      background: var(--bg-card-dark);
+      border: 1px solid var(--border-dark);
+      color: var(--text-primary-dark);
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .theme-toggle-btn:hover {
+      border-color: var(--block-orange);
+      transform: translateY(-1px);
+    }
+
+    /* ==========================================================================
+       PADRONIZAÇÃO UNIFORME DE TAMANHO DOS CONTAINERS DE SEMÁFORO (WIDTH 170PX)
+       ========================================================================== */
+
+    .liquid-badge-container {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 175px; /* Tamanho 100% Padronizado para Todas as Criticidades */
+      padding: 8px 12px 10px 12px;
+      background: rgba(14, 14, 16, 0.85);
+      backdrop-filter: blur(12px) saturate(180%);
+      -webkit-backdrop-filter: blur(12px) saturate(180%);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 12px;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+      flex-shrink: 0;
+      transition: all 0.2s ease;
+    }
+    .liquid-badge-container:hover {
+      border-color: rgba(255, 255, 255, 0.35);
+      transform: translateY(-1px);
+    }
+
+    .liquid-badge-text {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: #FFFFFF !important;
+      line-height: 1.2;
+      text-align: center;
+      width: 100%;
+    }
+
+    /* Continuous Animated Liquid Shader Line with 100% width across the standardized container */
+    .liquid-shader-line {
+      height: 4px;
+      width: 100%;
+      border-radius: 4px;
+      margin-top: 5px;
+      background-size: 250% 250%;
+      animation: liquidShaderMotion 3.5s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
+    }
+
+    /* P1 CRÍTICO - High Contrast Alarm Glow */
+    .shader-p1 {
+      background: linear-gradient(90deg, #FF3B30 0%, #FF7E46 35%, #FF2D55 70%, #FF3B30 100%);
+      box-shadow: 0 0 12px rgba(255, 59, 48, 0.9);
+    }
+
+    /* P2 ATENÇÃO - High Contrast Gold Glow */
+    .shader-p2 {
+      background: linear-gradient(90deg, #F5C211 0%, #FFD60A 35%, #FF9500 70%, #F5C211 100%);
+      box-shadow: 0 0 12px rgba(245, 194, 17, 0.9);
+    }
+
+    /* P3 OPORTUNIDADE - High Contrast Emerald Glow */
+    .shader-p3 {
+      background: linear-gradient(90deg, #10B981 0%, #34D399 35%, #00E676 70%, #10B981 100%);
+      box-shadow: 0 0 12px rgba(16, 185, 129, 0.9);
+    }
+
+    @keyframes liquidShaderMotion {
+      0% {
+        background-position: 0% 50%;
+        filter: hue-rotate(0deg) contrast(1.1);
+      }
+      50% {
+        background-position: 100% 50%;
+        filter: hue-rotate(15deg) contrast(1.3);
+      }
+      100% {
+        background-position: 0% 50%;
+        filter: hue-rotate(0deg) contrast(1.1);
+      }
+    }
+
+    /* BENTO GRID LAYOUT */
+    .bento-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 20px;
+      margin-bottom: 48px;
+    }
+
+    .bento-tile {
+      border-radius: var(--radius-bento);
+      padding: 32px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .bento-tile:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+    }
+
+    .tile-orange {
+      background-color: var(--block-orange);
+      color: #FFFFFF;
+      grid-column: span 7;
+      min-height: 280px;
+    }
+    .tile-cream {
+      background-color: var(--block-cream);
+      color: var(--block-cream-text);
+      grid-column: span 5;
+      min-height: 280px;
+    }
+    .tile-yellow {
+      background-color: var(--block-yellow);
+      color: var(--block-yellow-text);
+      grid-column: span 4;
+      min-height: 240px;
+    }
+    .tile-mint {
+      background-color: var(--block-mint);
+      color: var(--block-mint-text);
+      grid-column: span 8;
+      min-height: 240px;
+    }
+
+    .tile-label {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      opacity: 0.85;
+      margin-bottom: 12px;
+    }
+
+    .tile-number-hero {
+      font-family: var(--font-display);
+      font-size: 64px;
+      font-weight: 800;
+      letter-spacing: -2px;
+      line-height: 0.95;
+      margin-bottom: 8px;
+    }
+
+    .quote-box {
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: 16px;
+    }
+
+    .pill-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 22px;
+      border-radius: var(--radius-pill);
+      font-size: 13px;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.15s ease;
+    }
+
+    .pill-dark { background: #161616; color: #FFFFFF; }
+    .pill-dark:hover { opacity: 0.9; transform: scale(1.02); }
+
+    /* SWISS 4-QUADRANT METRICS GRID */
+    .swiss-grid-box {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border: 1px solid var(--border-dark);
+      border-radius: 20px;
+      overflow: hidden;
+      background: var(--bg-card-dark);
+      margin-bottom: 48px;
+    }
+
+    .swiss-quadrant {
+      padding: 24px;
+      border-right: 1px solid var(--border-dark);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 140px;
+    }
+    .swiss-quadrant:last-child { border-right: none; }
+
+    .quadrant-label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted-dark);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .quadrant-value {
+      font-family: var(--font-display);
+      font-size: 38px;
+      font-weight: 800;
+      letter-spacing: -1px;
+      margin-top: 8px;
+    }
+
+    /* SEMÁFORO DECISION CARDS STACK WITH STANDARDIZED CONTAINER (175PX) */
+    .section-header {
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+
+    .stack-cards-container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 64px;
+    }
+
+    .bento-card-item {
+      border-radius: 24px;
+      padding: 28px 36px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+    .bento-card-item:hover {
+      transform: scale(1.01);
+    }
+
+    .card-item-p1 {
+      background-color: var(--block-orange);
+      color: #FFFFFF;
+    }
+
+    .card-item-p2 {
+      background-color: var(--block-yellow);
+      color: var(--block-yellow-text);
+    }
+
+    .card-item-p3 {
+      background-color: var(--block-cream);
+      color: var(--block-cream-text);
+    }
+
+    .item-main-info {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+
+    .item-title {
+      font-size: 19px;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+      margin-bottom: 2px;
+    }
+
+    .item-impact {
+      font-family: var(--font-mono);
+      font-size: 24px;
+      font-weight: 800;
+    }
+
+    /* TOKEN EXPORTER */
+    .tokens-section {
+      background: var(--bg-card-dark);
+      border: 1px solid var(--border-dark);
+      border-radius: 24px;
+      padding: 32px;
+    }
+
+    .code-box {
+      background: #000000;
+      color: #F4F1EA;
+      padding: 20px;
+      border-radius: 16px;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      line-height: 1.6;
+      overflow-x: auto;
+      border: 1px solid var(--border-dark);
+    }
+
+    @media (max-width: 900px) {
+      .bento-grid { grid-template-columns: 1fr; }
+      .tile-orange, .tile-cream, .tile-yellow, .tile-mint { grid-column: span 1; }
+      .swiss-grid-box { grid-template-columns: repeat(2, 1fr); }
+      .bento-card-item { flex-direction: column; align-items: flex-start; gap: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="app-viewport">
+
+  <!-- TOP HEADER -->
+  <header class="app-header">
+    <div class="brand-group">
+      <!-- SVG LOGO AIVOR -->
+      <svg class="brand-svg" viewBox="0 0 1033 232" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M517.199 228.002L510.272 199.213H466.549L460.699 228.002H415.437L462.393 60.0405L458.698 47.5704H522.28L573.7 228.002H517.199ZM486.409 100.53L472.861 167.807H502.728L486.409 100.53Z" fill="currentColor"/>
+        <path d="M584.391 228.002V53.8824L575.154 48.3402V34.0227L624.572 26.3251H634.579V228.002H584.391Z" fill="currentColor"/>
+        <path d="M689.577 228.002L644.315 97.1428H699.584L709.437 144.406L716.519 185.203L724.37 144.406L735.763 97.1428H777.33L738.072 228.002H689.577Z" fill="currentColor"/>
+        <path d="M852.506 212.761C857.022 212.761 860.46 210.913 862.821 207.218C865.284 203.421 866.516 198.238 866.516 191.669V143.02C866.516 123.007 861.795 113 852.352 113C847.939 113 844.501 114.796 842.037 118.388C839.574 121.98 838.343 127.061 838.343 133.629V183.664C838.343 203.062 843.064 212.761 852.506 212.761ZM851.275 231.235C827.771 231.235 810.58 225.898 799.701 215.224C788.821 204.55 783.382 187.512 783.382 164.112C783.382 140.916 788.873 123.469 799.855 111.768C810.837 99.9653 828.695 94.0638 853.43 94.0638C877.549 94.0638 894.946 99.7087 905.619 110.998C916.396 122.186 921.784 139.172 921.784 161.956C921.784 185.562 916.088 203.01 904.696 214.3C893.406 225.59 875.599 231.235 851.275 231.235Z" fill="currentColor"/>
+        <path d="M992.9 228.002H943.174V128.395L933.937 122.699V105.302L967.037 97.1428H979.507L983.971 133.783C988.179 108.638 1001.68 96.0652 1024.46 96.0652C1027.03 96.0652 1029.69 96.527 1032.47 97.4508L1027.23 152.258C1025.08 150.307 1020.36 149.332 1013.07 149.332C1002.6 149.332 995.877 152.104 992.9 157.646V228.002Z" fill="currentColor"/>
+        <path d="M187.422 112.463L282.399 47.835L315.737 96.8271L213.72 166.245H102.017L0 96.8271L33.3369 47.835L128.163 112.359V0H187.422V112.463Z" fill="#FF5500"/>
+        <rect y="166.245" width="315.585" height="59.2592" fill="#FF5500"/>
+      </svg>
+      <span class="header-badge">STANDARDIZED BADGE CHIP (175PX)</span>
+    </div>
+
+    <button class="theme-toggle-btn" id="themeBtn">
+      <span>Alternar Estilo</span>
+    </button>
+  </header>
+
+  <!-- BENTO GRID SECTION -->
+  <section class="bento-grid">
+    
+    <!-- Hero Orange Bento Tile -->
+    <div class="bento-tile tile-orange">
+      <div>
+        <div class="tile-label">FATURAMENTO MENSAL HOJE</div>
+        <div class="tile-number-hero">R$ 412,5k</div>
+      </div>
+      <div style="display: flex; align-items: center; justify-content: space-between;">
+        <div style="font-size: 15px; font-weight: 600;">Meta mensal de R$ 400k atingida (+3.1%)</div>
+        <a href="#semaphoro" class="pill-btn pill-dark">Ver Diagnóstico →</a>
+      </div>
+    </div>
+
+    <!-- Cream Bento Tile -->
+    <div class="bento-tile tile-cream">
+      <div>
+        <div class="tile-label">MARGEM BRUTA</div>
+        <div class="tile-number-hero" style="font-size: 54px;">22.4%</div>
+      </div>
+      <div style="font-size: 15px; font-weight: 600; color: #666;">
+        Desvio de -5.4% provocado pela alta no custo de carnes.
+      </div>
+    </div>
+
+    <!-- Canary Yellow Action Tile -->
+    <div class="bento-tile tile-yellow">
+      <div>
+        <div class="tile-label">SISTEMA ATIVO</div>
+        <div style="font-size: 24px; font-weight: 800; margin-bottom: 8px;">Upload de DRE ou SPED</div>
+      </div>
+      <button class="pill-btn pill-dark" onclick="alert('Selecione o arquivo DRE .pdf ou .xlsx')">Carregar Arquivo</button>
+    </div>
+
+    <!-- Mint Slate Recommendation Tile -->
+    <div class="bento-tile tile-mint">
+      <div>
+        <div class="tile-label">CARTA DA SEMANA — CONSULTOR IA</div>
+        <div class="quote-box">
+          » Seu faturamento acumulado bateu R$ 3,72M. Se nenhuma ação for tomada até 30/09, o ICMS salta no mês seguinte. Valide com seu contador.
+        </div>
+      </div>
+      <div style="display: flex; align-items: center; justify-content: space-between;">
+        <span style="font-size: 13px; font-weight: 700;">Status: 3 Decisões Priorizadas</span>
+        <button class="pill-btn pill-dark" onclick="alert('Solicitação encaminhada para validação contábil!')">Enviar ao Contador</button>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- SWISS 4-QUADRANT METRICS GRID -->
+  <section>
+    <div class="section-header">
+      <h2 class="section-title">Quadro de Métricas e Performance (Suíço 4-Quadrantes)</h2>
+      <span style="font-family: var(--font-mono); font-size: 12px; opacity: 0.7;">REV. 2026.08</span>
+    </div>
+
+    <div class="swiss-grid-box">
+      <div class="swiss-quadrant">
+        <div class="quadrant-label"><span>RECEITA BRUTA</span><span>👁️</span></div>
+        <div class="quadrant-value">412.5K</div>
+      </div>
+
+      <div class="swiss-quadrant">
+        <div class="quadrant-label"><span>EBITDA AJUSTADO</span><span>📊</span></div>
+        <div class="quadrant-value">18.4%</div>
+      </div>
+
+      <div class="swiss-quadrant">
+        <div class="quadrant-label"><span>PMR (DIAS)</span><span>⏱️</span></div>
+        <div class="quadrant-value">38D</div>
+      </div>
+
+      <div class="swiss-quadrant">
+        <div class="quadrant-label"><span>PMP (DIAS)</span><span>⭐</span></div>
+        <div class="quadrant-value">20D</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SEMÁFORO DECISION CARDS STACK WITH UNIFORM STANDARDIZED BADGE CONTAINERS (175PX) -->
+  <section id="semaphoro">
+    <div class="section-header">
+      <h2 class="section-title">Semáforo de Decisões Priorizadas da Semana</h2>
+      <span style="font-family: var(--font-mono); font-size: 12px; color: var(--block-orange); font-weight: 800;">UNIFORM BADGES (175PX)</span>
+    </div>
+
+    <div class="stack-cards-container">
+      
+      <!-- Card P1: Orange Background with Standardized 175px Frosted Dark Badge -->
+      <div class="bento-card-item card-item-p1">
+        <div class="item-main-info">
+          <!-- CONTAINER COM LARGURA PADRONIZADA DE 175PX PARA TODAS AS CRITICIDADES -->
+          <div class="liquid-badge-container">
+            <span class="liquid-badge-text">P1 CRÍTICO</span>
+            <div class="liquid-shader-line shader-p1"></div>
+          </div>
+          <div>
+            <div class="item-title">Transição para Sublimite do Simples Nacional</div>
+            <div style="font-size: 14px; opacity: 0.92;">Extrapolação do sublimite de ICMS (R$ 3,6M) no acumulado 12 meses.</div>
+          </div>
+        </div>
+        <div class="item-impact">-R$ 8.400 / mês</div>
+      </div>
+
+      <!-- Card P2: Yellow Background with Standardized 175px Frosted Dark Badge -->
+      <div class="bento-card-item card-item-p2">
+        <div class="item-main-info">
+          <div class="liquid-badge-container">
+            <span class="liquid-badge-text">P2 ATENÇÃO</span>
+            <div class="liquid-shader-line shader-p2"></div>
+          </div>
+          <div>
+            <div class="item-title">Corrosão de Margem por Inflação de Insumos</div>
+            <div style="font-size: 14px; opacity: 0.92;">Alta não repassada no menu de carnes (+14% no custo).</div>
+          </div>
+        </div>
+        <div class="item-impact">-R$ 2.375 / mês</div>
+      </div>
+
+      <!-- Card P3: Off-White Background with Standardized 175px Frosted Dark Badge -->
+      <div class="bento-card-item card-item-p3">
+        <div class="item-main-info">
+          <div class="liquid-badge-container">
+            <span class="liquid-badge-text">P3 OPORTUNIDADE</span>
+            <div class="liquid-shader-line shader-p3"></div>
+          </div>
+          <div>
+            <div class="item-title">Recuperação de Crédito Tributário Restituível</div>
+            <div style="font-size: 14px; opacity: 0.92;">Crédito de IBS/CBS sobre produtos monofásicos acumulado.</div>
+          </div>
+        </div>
+        <div class="item-impact" style="color: #034D35;">+R$ 1.593 / mês</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- TOKEN EXPORTER SECTION -->
+  <section class="tokens-section">
+    <div class="section-header">
+      <h2 class="section-title">Standardized Badge Container CSS (175px Width)</h2>
+    </div>
+
+    <div class="code-box">
+<pre>/* Largura 100% padronizada (175px) para todas as frases de criticidade */
+.liquid-badge-container {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 175px; /* Tamanho fixo uniforme padronizado */
+  padding: 8px 12px 10px 12px;
+  background: rgba(14, 14, 16, 0.85);
+  backdrop-filter: blur(12px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 12px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+  flex-shrink: 0;
+}
+
+.liquid-badge-text {
+  text-align: center;
+  width: 100%;
+}</pre>
+    </div>
+  </section>
+
+</div>
+
+<script>
+  const themeBtn = document.getElementById('themeBtn');
+  const html = document.documentElement;
+
+  themeBtn.addEventListener('click', () => {
+    html.classList.toggle('light');
+  });
+</script>
+
+</body>
+</html>

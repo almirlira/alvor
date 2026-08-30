@@ -1,0 +1,513 @@
+{
+  "manifest": {
+    "kb_version": "0.1.0-fin",
+    "language": "pt-BR",
+    "escopo": "financeiro-pme-dre",
+    "tipos": ["concept", "kpi", "diagnostic_rule", "playbook"],
+    "teto_blocos_por_prompt": 8,
+    "teto_palavras_por_corpo": 120
+  },
+  "compiled_at": "2026-08-30T00:00:00.000Z",
+  "items": [
+    {
+      "id": "concept_dre", "type": "concept", "title": "DRE — Demonstracao do Resultado", "slug": "dre",
+      "status": "approved", "version": "1.0.0", "language": "pt-BR",
+      "summary": "A DRE mostra, mes a mes, quanto entrou (receita), quanto saiu (custos e despesas) e quanto sobrou (resultado). E o extrato de saude do negocio, nao o extrato do banco.",
+      "definition": "Relatorio contabil que parte da receita bruta, deduz impostos sobre vendas, custo das mercadorias ou servicos e despesas operacionais e financeiras, ate chegar ao resultado liquido do periodo.",
+      "why_it_matters": "Sem ler a DRE o dono decide pelo saldo do caixa, que mistura vendas de meses diferentes, emprestimos e retiradas. A DRE separa o que e operacao do que e financiamento.",
+      "related_kpis": ["kpi_receita_liquida", "kpi_lucro_bruto", "kpi_resultado_liquido", "kpi_margem_liquida"],
+      "caveats": ["A DRE e regime de competencia: registra a venda quando acontece, nao quando o dinheiro entra. Caixa apertado com DRE positiva e comum e exige olhar prazos de recebimento."],
+      "created_at": "2026-08-30", "updated_at": "2026-08-30", "owner": "curador-financeiro"
+    },
+    {
+      "id": "concept_margem_bruta_vs_liquida", "type": "concept", "title": "Margem bruta × margem liquida", "slug": "margem-bruta-vs-liquida",
+      "status": "approved", "version": "1.0.0", "language": "pt-BR",
+      "summary": "Margem bruta mede o que sobra depois do custo do que se vende; margem liquida mede o que sobra depois de todas as despesas. A distancia entre as duas e o peso da estrutura fixa.",
+      "definition": "Margem bruta = lucro bruto sobre receita liquida. Margem liquida = resultado liquido sobre receita liquida.",
+      "why_it_matters": "Se a margem bruta esta boa e a liquida esta ruim, o problema esta nas despesas, nao no preco ou no custo do produto. Se a bruta ja esta ruim, o problema comeca na precificacao ou no custo de insumos.",
+      "related_kpis": ["kpi_margem_bruta", "kpi_margem_liquida", "kpi_despesas_sobre_receita"],
+      "created_at": "2026-08-30", "updated_at": "2026-08-30", "owner": "curador-financeiro"
+    },
+    {
+      "id": "concept_custo_fixo_variavel", "type": "concept", "title": "Custo fixo e custo variavel", "slug": "custo-fixo-variavel",
+      "status": "approved", "version": "1.0.0", "language": "pt-BR",
+      "summary": "Custo variavel acompanha as vendas (insumos, taxas de cartao, comissoes, impostos sobre venda). Custo fixo existe mesmo sem vender (aluguel, salarios, sistemas).",
+      "definition": "Classificacao dos gastos pelo comportamento em relacao ao volume vendido, nao pela natureza contabil.",
+      "why_it_matters": "Cortar custo fixo muda o ponto de equilibrio; cortar custo variavel muda a margem de cada venda. Sao decisoes diferentes com efeitos diferentes.",
+      "related_kpis": ["kpi_margem_contribuicao", "kpi_ponto_equilibrio", "kpi_cmv"],
+      "caveats": ["Pessoal e tratado como fixo no curto prazo, mas horas extras e freelancers se comportam como variavel."],
+      "created_at": "2026-08-30", "updated_at": "2026-08-30", "owner": "curador-financeiro"
+    },
+    {
+      "id": "concept_margem_contribuicao", "type": "concept", "title": "Margem de contribuicao", "slug": "margem-de-contribuicao",
+      "status": "approved", "version": "1.0.0", "language": "pt-BR",
+      "summary": "E o que sobra de cada venda depois dos custos variaveis, para pagar os custos fixos e formar o lucro.",
+      "definition": "Receita menos custos e despesas variaveis. Em percentual, indica quanto de cada real vendido contribui para cobrir a estrutura fixa.",
+      "why_it_matters": "Uma empresa pode faturar mais e lucrar menos se a margem de contribuicao cair — vender mais com desconto ou com insumo mais caro nao cobre a estrutura.",
+      "related_kpis": ["kpi_margem_contribuicao", "kpi_ponto_equilibrio", "kpi_lucro_bruto"],
+      "created_at": "2026-08-30", "updated_at": "2026-08-30", "owner": "curador-financeiro"
+    },
+    {
+      "id": "concept_ponto_equilibrio", "type": "concept", "title": "Ponto de equilibrio", "slug": "ponto-de-equilibrio",
+      "status": "approved", "version": "1.0.0", "language": "pt-BR",
+      "summary": "E a receita minima do mes para nao ter prejuizo: os custos fixos divididos pela margem de contribuicao percentual.",
+      "definition": "Receita em que o resultado e zero. Abaixo dela a empresa perde dinheiro; acima, cada real adicional contribui integralmente para o lucro.",
+      "why_it_matters": "Diz ao dono a meta de vendas do mes e mostra que reduzir custo fixo baixa a meta, enquanto aumentar margem de contribuicao faz a meta ser atingida com menos venda.",
+      "related_kpis": ["kpi_ponto_equilibrio", "kpi_folga_ponto_equilibrio", "kpi_margem_contribuicao"],
+      "caveats": ["A estimativa depende da classificacao fixo/variavel adotada; revisar a classificacao muda o numero."],
+      "created_at": "2026-08-30", "updated_at": "2026-08-30", "owner": "curador-financeiro"
+    },
+    {
+      "id": "concept_capital_giro", "type": "concept", "title": "Capital de giro e prazo", "slug": "capital-de-giro",
+      "status": "approved", "version": "1.0.0", "language": "pt-BR",
+      "summary": "Lucro na DRE nao e dinheiro no caixa. Prazo de recebimento longo, estoque parado e fornecedor a vista consomem caixa mesmo com resultado positivo.",
+      "definition": "Recursos necessarios para financiar o intervalo entre pagar fornecedores e receber dos clientes.",
+      "why_it_matters": "Despesas financeiras crescendo na DRE costumam ser o sintoma de capital de giro insuficiente — a empresa financia a operacao com juros.",
+      "related_kpis": ["kpi_despesas_financeiras", "kpi_resultado_liquido"],
+      "created_at": "2026-08-30", "updated_at": "2026-08-30", "owner": "curador-financeiro"
+    },
+
+    {
+      "id": "kpi_receita_liquida", "type": "kpi", "title": "Receita liquida", "slug": "receita-liquida", "status": "approved", "version": "1.0.0", "language": "pt-BR",
+      "summary": "Receita bruta menos impostos sobre vendas, devolucoes e descontos. E a base real sobre a qual custos e despesas sao comparados.",
+      "aliases": ["receita", "faturamento liquido", "vendas liquidas", "faturamento"], "category": ["revenue"], "unit": "BRL",
+      "formula": "receita_bruta - deducoes", "formula_pt": "Receita bruta menos deducoes",
+      "business_question": "Quanto a empresa realmente vendeu no mes, depois dos impostos sobre venda?",
+      "interpretation": { "rising": "Mais volume ou preco maior. Verificar se margem acompanhou.", "falling": "Menos vendas ou mais devolucoes/descontos. Verificar sazonalidade antes de concluir." },
+      "related_kpis": ["kpi_lucro_bruto", "kpi_margem_bruta", "kpi_resultado_liquido"],
+      "created_at": "2026-08-30", "updated_at": "2026-08-30", "owner": "curador-financeiro"
+    },
+    {
+      "id": "kpi_cmv", "type": "kpi", "title": "CMV — custo das mercadorias/servicos", "slug": "cmv", "status": "approved", "version": "1.0.0", "language": "pt-BR",
+      "summary": "Custo direto do que foi vendido: insumos, mercadorias, materia-prima ou custo do servico prestado.",
+      "aliases": ["cmv", "cpv", "custo dos produtos", "custo das mercadorias", "custo variavel", "insumos"], "category": ["efficiency"], "unit": "BRL",
+      "formula": "soma(custos diretos do periodo)", "formula_pt": "Soma dos custos diretos do periodo",
+      "business_question": "Quanto custou produzir ou comprar o que foi vendido?",
+      "interpretation": { "rising": "Insumos mais caros, desperdicio, mix com itens de custo maior ou simplesmente mais volume — comparar com a receita.", "falling": "Negociacao com fornecedor, menos desperdicio ou menos volume." },
+      "related_kpis": ["kpi_lucro_bruto", "kpi_margem_bruta"],
+      "created_at": "2026-08-30", "updated_at": "2026-08-30", "owner": "curador-financeiro"
+    },
+    {
+      "id": "kpi_lucro_bruto", "type": "kpi", "title": "Lucro bruto", "slug": "lucro-bruto", "status": "approved", "version": "1.0.0", "language": "pt-BR",
+      "summary": "Receita liquida menos o custo do que foi vendido. E o dinheiro disponivel para pagar a estrutura e gerar lucro.",
+      "aliases": ["lucro bruto", "resultado bruto"], "category": ["revenue"], "unit": "BRL",
+      "formula": "receita_liquida - cmv", "formula_pt": "Receita liquida menos CMV",
+      "business_question": "Depois de pagar o produto, quanto sobra para pagar a empresa?",
+      "related_kpis": ["kpi_margem_bruta", "kpi_receita_liquida", "kpi_cmv"],
+      "created_at": "2026-08-30", "updated_at": "2026-08-30", "owner": "curador-financeiro"
+    },
+    {
+      "id": "kpi_margem_bruta", "type": "kpi", "title": "Margem bruta", "slug": "margem-bruta", "status": "approved", "version": "1.0.0", "language": "pt-BR",
+      "summary": "Percentual da receita liquida que sobra depois do custo do produto. Mede a saude da precificacao e do custo de insumos.",
+      "aliases": ["margem bruta", "margem"], "category": ["efficiency"], "unit": "%",
+      "formula": "lucro_bruto / receita_liquida * 100", "formula_pt": "Lucro bruto dividido pela receita liquida",
+      "business_question": "De cada real vendido, quanto sobra depois de pagar o produto?",
+      "interpretation": { "falling": "Custo subindo mais que o preco, desconto excessivo ou mix migrando para itens de margem menor.", "rising": "Preco ajustado, custo negociado ou mix melhor." },
+      "related_kpis": ["kpi_lucro_bruto", "kpi_cmv", "kpi_margem_liquida"],
+      "caveats": ["Comparar com o mesmo mes do ano anterior quando houver sazonalidade de insumos."],
+      "created_at": "2026-08-30", "updated_at": "2026-08-30", "owner": "curador-financeiro"
+    },
+    {
+      "id": "kpi_despesas_operacionais", "type": "kpi", "title": "Despesas operacionais", "slug": "despesas-operacionais", "status": "approved", "version": "1.0.0", "language": "pt-BR",
+      "summary": "Soma de pessoal, ocupacao, administrativas, comerciais, marketing e outras. E a estrutura que o lucro bruto precisa pagar.",
+      "aliases": ["despesas", "despesas operacionais", "gastos", "total de despesas", "estrutura"], "category": ["efficiency"], "unit": "BRL",
+      "formula": "pessoal + administrativas + comerciais + ocupacao + marketing + outras", "formula_pt": "Soma dos grupos de despesa",
+      "business_question": "Quanto custa manter a empresa funcionando no mes?",
+      "related_kpis": ["kpi_despesas_sobre_receita", "kpi_resultado_operacional", "kpi_despesas_pessoal"],
+      "created_at": "2026-08-30", "updated_at": "2026-08-30", "owner": "curador-financeiro"
+    },
+    {
+      "id": "kpi_despesas_sobre_receita", "type": "kpi", "title": "Despesas sobre receita", "slug": "despesas-sobre-receita", "status": "approved", "version": "1.0.0", "language": "pt-BR",
+      "summary": "Peso das despesas operacionais sobre a receita liquida. Quando sobe, a estrutura esta crescendo mais rapido que as vendas.",
+      "aliases": ["peso das despesas", "despesas sobre receita", "despesas/receita"], "category": ["efficiency"], "unit": "%",
+      "formula": "despesas_operacionais / receita_liquida * 100", "formula_pt": "Despesas operacionais divididas pela receita liquida",
+      "business_question": "A estrutura esta crescendo mais rapido que as vendas?",
+      "interpretation": { "rising": "Despesas crescendo acima da receita — sinal de alerta mesmo com receita subindo.", "falling": "Ganho de escala: a receita dilui a estrutura." },
+      "related_kpis": ["kpi_despesas_operacionais", "kpi_receita_liquida", "kpi_margem_liquida"],
+      "created_at": "2026-08-30", "updated_at": "2026-08-30", "owner": "curador-financeiro"
+    },
+    {
+      "id": "kpi_resultado_operacional", "type": "kpi", "title": "Resultado operacional", "slug": "resultado-operacional", "status": "approved", "version": "1.0.0", "language": "pt-BR",
+      "summary": "Lucro bruto menos despesas operacionais. Mostra se a operacao em si da lucro, antes de juros e impostos sobre o lucro.",
+      "aliases": ["resultado operacional", "lucro operacional", "ebit"], "category": ["revenue"], "unit": "BRL",
+      "formula": "lucro_bruto - despesas_operacionais", "formula_pt": "Lucro bruto menos despesas operacionais",
+      "business_question": "A operacao da lucro por si so?",
+      "related_kpis": ["kpi_resultado_liquido", "kpi_despesas_operacionais"],
+      "created_at": "2026-08-30", "updated_at": "2026-08-30", "owner": "curador-financeiro"
+    },
+    {
+      "id": "kpi_resultado_liquido", "type": "kpi", "title": "Resultado liquido", "slug": "resultado-liquido", "status": "approved", "version": "1.0.0", "language": "pt-BR",
+      "summary": "O que sobrou (lucro) ou faltou (prejuizo) no fim do mes, depois de tudo: custos, despesas, juros e impostos sobre o lucro.",
+      "aliases": ["resultado", "lucro liquido", "lucro", "prejuizo", "resultado do mes", "sobrou"], "category": ["revenue"], "unit": "BRL",
+      "formula": "resultado_operacional + resultado_financeiro - impostos_resultado", "formula_pt": "Resultado operacional mais resultado financeiro menos impostos sobre o lucro",
+      "business_question": "No fim das contas, o mes deu lucro ou prejuizo?",
+      "interpretation": { "falling": "Verificar primeiro se a queda veio da margem bruta, das despesas ou dos juros — cada origem pede uma acao diferente." },
+      "related_kpis": ["kpi_margem_liquida", "kpi_resultado_operacional", "kpi_despesas_financeiras"],
+      "created_at": "2026-08-30", "updated_at": "2026-08-30", "owner": "curador-financeiro"
+    },
+    {
+      "id": "kpi_margem_liquida", "type": "kpi", "title": "Margem liquida", "slug": "margem-liquida", "status": "approved", "version": "1.0.0", "language": "pt-BR",
+      "summary": "Percentual da receita liquida que virou lucro. E a medida final de eficiencia do negocio.",
+      "aliases": ["margem liquida", "lucratividade"], "category": ["efficiency"], "unit": "%",
+      "formula": "resultado_liquido / receita_liquida * 100", "formula_pt": "Resultado liquido dividido pela receita liquida",
+      "business_question": "De cada real vendido, quanto virou lucro de verdade?",
+      "related_kpis": ["kpi_resultado_liquido", "kpi_margem_bruta", "kpi_despesas_sobre_receita"],
+      "created_at": "2026-08-30", "updated_at": "2026-08-30", "owner": "curador-financeiro"
+    },
+    {
+      "id": "kpi_margem_contribuicao", "type": "kpi", "title": "Margem de contribuicao", "slug": "margem-contribuicao", "status": "approved", "version": "1.0.0", "language": "pt-BR",
+      "summary": "Receita menos custos e despesas variaveis. Percentual que cada venda contribui para cobrir os custos fixos.",
+      "aliases": ["margem de contribuicao", "contribuicao"], "category": ["efficiency"], "unit": "%",
+      "formula": "(receita_bruta - custos_variaveis) / receita_bruta * 100", "formula_pt": "Receita bruta menos custos variaveis, dividido pela receita bruta",
+      "business_question": "Quanto de cada venda sobra para pagar a estrutura fixa?",
+      "related_kpis": ["kpi_ponto_equilibrio", "kpi_margem_bruta", "kpi_cmv"],
+      "created_at": "2026-08-30", "updated_at": "2026-08-30", "owner": "curador-financeiro"
+    },
+    {
+      "id": "kpi_ponto_equilibrio", "type": "kpi", "title": "Ponto de equilibrio", "slug": "ponto-equilibrio", "status": "approved", "version": "1.0.0", "language": "pt-BR",
+      "summary": "Receita bruta minima do mes para o resultado ser zero, dada a estrutura fixa e a margem de contribuicao atuais.",
+      "aliases": ["ponto de equilibrio", "break even", "meta minima", "quanto preciso vender"], "category": ["efficiency"], "unit": "BRL",
+      "formula": "custos_fixos / margem_contribuicao_pct", "formula_pt": "Custos fixos divididos pela margem de contribuicao percentual",
+      "business_question": "Quanto preciso vender por mes para nao ter prejuizo?",
+      "related_kpis": ["kpi_folga_ponto_equilibrio", "kpi_margem_contribuicao", "kpi_despesas_operacionais"],
+      "caveats": ["Estimativa baseada na classificacao fixo/variavel default; ajuste a classificacao para refinar."],
+      "created_at": "2026-08-30", "updated_at": "2026-08-30", "owner": "curador-financeiro"
+    },
+    {
+      "id": "kpi_folga_ponto_equilibrio", "type": "kpi", "title": "Folga sobre o ponto de equilibrio", "slug": "folga-ponto-equilibrio", "status": "approved", "version": "1.0.0", "language": "pt-BR",
+      "summary": "Diferenca entre a receita bruta do mes e o ponto de equilibrio. Negativa significa que o mes ficou abaixo do minimo para empatar.",
+      "aliases": ["folga", "distancia do ponto de equilibrio"], "category": ["efficiency"], "unit": "BRL",
+      "formula": "receita_bruta - ponto_equilibrio", "formula_pt": "Receita bruta menos ponto de equilibrio",
+      "business_question": "Vendi acima ou abaixo do minimo para empatar?",
+      "related_kpis": ["kpi_ponto_equilibrio", "kpi_receita_liquida"],
+      "created_at": "2026-08-30", "updated_at": "2026-08-30", "owner": "curador-financeiro"
+    },
+    {
+      "id": "kpi_despesas_pessoal", "type": "kpi", "title": "Despesas com pessoal", "slug": "despesas-pessoal", "status": "approved", "version": "1.0.0", "language": "pt-BR",
+      "summary": "Salarios, encargos, beneficios e pro-labore. Normalmente o maior custo fixo de uma PME de servicos ou varejo.",
+      "aliases": ["pessoal", "folha", "salarios", "equipe", "encargos"], "category": ["efficiency"], "unit": "BRL",
+      "formula": "soma(linhas de pessoal)", "formula_pt": "Soma das linhas de pessoal",
+      "business_question": "Quanto custa o time por mes e isso acompanha a receita?",
+      "related_kpis": ["kpi_despesas_operacionais", "kpi_despesas_sobre_receita"],
+      "created_at": "2026-08-30", "updated_at": "2026-08-30", "owner": "curador-financeiro"
+    },
+    {
+      "id": "kpi_despesas_marketing", "type": "kpi", "title": "Marketing", "slug": "despesas-marketing", "status": "approved", "version": "1.0.0", "language": "pt-BR",
+      "summary": "Investimento em midia, agencia, promocoes e eventos. Deve ser lido junto com a receita dos meses seguintes.",
+      "aliases": ["marketing", "propaganda", "publicidade", "midia", "anuncios"], "category": ["media"], "unit": "BRL",
+      "formula": "soma(linhas de marketing)", "formula_pt": "Soma das linhas de marketing",
+      "business_question": "O que foi investido em marketing e voltou em receita?",
+      "interpretation": { "rising": "Picos isolados pedem verificar se a receita respondeu no mesmo mes ou no seguinte." },
+      "related_kpis": ["kpi_receita_liquida", "kpi_despesas_operacionais"],
+      "created_at": "2026-08-30", "updated_at": "2026-08-30", "owner": "curador-financeiro"
+    },
+    {
+      "id": "kpi_despesas_ocupacao", "type": "kpi", "title": "Ocupacao e utilidades", "slug": "despesas-ocupacao", "status": "approved", "version": "1.0.0", "language": "pt-BR",
+      "summary": "Aluguel, condominio, energia, agua e gas. Custo fixo que so cai com renegociacao ou mudanca de ponto.",
+      "aliases": ["aluguel", "ocupacao", "energia", "luz", "agua"], "category": ["efficiency"], "unit": "BRL",
+      "formula": "soma(linhas de ocupacao)", "formula_pt": "Soma das linhas de ocupacao",
+      "business_question": "Quanto custa o espaco fisico?",
+      "related_kpis": ["kpi_despesas_operacionais"],
+      "created_at": "2026-08-30", "updated_at": "2026-08-30", "owner": "curador-financeiro"
+    },
+    {
+      "id": "kpi_despesas_comerciais", "type": "kpi", "title": "Despesas comerciais", "slug": "despesas-comerciais", "status": "approved", "version": "1.0.0", "language": "pt-BR",
+      "summary": "Comissoes, taxas de cartao, marketplace e entrega. Variam com a venda — pesam na margem de contribuicao.",
+      "aliases": ["comerciais", "comissoes", "taxas de cartao", "taxas de aplicativo", "entrega", "delivery"], "category": ["efficiency"], "unit": "BRL",
+      "formula": "soma(linhas comerciais)", "formula_pt": "Soma das linhas comerciais",
+      "business_question": "Quanto custa vender cada real?",
+      "related_kpis": ["kpi_margem_contribuicao", "kpi_despesas_operacionais"],
+      "created_at": "2026-08-30", "updated_at": "2026-08-30", "owner": "curador-financeiro"
+    },
+    {
+      "id": "kpi_despesas_administrativas", "type": "kpi", "title": "Despesas administrativas", "slug": "despesas-administrativas", "status": "approved", "version": "1.0.0", "language": "pt-BR",
+      "summary": "Contabilidade, sistemas, telefone, manutencao e servicos de terceiros. Costumam crescer em silencio, assinatura por assinatura.",
+      "aliases": ["administrativas", "sistemas", "assinaturas", "contabilidade"], "category": ["efficiency"], "unit": "BRL",
+      "formula": "soma(linhas administrativas)", "formula_pt": "Soma das linhas administrativas",
+      "business_question": "Quanto custa a retaguarda da empresa?",
+      "related_kpis": ["kpi_despesas_operacionais"],
+      "created_at": "2026-08-30", "updated_at": "2026-08-30", "owner": "curador-financeiro"
+    },
+    {
+      "id": "kpi_despesas_financeiras", "type": "kpi", "title": "Despesas financeiras", "slug": "despesas-financeiras", "status": "approved", "version": "1.0.0", "language": "pt-BR",
+      "summary": "Juros, tarifas e antecipacao de recebiveis. Quando crescem, a empresa esta financiando a operacao com dinheiro caro.",
+      "aliases": ["juros", "despesas financeiras", "tarifas bancarias", "antecipacao"], "category": ["efficiency"], "unit": "BRL",
+      "formula": "soma(linhas financeiras)", "formula_pt": "Soma das linhas financeiras",
+      "business_question": "Quanto estou pagando de juros para manter o caixa?",
+      "related_kpis": ["kpi_resultado_liquido"],
+      "created_at": "2026-08-30", "updated_at": "2026-08-30", "owner": "curador-financeiro"
+    },
+    {
+      "id": "kpi_maior_despesa_share", "type": "kpi", "title": "Concentracao da maior despesa", "slug": "concentracao-maior-despesa", "status": "approved", "version": "1.0.0", "language": "pt-BR",
+      "summary": "Participacao do maior grupo de despesa no total de despesas operacionais.",
+      "aliases": ["concentracao", "maior despesa"], "category": ["efficiency"], "unit": "%",
+      "formula": "max(grupo_de_despesa) / despesas_operacionais * 100", "formula_pt": "Maior grupo dividido pelo total de despesas",
+      "business_question": "Existe uma despesa que domina a estrutura?",
+      "related_kpis": ["kpi_despesas_operacionais"],
+      "created_at": "2026-08-30", "updated_at": "2026-08-30", "owner": "curador-financeiro"
+    },
+
+    {
+      "id": "rule_receita_sobe_margem_cai", "type": "diagnostic_rule", "title": "Receita sobe mas margem bruta cai", "slug": "receita-sobe-margem-cai",
+      "status": "approved", "version": "1.0.0", "language": "pt-BR",
+      "summary": "A empresa vende mais e fica com menos de cada real vendido: crescimento sem rentabilidade proporcional.",
+      "problem_type": ["growth_without_profitability"],
+      "conditions": { "all": [
+        { "metric": "kpi_receita_liquida", "operator": "increased", "comparison": "previous_period", "threshold_percent": 4 },
+        { "metric": "kpi_margem_bruta", "operator": "decreased", "comparison": "previous_period", "threshold_percent": 1.5 }
+      ] },
+      "hypotheses": [
+        { "id": "h_custo_insumo", "text": "O custo dos insumos ou mercadorias pode ter subido sem repasse ao preco.", "confidence": "medium" },
+        { "id": "h_desconto", "text": "O crescimento pode estar apoiado em descontos ou promocoes que comprimem a margem.", "confidence": "medium" },
+        { "id": "h_mix", "text": "O mix pode ter migrado para produtos ou canais com margem menor (ex.: delivery com taxa).", "confidence": "low" }
+      ],
+      "recommendations": [
+        "Comparar o CMV com a receita liquida nos dois meses e localizar o insumo que mais pesou.",
+        "Verificar se houve promocao ou desconto no periodo e quanto da receita passou por ela.",
+        "Revisar o preco dos itens de maior volume antes de buscar mais vendas."
+      ],
+      "evidence_to_check": ["kpi_cmv", "kpi_lucro_bruto", "kpi_margem_contribuicao"],
+      "caveats": ["Insumos sazonais podem explicar a variacao — comparar com o mesmo mes do ano anterior."],
+      "output_style": { "tone": "advisory", "causality_level": "hypothesis" },
+      "created_at": "2026-08-30", "updated_at": "2026-08-30", "owner": "curador-financeiro"
+    },
+    {
+      "id": "rule_cmv_pressiona_margem", "type": "diagnostic_rule", "title": "CMV cresce e a margem bruta cede", "slug": "cmv-pressiona-margem",
+      "status": "approved", "version": "1.0.0", "language": "pt-BR",
+      "summary": "O custo do que se vende cresceu mais que a receita e a margem bruta caiu — o preco nao esta acompanhando o custo.",
+      "problem_type": ["margin_erosion"],
+      "conditions": { "all": [
+        { "metric": "kpi_cmv", "operator": "increased", "comparison": "previous_period", "threshold_percent": 5 },
+        { "metric": "kpi_margem_bruta", "operator": "decreased", "comparison": "previous_period", "threshold_percent": 1 }
+      ] },
+      "hypotheses": [
+        { "id": "h_fornecedor", "text": "Reajuste de fornecedor ou insumo-chave sem renegociacao.", "confidence": "medium" },
+        { "id": "h_desperdicio", "text": "Perda, quebra ou desperdicio na operacao elevando o custo por unidade.", "confidence": "low" }
+      ],
+      "recommendations": [
+        "Listar os tres insumos de maior peso e comparar preco de compra entre os dois meses.",
+        "Simular um reajuste de preco nos itens mais vendidos para recompor a margem.",
+        "Medir perdas e quebras antes de assumir que e so preco de fornecedor."
+      ],
+      "evidence_to_check": ["kpi_cmv", "kpi_margem_bruta", "kpi_lucro_bruto"],
+      "output_style": { "tone": "advisory", "causality_level": "hypothesis" },
+      "created_at": "2026-08-30", "updated_at": "2026-08-30", "owner": "curador-financeiro"
+    },
+    {
+      "id": "rule_despesas_crescem_acima_receita", "type": "diagnostic_rule", "title": "Despesas crescem mais rapido que a receita", "slug": "despesas-crescem-acima-receita",
+      "status": "approved", "version": "1.0.0", "language": "pt-BR",
+      "summary": "O peso das despesas sobre a receita subiu: a estrutura esta crescendo mais depressa que as vendas.",
+      "problem_type": ["expense_growth"],
+      "conditions": { "all": [
+        { "metric": "kpi_despesas_sobre_receita", "operator": "increased", "comparison": "previous_period", "threshold_percent": 3 }
+      ] },
+      "hypotheses": [
+        { "id": "h_contratacao", "text": "Contratacoes, reajustes ou horas extras podem ter elevado a folha antes de a receita responder.", "confidence": "medium" },
+        { "id": "h_gasto_pontual", "text": "Um gasto pontual (marketing, manutencao, multa) pode ter inflado o mes.", "confidence": "medium" },
+        { "id": "h_assinaturas", "text": "Despesas administrativas recorrentes (sistemas, servicos) podem estar se acumulando sem revisao.", "confidence": "low" }
+      ],
+      "recommendations": [
+        "Abrir o grupo de despesa que mais cresceu e separar o que e recorrente do que foi pontual.",
+        "Definir um teto de despesas como percentual da receita e acompanhar mensalmente.",
+        "Adiar novas despesas fixas ate a receita sustentar a estrutura atual."
+      ],
+      "evidence_to_check": ["kpi_despesas_operacionais", "kpi_despesas_pessoal", "kpi_despesas_marketing", "kpi_despesas_administrativas"],
+      "output_style": { "tone": "warning", "causality_level": "hypothesis" },
+      "created_at": "2026-08-30", "updated_at": "2026-08-30", "owner": "curador-financeiro"
+    },
+    {
+      "id": "rule_marketing_dispara", "type": "diagnostic_rule", "title": "Gasto de marketing disparou", "slug": "marketing-dispara",
+      "status": "approved", "version": "1.0.0", "language": "pt-BR",
+      "summary": "O investimento em marketing subiu muito acima do padrao dos meses anteriores. Vale conferir se a receita respondeu.",
+      "problem_type": ["expense_spike"],
+      "conditions": { "all": [
+        { "metric": "kpi_despesas_marketing", "operator": "increased", "comparison": "previous_period", "threshold_percent": 40 }
+      ] },
+      "hypotheses": [
+        { "id": "h_campanha", "text": "Campanha ou evento pontual concentrado no mes.", "confidence": "medium" },
+        { "id": "h_sem_retorno", "text": "Se a receita nao acompanhou, o investimento pode nao ter gerado retorno no periodo.", "confidence": "low" }
+      ],
+      "recommendations": [
+        "Comparar a receita deste mes e do seguinte com a media anterior para medir o retorno.",
+        "Registrar o que foi a campanha para separar investimento planejado de gasto sem controle.",
+        "Definir teto mensal de marketing ligado a uma meta de receita."
+      ],
+      "evidence_to_check": ["kpi_despesas_marketing", "kpi_receita_liquida"],
+      "output_style": { "tone": "informational", "causality_level": "hypothesis" },
+      "created_at": "2026-08-30", "updated_at": "2026-08-30", "owner": "curador-financeiro"
+    },
+    {
+      "id": "rule_resultado_negativo", "type": "diagnostic_rule", "title": "Mes fechou no prejuizo", "slug": "resultado-negativo",
+      "status": "approved", "version": "1.0.0", "language": "pt-BR",
+      "summary": "O resultado liquido do mes ficou negativo: a receita nao cobriu custos, despesas e juros.",
+      "problem_type": ["negative_result"],
+      "conditions": { "all": [
+        { "metric": "kpi_resultado_liquido", "operator": "less_than", "threshold_value": 0 }
+      ] },
+      "hypotheses": [
+        { "id": "h_estrutura", "text": "A estrutura fixa esta dimensionada para uma receita maior do que a atual.", "confidence": "medium" },
+        { "id": "h_margem", "text": "A margem bruta pode estar baixa demais para pagar a estrutura mesmo com boa receita.", "confidence": "medium" },
+        { "id": "h_juros", "text": "Despesas financeiras podem estar consumindo um resultado operacional positivo.", "confidence": "low" }
+      ],
+      "recommendations": [
+        "Verificar primeiro se o resultado operacional tambem e negativo — se for, o problema esta na operacao, nao nos juros.",
+        "Comparar a receita bruta com o ponto de equilibrio para dimensionar o tamanho do buraco.",
+        "Escolher entre reduzir custo fixo ou recompor margem — as duas alavancas com efeito mais rapido."
+      ],
+      "evidence_to_check": ["kpi_resultado_operacional", "kpi_folga_ponto_equilibrio", "kpi_despesas_financeiras", "kpi_margem_bruta"],
+      "output_style": { "tone": "warning", "causality_level": "hypothesis" },
+      "created_at": "2026-08-30", "updated_at": "2026-08-30", "owner": "curador-financeiro"
+    },
+    {
+      "id": "rule_abaixo_ponto_equilibrio", "type": "diagnostic_rule", "title": "Receita abaixo do ponto de equilibrio", "slug": "abaixo-ponto-equilibrio",
+      "status": "approved", "version": "1.0.0", "language": "pt-BR",
+      "summary": "A receita bruta do mes ficou abaixo do minimo necessario para cobrir a estrutura fixa com a margem de contribuicao atual.",
+      "problem_type": ["below_breakeven"],
+      "conditions": { "all": [
+        { "metric": "kpi_folga_ponto_equilibrio", "operator": "less_than", "threshold_value": 0 }
+      ] },
+      "hypotheses": [
+        { "id": "h_meta", "text": "A meta de vendas do mes pode estar abaixo do que a estrutura exige.", "confidence": "medium" },
+        { "id": "h_mc", "text": "A margem de contribuicao pode estar baixa por custos variaveis altos (insumos, taxas, comissoes).", "confidence": "medium" }
+      ],
+      "recommendations": [
+        "Tratar o ponto de equilibrio como meta minima de vendas e acompanhar semanalmente.",
+        "Testar o efeito de reduzir custos fixos sobre o ponto de equilibrio antes de decidir cortes.",
+        "Renegociar taxas de cartao, aplicativos e comissoes — cada ponto de custo variavel a menos baixa a meta."
+      ],
+      "evidence_to_check": ["kpi_ponto_equilibrio", "kpi_margem_contribuicao", "kpi_despesas_operacionais"],
+      "caveats": ["O ponto de equilibrio e uma estimativa baseada na classificacao fixo/variavel default."],
+      "output_style": { "tone": "warning", "causality_level": "hypothesis" },
+      "created_at": "2026-08-30", "updated_at": "2026-08-30", "owner": "curador-financeiro"
+    },
+    {
+      "id": "rule_pessoal_cresce_receita_parada", "type": "diagnostic_rule", "title": "Folha cresce com receita parada", "slug": "pessoal-cresce-receita-parada",
+      "status": "approved", "version": "1.0.0", "language": "pt-BR",
+      "summary": "As despesas com pessoal subiram enquanto a receita ficou estavel — a produtividade da equipe caiu ou a contratacao veio antes da demanda.",
+      "problem_type": ["expense_growth"],
+      "conditions": { "all": [
+        { "metric": "kpi_despesas_pessoal", "operator": "increased", "comparison": "previous_period", "threshold_percent": 5 },
+        { "metric": "kpi_receita_liquida", "operator": "stable", "comparison": "previous_period", "threshold_percent": 4 }
+      ] },
+      "hypotheses": [
+        { "id": "h_hora_extra", "text": "Horas extras, ferias ou rescisoes podem ter inflado o mes de forma pontual.", "confidence": "medium" },
+        { "id": "h_contratacao", "text": "Contratacao feita antes de a receita crescer.", "confidence": "medium" }
+      ],
+      "recommendations": [
+        "Separar na folha o que e recorrente do que e pontual (ferias, rescisao, hora extra).",
+        "Acompanhar receita por funcionario nos proximos meses.",
+        "Segurar novas contratacoes ate a receita justificar."
+      ],
+      "evidence_to_check": ["kpi_despesas_pessoal", "kpi_receita_liquida", "kpi_despesas_sobre_receita"],
+      "output_style": { "tone": "advisory", "causality_level": "hypothesis" },
+      "created_at": "2026-08-30", "updated_at": "2026-08-30", "owner": "curador-financeiro"
+    },
+    {
+      "id": "rule_juros_pesam", "type": "diagnostic_rule", "title": "Juros crescendo e comendo o resultado", "slug": "juros-pesam",
+      "status": "approved", "version": "1.0.0", "language": "pt-BR",
+      "summary": "As despesas financeiras subiram: a empresa esta pagando mais caro para financiar o caixa.",
+      "problem_type": ["expense_growth"],
+      "conditions": { "all": [
+        { "metric": "kpi_despesas_financeiras", "operator": "increased", "comparison": "previous_period", "threshold_percent": 15 }
+      ] },
+      "hypotheses": [
+        { "id": "h_antecipacao", "text": "Antecipacao de recebiveis ou uso de limite bancario para cobrir caixa.", "confidence": "medium" },
+        { "id": "h_emprestimo", "text": "Novo emprestimo ou parcela com juros altos entrando no mes.", "confidence": "medium" }
+      ],
+      "recommendations": [
+        "Levantar quais operacoes geraram os juros e o custo efetivo de cada uma.",
+        "Renegociar prazo com fornecedores antes de antecipar recebiveis.",
+        "Trocar divida cara por divida mais barata quando houver garantia."
+      ],
+      "evidence_to_check": ["kpi_despesas_financeiras", "kpi_resultado_liquido", "kpi_resultado_operacional"],
+      "output_style": { "tone": "advisory", "causality_level": "hypothesis" },
+      "created_at": "2026-08-30", "updated_at": "2026-08-30", "owner": "curador-financeiro"
+    },
+    {
+      "id": "rule_despesa_concentrada", "type": "diagnostic_rule", "title": "Uma despesa domina a estrutura", "slug": "despesa-concentrada",
+      "status": "approved", "version": "1.0.0", "language": "pt-BR",
+      "summary": "Um unico grupo de despesa responde pela maior parte da estrutura — qualquer plano de reducao precisa passar por ele.",
+      "problem_type": ["expense_concentration"],
+      "conditions": { "all": [
+        { "metric": "kpi_maior_despesa_share", "operator": "greater_than", "threshold_value": 55 }
+      ] },
+      "hypotheses": [
+        { "id": "h_modelo", "text": "Pode ser natural do modelo de negocio (servicos sao intensivos em pessoal), mas limita as opcoes de corte.", "confidence": "medium" }
+      ],
+      "recommendations": [
+        "Concentrar a analise de eficiencia no grupo dominante: produtividade, escala de trabalho, terceirizacao.",
+        "Nao gastar energia cortando despesas pequenas enquanto o grupo dominante nao for revisado."
+      ],
+      "evidence_to_check": ["kpi_maior_despesa_share", "kpi_despesas_operacionais"],
+      "output_style": { "tone": "informational", "causality_level": "hypothesis" },
+      "created_at": "2026-08-30", "updated_at": "2026-08-30", "owner": "curador-financeiro"
+    },
+
+    {
+      "id": "playbook_reduzir_custo", "type": "playbook", "title": "Reduzir custo sem quebrar a operacao", "slug": "reduzir-custo",
+      "status": "approved", "version": "1.0.0", "language": "pt-BR",
+      "summary": "Ordem de ataque para reduzir despesas: primeiro o que e grande e recorrente, depois o que e pontual, por ultimo o que e pequeno.",
+      "problem_type": ["expense_growth", "expense_spike", "negative_result", "expense_concentration"],
+      "when_to_use": ["Despesas crescendo acima da receita.", "Mes no prejuizo com resultado operacional negativo."],
+      "related_kpis": ["kpi_despesas_operacionais", "kpi_despesas_sobre_receita", "kpi_despesas_pessoal"],
+      "diagnostic_questions": ["Qual grupo de despesa mais cresceu e ele e recorrente?", "O que e contrato (aluguel, sistemas) e o que e decisao mensal (marketing, horas extras)?"],
+      "actions": [
+        { "priority": "high", "type": "investigate", "text": "Abrir os tres maiores grupos de despesa linha a linha e marcar cada uma como recorrente ou pontual." },
+        { "priority": "high", "type": "adjust_budget", "text": "Definir teto mensal para as despesas de decisao (marketing, horas extras, servicos avulsos)." },
+        { "priority": "medium", "type": "run_experiment", "text": "Renegociar os dois maiores contratos fixos (aluguel, sistemas) com base no historico de pagamento." },
+        { "priority": "medium", "type": "review_channel_mix", "text": "Revisar taxas de cartao, aplicativos e comissoes — custo variavel que pode ser negociado por volume." },
+        { "priority": "low", "type": "investigate", "text": "Cancelar assinaturas e servicos sem uso nos ultimos meses." }
+      ],
+      "guardrails": [
+        "NAO cortar despesa que gera receita (equipe de vendas, insumo de qualidade) sem medir o efeito no faturamento.",
+        "NAO tratar reducao de pessoal como primeira opcao — rescisoes custam caro no curto prazo e destroem capacidade de venda."
+      ],
+      "success_metrics": ["kpi_despesas_sobre_receita", "kpi_resultado_operacional"],
+      "created_at": "2026-08-30", "updated_at": "2026-08-30", "owner": "curador-financeiro"
+    },
+    {
+      "id": "playbook_recuperar_margem", "type": "playbook", "title": "Recuperar a margem bruta", "slug": "recuperar-margem",
+      "status": "approved", "version": "1.0.0", "language": "pt-BR",
+      "summary": "Quando o problema esta no custo do produto ou no preco, atacar preco, fornecedor e mix — nesta ordem de velocidade.",
+      "problem_type": ["margin_erosion", "growth_without_profitability"],
+      "when_to_use": ["Margem bruta caindo por dois ou mais meses.", "Receita crescendo com lucro bruto parado."],
+      "related_kpis": ["kpi_margem_bruta", "kpi_cmv", "kpi_margem_contribuicao"],
+      "diagnostic_questions": ["Qual insumo ou mercadoria mais subiu de preco?", "Quanto da receita passou por desconto?", "Quais itens vendem muito e tem margem baixa?"],
+      "actions": [
+        { "priority": "high", "type": "adjust_pricing", "text": "Reajustar o preco dos itens de maior volume para repor o aumento de custo." },
+        { "priority": "high", "type": "investigate", "text": "Cotar os tres insumos de maior peso com fornecedores alternativos." },
+        { "priority": "medium", "type": "revise_offer", "text": "Reduzir descontos e promocoes que nao trazem volume adicional comprovado." },
+        { "priority": "medium", "type": "analyze_margin", "text": "Empurrar o mix para itens de margem maior (destaque no cardapio, combos, sugestao de venda)." },
+        { "priority": "low", "type": "investigate", "text": "Medir perdas, quebras e desperdicio por semana." }
+      ],
+      "guardrails": [
+        "NAO subir preco de todos os itens de uma vez sem testar a reacao dos clientes nos itens principais.",
+        "NAO trocar fornecedor so pelo preco quando a qualidade sustenta a venda."
+      ],
+      "success_metrics": ["kpi_margem_bruta", "kpi_lucro_bruto"],
+      "created_at": "2026-08-30", "updated_at": "2026-08-30", "owner": "curador-financeiro"
+    },
+    {
+      "id": "playbook_aumentar_receita", "type": "playbook", "title": "Aumentar receita com a estrutura atual", "slug": "aumentar-receita",
+      "status": "approved", "version": "1.0.0", "language": "pt-BR",
+      "summary": "Quando a estrutura ja esta paga e sobra capacidade, cada real a mais de venda acima do ponto de equilibrio vira lucro quase integral.",
+      "problem_type": ["below_breakeven", "negative_result"],
+      "when_to_use": ["Receita abaixo do ponto de equilibrio.", "Capacidade ociosa (equipe e espaco pagos, vendas abaixo do possivel)."],
+      "related_kpis": ["kpi_receita_liquida", "kpi_ponto_equilibrio", "kpi_margem_contribuicao"],
+      "diagnostic_questions": ["Quanto falta para o ponto de equilibrio?", "Quais dias ou horarios tem capacidade ociosa?", "Quais clientes compraram uma vez e nao voltaram?"],
+      "actions": [
+        { "priority": "high", "type": "investigate", "text": "Transformar o ponto de equilibrio em meta semanal de vendas e acompanhar." },
+        { "priority": "high", "type": "improve_retention", "text": "Reativar clientes que ja compraram — custa menos que conquistar novos." },
+        { "priority": "medium", "type": "revise_offer", "text": "Criar oferta para horarios ou dias de baixa demanda, sem desconto nos horarios cheios." },
+        { "priority": "medium", "type": "adjust_pricing", "text": "Aumentar ticket medio com combos e itens complementares." },
+        { "priority": "low", "type": "run_experiment", "text": "Testar um canal novo com orcamento limitado e medir a receita dos dois meses seguintes." }
+      ],
+      "guardrails": [
+        "NAO comprar receita com desconto que derruba a margem de contribuicao abaixo do necessario para cobrir a estrutura.",
+        "NAO aumentar despesa fixa (contratacao, ponto novo) antes de a receita recorrente passar do ponto de equilibrio."
+      ],
+      "success_metrics": ["kpi_receita_liquida", "kpi_folga_ponto_equilibrio", "kpi_resultado_liquido"],
+      "created_at": "2026-08-30", "updated_at": "2026-08-30", "owner": "curador-financeiro"
+    }
+  ]
+}
