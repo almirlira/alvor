@@ -29,7 +29,7 @@ import {
 // Identico ao prototipo chat.html. aria-hidden por padrao (decorativo).
 // ---------------------------------------------------------------------------
 function CrossSymbol({ size = 20 }: { readonly size?: number }): JSX.Element {
-  // Simbolo AIVOR (design system) — substitui o cata-vento do CROSS.
+  // Simbolo ALVOR (design system) — substitui o cata-vento do CROSS.
   return (
     <svg viewBox="0 0 316 226" xmlns="http://www.w3.org/2000/svg" width={size} height={Math.round(size * 0.72)} aria-hidden="true">
       <path d="M187.422 112.463L282.399 47.835L315.737 96.8271L213.72 166.245H102.017L0 96.8271L33.3369 47.835L128.163 112.359V0H187.422V112.463Z" fill="#FF5500" />

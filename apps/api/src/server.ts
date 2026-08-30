@@ -8,7 +8,7 @@ import { semaforoRoutes } from './routes-semaforo.js';
 import { createLlm } from './llm.js';
 import { kb } from './engine.js';
 
-export const APP_NAME = 'AIVOR';
+export const APP_NAME = 'ALVOR';
 
 const app = Fastify({ logger: { level: 'info' } });
 

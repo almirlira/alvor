@@ -8,9 +8,9 @@ import { CopilotPage } from './routes/CopilotPage';
 import { SemaforoPage, type SemaforoResult } from './routes/SemaforoPage';
 import { TickerBar } from './components/TickerBar';
 import './styles/screen-dre.css';
-import './styles/aivor-theme.css';
+import './styles/alvor-theme.css';
 
-export const APP_NAME = 'AIVOR';
+export const APP_NAME = 'ALVOR';
 
 function RootIndex(): JSX.Element {
   const { data, loading } = useDre();
@@ -18,8 +18,8 @@ function RootIndex(): JSX.Element {
   return <Navigate to={data === null ? '/enviar' : '/painel'} replace />;
 }
 
-/** Simbolo AIVOR (marca do design system) — recorte do SVG oficial. */
-function AivorMark(): JSX.Element {
+/** Simbolo ALVOR (marca do design system) — recorte do SVG oficial. */
+function AlvorMark(): JSX.Element {
   return (
     <svg viewBox="0 0 316 226" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <path d="M187.422 112.463L282.399 47.835L315.737 96.8271L213.72 166.245H102.017L0 96.8271L33.3369 47.835L128.163 112.359V0H187.422V112.463Z" fill="#FF5500" />
@@ -52,7 +52,7 @@ function Rail(): JSX.Element {
   );
   return (
     <nav className="dre-rail" aria-label="Navegacao">
-      <div className="dre-rail-logo"><AivorMark /><span>AIVOR</span></div>
+      <div className="dre-rail-logo"><AlvorMark /><span>ALVOR</span></div>
       {item('/painel', 'grid_view', 'Painel')}
       {item('/semaforo', 'traffic', 'Semaforo', alerts)}
       {item('/copilot', 'forum', 'Copilot')}

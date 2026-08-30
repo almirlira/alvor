@@ -1,5 +1,5 @@
 /**
- * API client fino sobre fetch — AIVOR (protótipo, sem autenticação).
+ * API client fino sobre fetch — ALVOR (protótipo, sem autenticação).
  * Todas as chamadas vão para /api/* e o Vite encaminha para a API local (:3800).
  */
 

@@ -1,4 +1,4 @@
-# AIVOR — protótipo (hackathon)
+# ALVOR — protótipo (hackathon)
 
 Lê a DRE mensal de uma PME (planilha), mostra o painel do mês, classifica cada problema no **Semáforo de Autonomia** e entrega insights práticos de lucro com IA — **todo número citado tem fonte na própria DRE**; se não tem o dado, ele diz que não tem.
 
@@ -16,7 +16,7 @@ Cada card traz: o problema, a **trilha** (números com origem na linha da DRE ou
 
 Os 3 cards mais importantes (um por cor) ficam no hero do Painel; a tela **Semáforo** lista todos, com filtro por cor e seleção de mês. Motor determinístico em `apps/api/src/semaforo.ts` (`GET /semaforo?month=`), sem IA — instantâneo e sempre com fonte.
 
-Visual: design system AIVOR (`design/aivor_bento_design_system.html`) aplicado por `apps/web/src/styles/aivor-theme.css`, que remapeia os tokens herdados do CROSS para a paleta bento escura. Paleta do semáforo: verde `#859364`, amarelo `#EFC059`, vermelho `#ED615A` — os mesmos tons governam os gráficos.
+Visual: design system ALVOR (`design/alvor_bento_design_system.html`) aplicado por `apps/web/src/styles/alvor-theme.css`, que remapeia os tokens herdados do CROSS para a paleta bento escura. Paleta do semáforo: verde `#859364`, amarelo `#EFC059`, vermelho `#ED615A` — os mesmos tons governam os gráficos.
 
 ## Ticker (barra fixa de rodapé)
 
