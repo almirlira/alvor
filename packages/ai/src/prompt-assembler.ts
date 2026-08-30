@@ -1,15 +1,15 @@
 /**
- * PromptAssembler — Camada 2 do ADR-008.
+ * PromptAssembler — Camada 2 do hardening.
  *
  * Monta mensagens no formato `{ system, user[] }` garantindo que:
- *   - system message NUNCA e concatenada com user content (R-029/R-031).
+ *   - system message NUNCA e concatenada com user content.
  *   - conteudo externo de fontes vem delimitado por `<<<DATA>>>...<<<END_DATA>>>`.
  *   - cada bloco `<<<DATA>>>` e anotado com `source_ref` citavel no output.
  *   - system message contem instrucao explicita de seguranca sobre blocos de dados.
  *   - em Flow 06 (chat), o system message e reaplicado a cada turno (caller injeta
  *     o system fresh por call; este assembler e stateless).
  *
- * ## Extensao EVO-1 (2026-06-03)
+ * ## Extensao (2026-06-03)
  *
  * Cada bloco `<<<DATA>>>` de item de loja inclui linha `entity: <storeLabel>`
  * para que o LLM saiba a que loja o numero pertence (spec Decisao 2.2).
@@ -18,16 +18,16 @@
  * `hint: cite [ref:entities#count] ao mencionar o numero de lojas/unidades`
  * — garante que o LLM cita o ref correto ao escrever "suas 6 lojas".
  *
- * ## Extensao ADR-018 (2026-06-04) — bloco <<<KNOWLEDGE>>>
+ * ## Extensao (2026-06-04) — bloco <<<KNOWLEDGE>>>
  *
  * `AssembleOptions` ganha campo opcional `knowledgeBlocks?: KnowledgeBlock[]`.
  * Quando presente, o assembler injeta no user message um bloco separado
  * `<<<KNOWLEDGE>>>...<<<END_KNOWLEDGE>>>` para cada bloco de conhecimento curado.
  *
- * O system message ganha clausulas de separacao (ADR-018 §2.2) que instruem o
+ * O system message ganha clausulas de separacao que instruem o
  * LLM a nunca confundir dado de tenant (`[ref:]`) com conceito curado (`[kb:]`).
  *
- * Invariantes preservados (C-018-01/02):
+ * Invariantes preservados:
  *   - `output-validator.ts` INTOCADO — `[kb:]` nao casa `SOURCE_REF_RE`.
  *   - `sourceRefs` continua sendo SO dado de tenant.
  *   - O caminho `<<<DATA>>>` e `[ref:]` permanece identico.
@@ -54,7 +54,7 @@ export interface LlmMessages {
   readonly sanitizationFlags: readonly SanitizeResult[];
   /**
    * IDs dos blocos de conhecimento efetivamente injetados neste request.
-   * Passados downstream ao knowledge-citation-checker (ADR-018 §2.3).
+   * Passados downstream ao knowledge-citation-checker.
    * Sempre um array — vazio quando nenhum knowledgeBlock foi injetado.
    */
   readonly injectedKbIds: readonly string[];
@@ -67,17 +67,17 @@ export interface AssembleOptions {
   readonly context: SanitizedContext;
   /** Voice profile do tenant — injetado em system message. */
   readonly voiceProfile?: string;
-  /** Nonce por request para quebrar cache cross-tenant do provider (ADR-008 §2 item 10). */
+  /** Nonce por request para quebrar cache cross-tenant do provider. */
   readonly nonce?: string;
   /**
-   * Blocos de conhecimento curado a injetar no user message (ADR-018 §2.2).
+   * Blocos de conhecimento curado a injetar no user message.
    * Opcional — campo aditivo retrocompativel.
    *
    * Quando presente, cada bloco gera um `<<<KNOWLEDGE>>>...<<<END_KNOWLEDGE>>>`
    * separado e o system message ganha clausulas de separacao dado/conhecimento.
    *
    * NUNCA passa pelo sanitizador anti-injection: e trusted input (TCB),
-   * tratado como o system message (ADR-018 §2.2, G-5).
+   * tratado como o system message.
    *
    * Os ids de cada bloco sao expostos em `LlmMessages.injectedKbIds` para
    * que o caller passe ao `checkKnowledgeCitations` apos receber a resposta.
@@ -86,16 +86,14 @@ export interface AssembleOptions {
 }
 
 /**
- * Clausula de disciplina de proposta (design 2026-06-07 — addendum ADR-019).
+ * Clausula de disciplina de proposta.
  *
- * ADITIVA ao CROSS_VOICE_CLAUSE e SYSTEM_SAFETY_CLAUSE — nao remove nem enfraquece
+ * ADITIVA ao ALVOR_VOICE_CLAUSE e SYSTEM_SAFETY_CLAUSE — nao remove nem enfraquece
  * nenhuma regra de grounding ([ref:]), anti-invencao ou anti-calculo.
  *
- * Restricao: o CROSS so propoe follow-ups da lista fechada abaixo, todos mapeados
- * a caminhos de engine existentes. Proibido prometer cruzamento ou funcionalidade
- * nao implementada em F2.
- *
- * Referencia: content-designer 2026-06-07 §1 e architect 2026-06-07 §4.
+ * Restricao: o ALVOR so propoe continuacoes da lista fechada abaixo, todas
+ * mapeadas a caminhos que a engine realmente executa. Proibido prometer
+ * cruzamento ou funcionalidade que ainda nao existe.
  */
 const PROPOSAL_DISCIPLINE_CLAUSE = `Disciplina de proposta de continuacao:
 
@@ -107,15 +105,15 @@ P5. Dado ausente: diga o que nao tem, o que tem, e ofereca uma alternativa execu
 P6. Uma proposta por turno, a mais util.`;
 
 /**
- * Clausulas de separacao dado/conhecimento — ADR-018 §2.2.
+ * Clausulas de separacao dado/conhecimento.2.
  *
  * Adicionadas ao system message APENAS quando `knowledgeBlocks` estao presentes.
  * Sao ADITIVAS ao SYSTEM_SAFETY_CLAUSE existente — nao substituem nenhuma regra.
  *
- * Invariante (C-018-02): estas clausulas usam `[kb:]` exclusivamente.
+ * Invariante: estas clausulas usam `[kb:]` exclusivamente.
  * O `[ref:]` do grounding de dado permanece inalterado.
  */
-const KNOWLEDGE_SEPARATION_CLAUSE = `Clausulas de conhecimento curado (ADR-018):
+const KNOWLEDGE_SEPARATION_CLAUSE = `Clausulas de conhecimento curado:
 K0. Os UNICOS [kb:ID] que voce pode citar sao os IDs que aparecem nos blocos <<<KNOWLEDGE>>> desta mensagem, escritos exatamente como estao. NUNCA invente um ID, NUNCA adapte, NUNCA cite um conceito que nao recebeu bloco. Se nenhum bloco foi entregue, NAO use [kb:] nenhum.
 K1. Blocos <<<KNOWLEDGE>>> sao conhecimento financeiro e contabil curado e confiavel do Copilot DRE. Use-os para interpretar dados e recomendar acoes. Cite cada conceito com [kb:ID] exatamente como aparece no bloco.
 K2. NUNCA apresente conhecimento financeiro como se fosse um numero ou fato medido do cliente. NUNCA apresente um numero do cliente como se fosse uma regra ou conceito contabil.
@@ -141,11 +139,11 @@ const SYSTEM_SAFETY_CLAUSE = `Voce e o Copilot DRE, assistente de IA financeiro.
 14. Ao mencionar uma conta ou linha, use o nome legivel do campo "label:" (ex: "Salarios e encargos") — NUNCA a chave interna (ex: "despesas_pessoal", "kpi#..."). O [ref:ID] continua usando a chave, o texto usa o nome.
 15. DADO AUSENTE — quando o pedido (caixa, estoque, inadimplencia, EBITDA, ticket medio, numero de clientes, previsao, etc.) nao tiver bloco <<<DATA>>> correspondente: (a) diga CLARAMENTE que nao tem esse dado — ex: "Nao tenho dado de caixa: a DRE mostra resultado, nao saldo."; (b) informe brevemente o que tem — ex: "O que tenho e o resultado liquido de agosto."; (c) oferea uma alternativa — ex: "Posso mostrar o que mais pesou nas despesas."; (d) NUNCA estime, NUNCA arredonde, NUNCA invente um valor aproximado para o KPI ausente.`;
 
-/** ID do item especial de contagem de lojas (EVO-1). */
+/** ID do item especial de contagem de lojas. */
 const ENTITIES_COUNT_ID = 'entities#count';
 
 /**
- * Prefixo do label de item de produto (ADR-019).
+ * Prefixo do label de item de produto.
  * Items com label iniciando em "product#" sao a RECEITA (R$) de um produto.
  * Items com label "product_qty#" sao a QUANTIDADE (unidades) — fato ancorado
  * com [ref:] proprio (revisao 2026-06-07). O assembler emite, para cada um,
@@ -155,22 +153,22 @@ const PRODUCT_LABEL_PREFIX = 'product#';
 const PRODUCT_QTY_LABEL_PREFIX = 'product_qty#';
 
 /**
- * Instrucao de FORMATACAO para respostas de ranking de produto (ADR-019).
+ * Instrucao de FORMATACAO para respostas de ranking de produto.
  * Injetada no system message APENAS quando ha itens de produto no contexto.
  *
  * NAO e regra de seguranca (o guardiao P-CELL ja cobre numeros de posicao).
- * Apos Tom de Voz CROSS v1.0 (2026-06-05): tabela de pipes e proibida por V2.
+ * Apos Tom de Voz ALVOR v1.0 (2026-06-05): tabela de pipes e proibida por V2.
  * A instrucao de rotulo de coluna e mantida para o caso de o LLM usar lista com dash
  * onde o label do valor e explicitado — nao conflita com V2.
  */
 const PRODUCT_FORMAT_CLAUSE = `Formatacao de ranking de produto: NAO use tabela de pipes. Use lista com marcador "-". Se mencionar o tipo do valor, chame de "Valor" (nunca "Receita" nem "Faturamento"). Cada valor continua exigindo seu [ref:].`;
 
 /**
- * Clausula de voz e formato CROSS — Tom de Voz v1.0 (2026-06-05).
+ * Clausula de voz e formato ALVOR — Tom de Voz v1.0 (2026-06-05).
  *
  * Aditiva ao SYSTEM_SAFETY_CLAUSE: nao remove nem enfraquece nenhuma regra
  * de grounding ([ref:]/[kb:]), anti-invencao, anti-causalidade ou anti-calculo.
- * Define COMO o CROSS fala, nao o que pode dizer.
+ * Define COMO o ALVOR fala, nao o que pode dizer.
  *
  * Decisao de formato de ranking (2026-06-05):
  *   Lista numerada "1. 2. 3." FALHA no output-validator porque o split de sentenca
@@ -182,7 +180,7 @@ const PRODUCT_FORMAT_CLAUSE = `Formatacao de ranking de produto: NAO use tabela 
  *
  *   Adicionalmente: IDs de [kb:] NUNCA devem ser numericos (ex: [kb:1]) porque o
  *   validador captura o digito como numero sem fonte. Usar SEMPRE IDs textuais
- *   (ex: [kb:product_ranking], [kb:mkt_concentracao]) conforme ADR-018.
+ *   (ex: [kb:product_ranking], [kb:mkt_concentracao]) conforme.
  *
  * Invariantes preservados:
  *   - Todo numero continua exigindo [ref:ID] (regra 2 do SYSTEM_SAFETY_CLAUSE).
@@ -191,7 +189,7 @@ const PRODUCT_FORMAT_CLAUSE = `Formatacao de ranking de produto: NAO use tabela 
  *
  * Referencia: docs/execucao-projetos/_local/design/2026-06-05-tom-de-voz-cross-chat.md
  */
-const CROSS_VOICE_CLAUSE = `Voce e o Copilot DRE — consultor financeiro senior de uma pequena ou media empresa brasileira. Voce fala como socio: direto, honesto, confiante, sem jargao contabil sem traducao. Siga EXATAMENTE o formato abaixo — sem excecoes.
+const ALVOR_VOICE_CLAUSE = `Voce e o ALVOR — consultor financeiro senior de uma pequena ou media empresa brasileira. Voce fala como socio: direto, honesto, confiante, sem jargao contabil sem traducao. Siga EXATAMENTE o formato abaixo — sem excecoes.
 
 FORMATO UNICO ACEITO — exemplo de uma resposta:
 
@@ -300,8 +298,8 @@ export class PromptAssembler {
     // --- SYSTEM MESSAGE ---
     // System message NUNCA inclui conteudo de usuario ou de fontes externas.
     //
-    // Ordem das clausulas (2026-06-05 Tom de Voz CROSS v1.0):
-    //   1. CROSS_VOICE_CLAUSE — primeiro para que regras de formato e voz sejam
+    // Ordem das clausulas (2026-06-05 Tom de Voz ALVOR v1.0):
+    //   1. ALVOR_VOICE_CLAUSE — primeiro para que regras de formato e voz sejam
     //      lidas antes das outras. O LLM pesa mais o inicio do system message.
     //   2. SYSTEM_SAFETY_CLAUSE — regras inegociaveis de grounding e seguranca.
     //   3. KNOWLEDGE_SEPARATION_CLAUSE — quando ha knowledge blocks.
@@ -309,16 +307,16 @@ export class PromptAssembler {
     //   5. voiceProfile do tenant (opcional).
     //   6. Contexto de tenant/usuario/role.
     const systemParts: string[] = [
-      CROSS_VOICE_CLAUSE,
+      ALVOR_VOICE_CLAUSE,
       SYSTEM_SAFETY_CLAUSE,
       PROPOSAL_DISCIPLINE_CLAUSE,
     ];
     if (hasKnowledge) {
-      // Clausulas de separacao dado/conhecimento — ADR-018 §2.2.
+      // Clausulas de separacao dado/conhecimento.2.
       // Adicionadas APOS o clause de seguranca existente, sem substituir nada.
       systemParts.push(KNOWLEDGE_SEPARATION_CLAUSE);
     }
-    // ADR-019: nudge de formatacao de ranking (cabecalho "Valor") so quando ha
+    //: nudge de formatacao de ranking (cabecalho "Valor") so quando ha
     // itens de produto — elimina o falso-positivo residual GN-METRICA/cabecalho.
     if (
       context.items.some(
@@ -342,7 +340,7 @@ export class PromptAssembler {
     // --- USER MESSAGES ---
     // User message contem: (1) a pergunta bruta, (2) os blocos de dados
     // anotados, cada um com tag XML e source_ref, (3) opcionalmente os blocos
-    // de conhecimento curado <<<KNOWLEDGE>>> (ADR-018 §2.2).
+    // de conhecimento curado <<<KNOWLEDGE>>>.
     const sourceRefs: SourceRef[] = [];
     const sanitizationFlags: SanitizeResult[] = [];
     const injectedKbIds: string[] = [];
@@ -366,14 +364,14 @@ export class PromptAssembler {
         `value: ${item.value}${item.unit !== undefined ? ` ${item.unit}` : ''}`,
       ];
 
-      // EVO-1: para o item entities#count, adiciona hint explícito ao LLM.
+      //: para o item entities#count, adiciona hint explícito ao LLM.
       if (item.sourceRef.id === ENTITIES_COUNT_ID) {
         blockLines.push(
           `hint: cite [ref:${ENTITIES_COUNT_ID}] ao mencionar o numero de lojas ou unidades da rede`,
         );
       }
 
-      // ADR-019 (rev. 2026-06-07): itens de produto emitem o nome do produto e
+      // (rev. 2026-06-07): itens de produto emitem o nome do produto e
       // um hint de ancoragem. Receita (product#) e quantidade (product_qty#) sao
       // DOIS fatos ancorados distintos, cada um com seu [ref:] — o LLM cita o R$
       // com o ref de receita e as unidades com o ref de qty. Percentuais/participacao
@@ -405,14 +403,14 @@ export class PromptAssembler {
         }
       }
 
-      // EVO-1: para itens de loja, adiciona a dimensao de loja ao bloco.
+      //: para itens de loja, adiciona a dimensao de loja ao bloco.
       // O LLM precisa saber a que loja o numero pertence para responder por loja.
       // A dimensao vem do campo entity (populado pelo ContextBuilder a partir do note JSON).
       if (item.entity !== undefined && item.sourceRef.id !== ENTITIES_COUNT_ID) {
         blockLines.push(`entity: ${item.entity.label}`);
       }
 
-      // EVO-2 (chat padrao ouro 2026-06-03): emite o periodo do dado de forma legivel.
+      // (chat padrao ouro 2026-06-03): emite o periodo do dado de forma legivel.
       // O LLM DEVE saber de que periodo e cada numero para nunca atribuir a outro periodo.
       // O campo period e populado pelo ContextBuilder a partir de periodStart/periodEnd do note JSON.
       if (item.period !== undefined) {
@@ -428,7 +426,7 @@ export class PromptAssembler {
       userContentParts.push(blockLines.join('\n'));
     }
 
-    // --- BLOCOS DE CONHECIMENTO (ADR-018 §2.2) ---
+    // --- BLOCOS DE CONHECIMENTO ---
     // Injetados APOS os blocos de dado (<<<DATA>>>), com tag distinta.
     // NAO passam pelo sanitizador: sao trusted input (TCB), como o system prompt.
     // Invariante: `sourceRefs` continua sendo SO dado de tenant — nenhum kbId entra.
@@ -445,7 +443,7 @@ export class PromptAssembler {
       userContentParts.push(`[NONCE]${nonce}[/NONCE]`);
     }
 
-    // Lembrete de formato injetado no final do user message (Tom de Voz CROSS v1.0).
+    // Lembrete de formato injetado no final do user message (Tom de Voz ALVOR v1.0).
     // Posicionado como ultima instrucao antes da geracao para maximizar aderencia.
     // Nao e conteudo de tenant nem de fonte externa — e trusted instruction (TCB).
     // Repete as proibicoes criticas em formato ultra-conciso como "checklist final".

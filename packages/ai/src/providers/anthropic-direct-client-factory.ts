@@ -12,7 +12,7 @@
  *   - Este factory apenas entrega um client com `messagesCreate` que faz a
  *     chamada direta e normaliza a resposta para `VertexMessagesResponse`.
  *
- * Politica (B.20 D-013 — rev. piloto):
+ * Politica:
  *   - Garantia "no training" esta nos termos comerciais da Anthropic (plano
  *     com DPA). Nao existe header por chamada — a garantia vive no contrato.
  *   - Este provider e EXCLUSIVO para dev/piloto. Em NODE_ENV=production
@@ -85,7 +85,7 @@ export interface AnthropicSdkResponse {
 
 /**
  * Shape minimo do undici.Agent que precisamos para configurar keep-alive.
- * Evita dependencia de tipos em `undici` no pacote @mktvibe/ai.
+ * Evita dependencia de tipos em `undici` no pacote @dre/ai.
  */
 export interface UndiciAgentLike {
   // opaque — so usamos como dispatcher no fetchOptions
@@ -287,7 +287,7 @@ async function defaultSdkLoader(): Promise<AnthropicSdkModule> {
  * Retorna null se o undici nao estiver disponivel — o SDK usa fetch global.
  *
  * Usa dynamic import para nao adicionar `undici` como dependencia hard do
- * pacote @mktvibe/ai. Em Node.js 18+, o undici e embutido no runtime mas
+ * pacote @dre/ai. Em Node.js 18+, o undici e embutido no runtime mas
  * nao exportado como 'undici' — importamos como modulo instalado pelo
  * consumidor (a api) que tem undici via dependencias de pg/fastify.
  */

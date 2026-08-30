@@ -1,7 +1,7 @@
 /**
  * InsightComposer — assembles structured insights from triggered rules.
  *
- * NO LLM. NO interpolation of tenant values into text fields (C-018-12).
+ * NO LLM. NO interpolation of tenant values into text fields.
  * Fields hypotheses/recommendations/caveats are LITERAL COPIES of curated blocks.
  * Numbers live ONLY in evidence[] — never in text fields.
  *
@@ -41,7 +41,7 @@ export class InsightComposer {
 
       const rule = anchor.rule;
 
-      // evidence[] — numbers ONLY, from input.metrics, zero text from KB (C-018-12)
+      // evidence[] — numbers ONLY, from input.metrics, zero text from KB
       const evidenceKpiIds = new Set<string>([
         ...(rule.conditions.all ?? []).map((c) => c.metric),
         ...(rule.conditions.any ?? []).map((c) => c.metric),
@@ -59,7 +59,7 @@ export class InsightComposer {
         evidence.push(ev);
       }
 
-      // hypotheses — LITERAL COPY from curated rule (C-018-12, no interpolation)
+      // hypotheses — LITERAL COPY from curated rule
       const hypotheses: InsightHypothesis[] = (rule.hypotheses ?? []).map((h) => ({
         text: h.text,
         confidence: h.confidence,
@@ -93,9 +93,9 @@ export class InsightComposer {
       });
       const recommendations = allRecs.slice(0, maxRecs);
 
-      // caveats — LITERAL COPY (C-018-12)
+      // caveats — LITERAL COPY
       const caveats: string[] = [...(rule.caveats ?? [])];
-      // Add playbook guardrails as caveats (C-018-11: guardrails propagated)
+      // Add playbook guardrails as caveats
       for (const pb of playbooks) {
         for (const g of pb.guardrails ?? []) {
           if (!caveats.includes(g)) caveats.push(g);

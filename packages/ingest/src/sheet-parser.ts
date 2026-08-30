@@ -6,10 +6,10 @@
  *   - CSV (string ou Buffer)
  *   - XLSX (Buffer — via import dinamico de `xlsx`)
  *
- * F2-flow-05 / ADR-015 Divergencia 1: parser generico, SEM hardcoding por
+ * / Divergencia 1: parser generico, SEM hardcoding por
  * cliente. Nenhum nome de sheet, cliente ou loja aparece aqui.
  *
- * Criterio PAR-DRV-01: deve funcionar com planilha de qualquer tenant com
+ * Criterio: deve funcionar com planilha de qualquer tenant com
  * colunas em qualquer ordem e nomes de header sinonimoicos.
  *
  * Validador de integridade emite warnings (nunca erros fatais):
@@ -61,7 +61,7 @@ export interface SheetSourceContent {
    * Precedência: config.profile (inline) > config.profile_id (referência ao registro) >
    *              perfil hardcoded (REGISTERED_PROFILES) > heurística.
    *
-   * ADR-016 §2.2 / O1-002.
+   * /.
    */
   readonly sourceConfig?: Record<string, unknown> | undefined;
   /**
@@ -73,7 +73,7 @@ export interface SheetSourceContent {
    *
    * Apenas para mimeType XLSX. Ignorado para CSV e Sheets API.
    * O caller deve garantir que o workbook foi parsado com as mesmas opções de
-   * segurança (cellFormula:false, cellHTML:false, cellNF:false — ADR-016 §2.7 C-016-03).
+   * segurança (cellFormula:false, cellHTML:false, cellNF:false.7).
    */
   readonly _preloadedXlsxWorkbook?: {
     readonly workbook: PreParsedXlsxWorkbook;
@@ -88,7 +88,7 @@ export interface SheetSourceContent {
  * (header na linha 0, sem linhas extras de titulo). Nenhum perfil hardcoda
  * nome de cliente — a identificacao e feita por padroes de nome de arquivo e/ou aba.
  *
- * ADR-015 Div 1: engenharia generica — os padroes sao configuracoes,
+ * Div 1: engenharia generica — os padroes sao configuracoes,
  * nao codigo especifico por cliente.
  */
 export interface SheetProfile {
@@ -136,12 +136,12 @@ export interface SheetProfile {
  * Criterio de match: fileNamePattern (se presente) E sheetNamePattern (se presente).
  * Se so um criterio definido, so ele precisa bater.
  *
- * ADR-015 Div 1: adicionar perfis aqui e a forma correta de suportar novos
+ * Div 1: adicionar perfis aqui e a forma correta de suportar novos
  * formatos sem hardcoding no corpo de parseSheet.
  */
 const REGISTERED_PROFILES: readonly SheetProfile[] = [
   {
-    // Perfil para planilhas MKT_vendas_diarias da Casa de Bolos.
+    // Perfil para planilhas MKT_vendas_diarias da empresa exemplo.
     // Detectado por padrao de nome de arquivo OU nome de aba "RESUMO MENSAL".
     // Header na linha 3 do Excel (indice 2, 0-based).
     // Linha de TOTAL MES ignorada: col[1] == 'TOTAL MES' (normalizado).
@@ -185,7 +185,7 @@ export interface ParsedSheet {
   /** Perfil de planilha aplicado, se algum foi detectado. */
   readonly appliedProfileId?: string | null;
   /**
-   * Versão do perfil declarativo aplicado (O1-002 — insumo de linhagem).
+   * Versão do perfil declarativo aplicado.
    * Presente quando um SourceProfile declarativo foi aplicado.
    * Null quando só heurística foi usada.
    */
@@ -193,11 +193,11 @@ export interface ParsedSheet {
   /**
    * Fonte do perfil aplicado: 'config' (inline da fonte), 'registry' (padrão
    * do registro), 'hardcoded' (REGISTERED_PROFILES legado), ou 'heuristic'.
-   * Insumo de linhagem para rastreabilidade (O1-002).
+   * Insumo de linhagem para rastreabilidade.
    */
   readonly profileSource?: 'config' | 'registry' | 'hardcoded' | 'heuristic' | null;
   /**
-   * SHA-256 hex do buffer bruto do arquivo antes do parse (R-049).
+   * SHA-256 hex do buffer bruto do arquivo antes do parse.
    * Presente apenas quando o caller calculou e injetou o hash
    * (ex: GoogleDriveCollector._downloadAndParse). Ausente em chamadas diretas.
    */
@@ -205,7 +205,7 @@ export interface ParsedSheet {
 }
 
 // ---------------------------------------------------------------------------
-// Sanitizacao de formula injection (R-031)
+// Sanitizacao de formula injection
 // ---------------------------------------------------------------------------
 
 /**
@@ -218,7 +218,7 @@ export interface ParsedSheet {
 const FORMULA_INJECTION_PREFIXES = ['=', '+', '-', '@'] as const;
 
 /**
- * Sanitiza um valor de celula STRING para prevenir formula injection (R-031).
+ * Sanitiza um valor de celula STRING para prevenir formula injection.
  *
  * Regra:
  *   - Se o valor for string E comecar com `=`, `+`, `-` ou `@`,
@@ -422,11 +422,11 @@ async function xlsxToMatrix(
     XLSX = (await import('xlsx' as any)) as XlsxModule;
   } catch {
     throw new Error(
-      'Dependencia `xlsx` nao instalada. Adicione `xlsx` ao package.json de @mktvibe/collectors para suporte a XLSX.',
+      'Dependencia `xlsx` nao instalada. Adicione `xlsx` ao package.json de @dre/ingest para suporte a XLSX.',
     );
   }
 
-  // C-016-03 (ADR-016 §2.7): formulas e refs externas desabilitadas no parse.
+  //: formulas e refs externas desabilitadas no parse.
   // cellFormula:false — nao parseia formulas em celulas; cellHTML:false — sem
   // extracao de HTML; cellNF:false — sem number-format. Fecha vetor de formula/XXE.
   const workbook = XLSX.read(buffer, {
@@ -566,7 +566,7 @@ function validateIntegrity(
  * Criterio: fileNamePattern (se definido) E sheetName (verificado apos carregar XLSX).
  *
  * Usado apenas como fallback quando nenhum perfil DECLARATIVO foi encontrado.
- * (O perfil declarativo tem precedencia sobre este — ADR-016 §2.2)
+ * (O perfil declarativo tem precedencia sobre este.2)
  */
 function detectHardcodedProfile(
   filename: string,
@@ -584,7 +584,7 @@ function detectHardcodedProfile(
 }
 
 // ---------------------------------------------------------------------------
-// Resolucao de perfil declarativo (O1-002)
+// Resolucao de perfil declarativo
 // ---------------------------------------------------------------------------
 
 /**
@@ -748,7 +748,7 @@ function resolveProfile(
  *
  * Etapas:
  *   1. Converte para matriz 2D (header + rows)
- *   2. Resolve perfil (declarativo > hardcoded > heuristica) — ADR-016 §2.2
+ *   2. Resolve perfil (declarativo > hardcoded > heuristica).2
  *   3. Detecta colunas por heuristica (column-detector) — mescla com column_map do perfil
  *   4. Infere tipos por coluna (type-inferrer)
  *   5. Valida integridade e emite warnings
@@ -756,7 +756,7 @@ function resolveProfile(
  *
  * Nunca lanca excecao de negocio — erros de parse viram warnings.
  *
- * Precedencia de perfil (O1-002):
+ * Precedencia de perfil:
  *   content.sourceConfig.profile (inline) > content.sourceConfig.profile_id (registro) >
  *   auto-deteccao por nome de arquivo no registro > REGISTERED_PROFILES (hardcoded) >
  *   heuristica do column-detector
@@ -820,7 +820,7 @@ export async function parseSheet(content: SheetSourceContent): Promise<ParsedShe
         // PERF (fix): usa workbook pré-parsado quando disponível para evitar duplo XLSX.read.
         // O caller (parse-worker-thread.ts) já fez o XLSX.read via loadXlsxWorkbook; ao passar
         // _preloadedXlsxWorkbook evitamos a segunda deserialização que causava timeout de 30s.
-        // As opções de segurança (cellFormula:false etc.) foram aplicadas pelo caller — ADR-016 §2.7.
+        // As opções de segurança (cellFormula:false etc.) foram aplicadas pelo caller.7.
         if (content._preloadedXlsxWorkbook !== undefined) {
           const result = xlsxMatrixFromWorkbook(
             content._preloadedXlsxWorkbook.workbook,
@@ -1061,7 +1061,7 @@ export async function parseSheet(content: SheetSourceContent): Promise<ParsedShe
     .map((row): ParsedRow => {
       const cells = rawHeaders.map((_, colIdx) => {
         const rawOriginal: unknown = row[colIdx] ?? null;
-        // R-031: sanitiza formula injection antes de persistir/propagar.
+        //: sanitiza formula injection antes de persistir/propagar.
         // Numeros (negativos inclusos) nao sao afetados — so strings suspeitas.
         const raw: unknown = sanitizeCellValue(rawOriginal);
         const colTypeInfo = columnTypes[colIdx];

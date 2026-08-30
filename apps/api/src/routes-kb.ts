@@ -1,7 +1,7 @@
 /**
  * routes-kb.ts — "Explica pra mim" deterministico (sem IA).
  *
- *   GET /marketing-kb/kpi/:metric_key   (rota herdada do painel do CROSS)
+ *   GET /marketing-kb/kpi/:metric_key   (rota herdada do painel do ALVOR)
  *   GET /kb/kpi/:metric_key
  *
  * Contrato: KpiKbData do ExplainPanel (metric_key, name_pt, definition, formula, kb_ref, current_value).

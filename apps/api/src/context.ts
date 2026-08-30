@@ -1,6 +1,6 @@
 /**
  * context.ts — transforma a DRE + KPIs + referencias fiscais em itens citaveis
- * ([ref:...]) para o prompt, no formato ScopedDataItem do guardiao do CROSS.
+ * ([ref:...]) para o prompt, no formato ScopedDataItem do guardiao do ALVOR.
  *
  * Convencao de ids:
  *   dre#<conta>#<AAAA-MM>       valor canonico de uma conta no mes

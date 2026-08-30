@@ -1,19 +1,19 @@
 /**
- * Knowledge Citation Checker — ADR-018 §2.3, Passo 6 fio 1.
+ * Knowledge Citation Checker.3, Passo 6 fio 1.
  *
  * Segunda camada de grounding: verifica que cada marcador `[kb:ID]` citado
  * pelo LLM pertence ao conjunto de blocos de conhecimento EFETIVAMENTE
  * injetados no prompt — nao basta existir na base; tem que ter sido injetado,
- * senao o LLM "lembrou" um id de treinamento (C-018-03).
+ * senao o LLM "lembrou" um id de treinamento.
  *
- * ## Separacao estrutural (C-018-02)
+ * ## Separacao estrutural
  *
  * O namespace `[kb:ID]` e distinto do `[ref:ID]` do output-validator.
  * `KB_REF_RE` nao casa `[ref:...]` e `SOURCE_REF_RE` do output-validator nao
  * casa `[kb:...]`. As duas camadas sao independentes e compostas em serie pelo
  * caller.
  *
- * ## O que este modulo NAO faz (ADR-018 §3 / Addendum A.5)
+ * ## O que este modulo NAO faz
  *
  * - Nao inspeciona numeros (responsabilidade do output-validator, INTOCADO).
  * - Nao faz NLP, embeddings ou RAG — set-membership simples de ids.
@@ -36,9 +36,9 @@
  *
  * ## Controles cobertos
  *
- * - C-018-01: zero diff em output-validator.ts (este modulo e arquivo NOVO)
- * - C-018-02: KB_REF_RE e SOURCE_REF_RE nao colidem por design
- * - C-018-03: [kb:ID] nao-injetado => passed: false, razao 'unknown_kb_id'
+ * -: zero diff em output-validator.ts (este modulo e arquivo NOVO)
+ * -: KB_REF_RE e SOURCE_REF_RE nao colidem por design
+ * -: [kb:ID] nao-injetado => passed: false, razao 'unknown_kb_id'
  */
 
 /**
@@ -48,7 +48,7 @@
  * `kbId` e o identificador unico do item na base (ex: "kpi.roas", "4p.promocao",
  * "rule.ctr_down_cpc_up"). `body` e o texto curado a ser injetado.
  *
- * Invariantes (ADR-018 §2.2, C-018-07):
+ * Invariantes:
  *   - `body` nunca contem numero apresentavel como metrica do cliente.
  *   - `body` nunca contem delimitadores `<<<DATA>>>` / `<<<KNOWLEDGE>>>`.
  *   - `kbId` nao colide com ids do `sourceRefs` de dado de tenant.
@@ -65,7 +65,7 @@ export interface KnowledgeBlock {
  * `passed: false` — pelo menos um `[kb:ID]` nao foi injetado (unknown_kb_id).
  *
  * `citedKbIds` lista TODOS os ids extraidos do texto, inclusive os invalidos,
- * para rastreabilidade no llm_audit_log (C-018-05).
+ * para rastreabilidade no llm_audit_log.
  */
 export interface KnowledgeCheckResult {
   readonly passed: boolean;
@@ -78,7 +78,7 @@ export interface KnowledgeCheckResult {
 /**
  * Regex que captura marcadores `[kb:ID]` no output do LLM.
  *
- * ## Separacao de namespace (C-018-02)
+ * ## Separacao de namespace
  *
  * Esta regex captura SOMENTE `[kb:...]` — nunca `[ref:...]`.
  * O `SOURCE_REF_RE` do output-validator captura SOMENTE `[ref:...]` — nunca `[kb:...]`.
@@ -96,13 +96,13 @@ export const KB_REF_RE = /\[kb:([^\]]+)\]/g;
  * Verifica que todos os marcadores `[kb:ID]` no texto do LLM foram EFETIVAMENTE
  * injetados no prompt como blocos `<<<KNOWLEDGE>>>`.
  *
- * Algoritmo (set-membership simples, anti-overengineering ADR-018 Addendum A.5):
+ * Algoritmo (set-membership simples, anti-overengineering Addendum A.5):
  *   1. Extrai todos os `[kb:ID]` do texto via KB_REF_RE.
  *   2. Para cada ID extraido, verifica pertencimento ao set de `injectedKbIds`.
  *   3. Primeiro ID fora do set => passed: false, reason: 'unknown_kb_id'.
  *   4. Todos no set (ou nenhum citado) => passed: true, reason: 'ok'.
  *
- * ## Por que "injetado" e a condicao correta (ADR-018 §2.3)
+ * ## Por que "injetado" e a condicao correta
  *
  * Nao basta que o ID exista na base de conhecimento — o LLM poderia ter
  * "lembrado" um id de treinamento sem o trecho ter sido injetado neste

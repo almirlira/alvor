@@ -5,7 +5,7 @@
  * - NUNCA importar ou editar global.css daqui.
  * - Todos os seletores prefixados com .cs- (chat-screen) ou .cbubble-.
  * - Tokens via var(--md-*) e var(--mkv-*) — zero valores hardcoded.
- * - Fiel ao prototipo chat.html (Material 3 Expressive + Vivid Editorial CROSS B.49).
+ * - Fiel ao prototipo chat.html (Material 3 Expressive + Vivid Editorial ALVOR).
  *
  * Referencia: docs/execucao-projetos/_local/design/prototipo/chat.html
  */
@@ -307,7 +307,7 @@
   flex-shrink: 0;
   display: grid;
   place-items: center;
-  /* Degradê suave: marcador da CROSS */
+  /* Degradê suave: marcador do ALVOR */
   background: linear-gradient(135deg, rgba(63, 37, 112, 0.1) 0%, rgba(0, 121, 220, 0.1) 100%);
   border: 1px solid var(--md-outline-variant);
 }
@@ -325,7 +325,7 @@
   font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
 }
 
-/* SVG do logo CROSS dentro do avatar */
+/* SVG do logo ALVOR dentro do avatar */
 .cbubble-avatar svg {
   display: block;
 }
@@ -343,7 +343,7 @@
   max-width: 100%;
 }
 
-/* Bolha da CROSS — superficie neutra elevada */
+/* Bolha do ALVOR — superficie neutra elevada */
 .cbubble-bubble-cross {
   background: var(--md-surface-container-lowest);
   color: var(--md-on-surface);
@@ -351,7 +351,7 @@
   border-top-left-radius: var(--md-shape-xs);
 }
 
-/* Bolha do usuario — roxo primario CROSS.
+/* Bolha do usuario — roxo primario ALVOR.
    Contraste: #FFFFFF sobre #3F2570 = 12.1:1 — AAA ✓ */
 .cbubble-bubble-user {
   background: var(--md-primary);
@@ -360,7 +360,7 @@
   box-shadow: var(--md-elev-1);
 }
 
-/* Rotulo do remetente — CROSS */
+/* Rotulo do remetente — ALVOR */
 .cbubble-sender {
   font-size: 11px;
   font-weight: 700;
@@ -479,7 +479,7 @@
 }
 
 /* ================================================================
-   TYPING INDICATOR — "CROSS esta pensando"
+   TYPING INDICATOR — "ALVOR esta pensando"
    3 pontos com wave phase-offset.
    ================================================================ */
 .cs-typing {
@@ -734,7 +734,7 @@
   cursor: not-allowed;
 }
 
-/* Botao enviar — degradê tricolor CROSS: acao principal da tela */
+/* Botao enviar — degradê tricolor ALVOR: acao principal da tela */
 .cs-send-btn {
   width: 46px;
   height: 46px;
@@ -813,7 +813,7 @@
 }
 
 /* ================================================================
-   BARRA DE ACAO SUPERIOR — Nova conversa (F1-003)
+   BARRA DE ACAO SUPERIOR — Nova conversa
    ================================================================ */
 .cs-top-actions {
   display: flex;

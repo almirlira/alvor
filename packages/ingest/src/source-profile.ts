@@ -1,5 +1,5 @@
 /**
- * source-profile.ts — Tipo e loader de perfil declarativo por fonte (O1-002).
+ * source-profile.ts — Tipo e loader de perfil declarativo por fonte.
  *
  * Um perfil declarativo descreve COMPLETAMENTE como ler a planilha de uma fonte:
  *   - quais abas processar (e como identificá-las)
@@ -12,7 +12,7 @@
  * O perfil é carregado a partir de `data_sources.config` (campo JSONB que já
  * existe — sem migration). Tenant pode referenciar/override via config.
  *
- * ADR-016 §2.2 (D-029): zero nome de cliente em código — o perfil é dado, não branch.
+ *: zero nome de cliente em código — o perfil é dado, não branch.
  *
  * Precedência:
  *   1. Perfil declarativo em `data_sources.config.profile` (override declarativo)
@@ -21,7 +21,7 @@
  *   4. Heurística do column-detector (fallback)
  *
  * O campo `profile_id` + `profile_version` é propagado no metadata de cada
- * record produzido para rastreabilidade de linhagem (insumo para O1-005+).
+ * record produzido, para rastreabilidade de linhagem.
  */
 
 // ---------------------------------------------------------------------------
@@ -109,7 +109,7 @@ export interface SourceProfile {
    * Identificador único do perfil. Aparece em metadata de linhagem.
    * Exemplo: 'casa-de-bolos-vendas-diarias-v1'
    *
-   * Regra D-029: NUNCA inclua nome de cliente — use descrição do formato.
+   * Regra: NUNCA inclua nome de cliente — use descrição do formato.
    * O profile_id é identificador do formato/template, não do cliente.
    */
   readonly profile_id: string;
@@ -136,7 +136,7 @@ export interface SourceProfile {
   /**
    * Nome da coluna que identifica a entidade (loja/filial) nos dados tabulares.
    * Após normalização (lowercase, sem acento). Exemplo: 'loja'.
-   * Usado para propagação de entity_id em O1-005+.
+   * Usado para propagar o identificador da entidade.
    * Se ausente, registros não têm entity_id (aceitável para fontes sem multi-entidade).
    */
   readonly entity_column?: string;

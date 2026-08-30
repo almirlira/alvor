@@ -3,7 +3,7 @@ import { t } from '../lib/i18n';
 
 export type FallbackReason = 'no_data' | 'out_of_scope' | 'ambiguous';
 
-/** Shape F2 de fonte citada — campos opcionais degradam graciosamente. */
+/** Shape de fonte citada — campos opcionais degradam graciosamente. */
 export interface ChatSource {
   readonly id: string;
   readonly label: string;
@@ -70,9 +70,9 @@ export function stripKbRefs(text: string): string {
 }
 
 // ---------------------------------------------------------------------------
-// parseMdBlocks — parser minimo de markdown seguro para o chat da CROSS.
+// parseMdBlocks — parser minimo de markdown seguro para o chat do ALVOR.
 //
-// Suporte intencional e limitado ao subset que o LLM CROSS produz:
+// Suporte intencional e limitado ao subset que o LLM ALVOR produz:
 //   - Paragrafos (blocos separados por linha em branco)
 //   - Listas (linhas consecutivas iniciadas por "- ")
 //   - Divisorias ("---" numa linha propria → <hr>)
@@ -191,7 +191,7 @@ export function parseInlineBold(text: string): readonly (readonly [boolean, stri
 }
 
 // ---------------------------------------------------------------------------
-// annotateRefs — substitui stripRefs() para renderizacao com afordancias F2.
+// annotateRefs — substitui stripRefs() para renderizacao com afordancias.
 // stripRefs() continua disponivel para usos que nao precisam de renderizacao
 // (ex.: derivar titulo de sessao a partir do conteudo).
 // ---------------------------------------------------------------------------
@@ -539,7 +539,7 @@ function SourcesFooter({ sources, activeRef, onChipClick }: SourcesFooterProps):
 }
 
 // ---------------------------------------------------------------------------
-// ChatMessage — componente principal (refatorado para F2)
+// ChatMessage — componente principal (refatorado para)
 // ---------------------------------------------------------------------------
 
 interface ChatMessageProps {

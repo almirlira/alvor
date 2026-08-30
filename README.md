@@ -16,13 +16,13 @@ Cada card traz: o problema, a **trilha** (números com origem na linha da DRE ou
 
 Os 3 cards mais importantes (um por cor) ficam no hero do Painel; a tela **Semáforo** lista todos, com filtro por cor e seleção de mês. Motor determinístico em `apps/api/src/semaforo.ts` (`GET /semaforo?month=`), sem IA — instantâneo e sempre com fonte.
 
-Visual: design system ALVOR (`design/alvor_bento_design_system.html`) aplicado por `apps/web/src/styles/alvor-theme.css`, que remapeia os tokens herdados do CROSS para a paleta bento escura. Paleta do semáforo: verde `#859364`, amarelo `#EFC059`, vermelho `#ED615A` — os mesmos tons governam os gráficos.
+Visual: design system ALVOR (`design/alvor_bento_design_system.html`) aplicado por `apps/web/src/styles/alvor-theme.css`, que centraliza a paleta bento escura em tokens. Paleta do semáforo: verde `#859364`, amarelo `#EFC059`, vermelho `#ED615A` — os mesmos tons governam os gráficos.
 
 ## Ticker (barra fixa de rodapé)
 
 `apps/web/src/components/TickerBar.tsx` — barra fixa estilo mercado, sempre visível, com rolagem contínua: **lucro bruto, lucro líquido, custos e despesas** em destaque, mais receita líquida, margem bruta e ponto de equilíbrio. Cada item traz a variação contra o mês anterior com **semântica invertida para custo**: despesa subindo é vermelho, despesa caindo é verde. Quando a comparação não é honesta (mudança de sinal ou base desprezível) mostra "—" em vez de um percentual sem sentido. Pausa ao passar o mouse e congela em `prefers-reduced-motion`.
 
-Construído sobre três motores do CROSS (`mktvibe-v2`): leitor genérico de planilha, guardião anti-invenção da IA e base de conhecimento + motor de regras. Conteúdo financeiro novo em `packages/kb/content/`.
+Três motores sustentam o produto: um leitor genérico de planilha, o guardião anti-invenção da IA e uma base de conhecimento financeiro com motor de regras determinístico. O conteúdo curado fica em `packages/kb/content/`.
 
 ## Rodar (3 comandos)
 
@@ -32,7 +32,7 @@ pnpm install
 pnpm dev                    # API :3800 + web :5180
 ```
 
-Abra http://localhost:5180 → **Enviar DRE** (arraste o XLSX/CSV ou "Usar DRE de exemplo") → **Painel** → **Copilot**.
+Abra http://localhost:5180 → **Enviar arquivos** (arraste o XLSX/CSV ou "Usar DRE de exemplo") → **Painel** → **Semáforo** → **Copilot**.
 
 ## Chaves de escape (`.env`)
 
@@ -52,7 +52,7 @@ Abra http://localhost:5180 → **Enviar DRE** (arraste o XLSX/CSV ou "Usar DRE d
 
 ## Roteiro da demo (5 min)
 
-1. **Enviar DRE** → soltar a planilha → "12 meses, 32 linhas reconhecidas, 0 não classificadas · subtotais batem centavo a centavo".
+1. **Enviar arquivos** → soltar a planilha → "12 meses, 32 linhas reconhecidas, 0 não classificadas · subtotais batem centavo a centavo".
 2. **Painel** → hero: resultado do mês no vermelho, margem bruta cedendo → **Semáforo**: um card de cada cor (vermelho: regime tributário pede parecer; amarelo: CBS/IBS nas notas, valide com o contador; verde: margem bruta, você resolve no preço e no fornecedor) → clicar no "?" de um quadrante → "Explica pra mim".
 3. **Semáforo** → filtrar por cor → abrir o card vermelho → mostrar a trilha, as ações e o botão **Copiar pedido** (texto pronto para o contador) + os 4 campos (norma, vigência, confiança, semáforo).
 4. **Copilot** → "Gerar insights do mês" → ler o diagnóstico (regras disparadas aparecem como chips) → clicar num número sublinhado → painel lateral mostra linha/mês de origem.
@@ -68,11 +68,11 @@ Contas nas **linhas**, meses nas **colunas** (`jan/26`, `01/2026`, `Janeiro`, da
 ## Estrutura
 
 ```
-packages/ingest   leitor de planilha (CROSS) + dre-profile / account-detector / dre-model / dre-kpis
-packages/ai       guardião anti-invenção, prompt, provedor Anthropic (CROSS, prompt adaptado para finanças)
-packages/kb       runtime da base de conhecimento (CROSS) + finance_kb.json + fiscal_reference.json
-apps/api          Fastify: /dre/upload · /dre/current · /insights/generate · /copilot/ask · /kb/kpi/:id
-apps/web          Vite/React: Enviar DRE · Painel · Copilot (tokens visuais do CROSS)
+packages/ingest   leitor de planilha + dre-profile / account-detector / dre-model / dre-kpis
+packages/ai       guardião anti-invenção, montagem de prompt, provedor Anthropic
+packages/kb       runtime da base de conhecimento + finance_kb.json + fiscal_reference.json
+apps/api          Fastify: /dre/upload · /dre/current · /semaforo · /insights/generate · /copilot/ask · /kb/kpi/:id
+apps/web          Vite/React: Painel · Semáforo · Copilot · Enviar arquivos
 scripts           make-sample-dre.mjs · smoke-parse.ts · smoke-api.ts
 ```
 

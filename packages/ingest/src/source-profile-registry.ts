@@ -5,7 +5,7 @@
  * Tenant pode referenciar o perfil por profile_id em data_sources.config,
  * ou fornecer um perfil inline completo (override total).
  *
- * ADR-016 §2.2 (D-029): ZERO nome de cliente em código.
+ *: ZERO nome de cliente em código.
  * O profile_id descreve o FORMATO/TEMPLATE, não o cliente.
  *
  * Como adicionar um novo perfil:
@@ -35,7 +35,7 @@ import type { SourceProfile } from './source-profile.js';
  *  - Aba SABORES POR DIA (pivot): receita e volume de sabores
  *  - Aba COBERTURAS POR DIA (pivot): receita de coberturas (sem volume)
  *
- * Versão 1 — mapeamentos iniciais com campos VLR BALCAO/DELIVERY (O1-001).
+ * Versão 1 — mapeamentos iniciais com campos VLR BALCAO/DELIVERY.
  */
 const MKT_VENDAS_DIARIAS_V1: SourceProfile = {
   profile_id: 'mkt-vendas-diarias-v1',
@@ -50,7 +50,7 @@ const MKT_VENDAS_DIARIAS_V1: SourceProfile = {
       layout: 'tabular',
       column_map: {
         // Mapeamentos explícitos para colunas que a heurística pode errar ou não cobrir.
-        // Incluem os campos VLR BALCAO/DELIVERY entregues em O1-001.
+        // Incluem os campos de valor por canal (balcao/delivery).
         'VLR BALCAO': 'vlr_balcao',
         'VLR DELIVERY': 'vlr_delivery',
         'QTDE DELIVERY': 'quantidade_delivery',

@@ -1,8 +1,8 @@
 /**
- * Skeleton — componente de carregamento CROSS M3 (F3 Onda 2).
+ * Skeleton — componente de carregamento ALVOR.
  *
  * Shape: retangulo com base creme --md-surface-container (nao azul-frio).
- * Animacao: pulse suave sobre a superficie creme CROSS.
+ * Animacao: pulse suave sobre a superficie creme ALVOR.
  * Acessibilidade: role="status" + aria-label no wrapper; shapes internos sao aria-hidden.
  *
  * Variantes:

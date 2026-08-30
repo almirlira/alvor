@@ -1,11 +1,11 @@
 /**
- * i18n minimo F1.
+ * i18n minimo.
  *
  * Regra dura: nenhuma string visivel ao usuario pode viver fora deste arquivo.
  * Content-Designer edita as strings aqui; Frontend-Engineer apenas consome `t()`.
  *
  * Quando a primeira lingua alem de pt-BR entrar, esta camada ganha um seletor
- * de locale. Em F1 pt-BR e a unica.
+ * de locale. Em pt-BR e a unica.
  */
 
 export const ptBR = {
@@ -95,7 +95,7 @@ export const ptBR = {
     title: 'Vamos configurar seu espaco',
     subtitle: 'Comece com um espaco de trabalho. Depois voce conecta suas fontes.',
     tenantNameLabel: 'Nome do seu negocio ou espaco',
-    tenantNamePlaceholder: 'Ex: Casa de Bolos Belem',
+    tenantNamePlaceholder: 'Ex: Padaria do Bairro',
     segmentLabel: 'Qual o tipo do seu negocio?',
     segmentOptions: {
       construtora: 'Construtora / Incorporadora',
@@ -164,7 +164,7 @@ export const ptBR = {
     backButton: 'Voltar',
     skipSources: 'Pular por agora',
 
-    // Novos — tela fiel ao prototipo (F3)
+    // Novos — tela fiel ao prototipo
     stepEyebrow1: 'Passo 1 de 3',
     stepEyebrow2: 'Passo 2 de 3',
     stepEyebrow3: 'Passo 3 de 3',
@@ -746,7 +746,7 @@ export const ptBR = {
     limitOf: 'de',
     upgradeUnavailable: 'Em breve. Por enquanto, fale com a equipe para mudar de plano.',
     nextBillingNone: 'Nao agendada',
-    /* Chaves adicionadas para a tela Plano (F3) */
+    /* Chaves adicionadas para a tela Plano */
     planStatusActive: 'Ativo',
     featuresTitle: 'O que esta incluido',
     nextBillingLabel: 'Proximo vencimento',
@@ -1211,7 +1211,7 @@ export const ptBR = {
       'Faturamento e a receita bruta do periodo — a soma de todas as vendas antes de descontar custos.',
   },
   explain: {
-    /* --- Painel "Explica pra mim" (F3-002) --- */
+    /* --- Painel "Explica pra mim" --- */
     panelTitle: 'O que e isso?',
     panelAriaLabel: 'Explicacao do indicador',
     closeBtnLabel: 'Fechar explicacao',

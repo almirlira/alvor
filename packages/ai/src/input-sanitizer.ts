@@ -1,12 +1,12 @@
 /**
- * Input sanitizer — Camada 3 do ADR-008.
+ * Input sanitizer — Camada 3 do hardening.
  *
  * Remove padroes conhecidos de prompt injection antes que qualquer conteudo
  * externo (legenda de post, nome de cliente CRM, comentario em DM, etc) seja
  * injetado em um bloco `<<<DATA>>>` no user message.
  *
- * **Scope F1:** cobertura dos padroes mais comuns e conhecidos. F2 amplia
- * via config atualizavel sem deploy (ADR-008 §2 Camada 3 regra 1).
+ * **Scope:** cobertura dos padroes mais comuns e conhecidos. amplia
+ * via config atualizavel sem deploy.
  *
  * Tambem:
  *   - trunca payloads acima de MAX_ITEM_CHARS
@@ -14,7 +14,7 @@
  *   - escapa delimitadores `<<<DATA>>>` / `<<<END_DATA>>>`
  */
 
-/** Teto de tamanho por item de conteudo externo (ADR-008 §2 Camada 3 regra 2). */
+/** Teto de tamanho por item de conteudo externo. */
 export const MAX_ITEM_CHARS = 500;
 
 /** Acima deste tamanho o item e considerado anomalo (regra 3). */
@@ -22,7 +22,7 @@ export const ANOMALY_THRESHOLD_CHARS = 2000;
 
 /**
  * Padroes conhecidos de prompt injection. Todos case-insensitive.
- * Atualizaveis via config em F2 sem deploy — em F1 sao hardcoded.
+ * Atualizaveis via config em sem deploy — em sao hardcoded.
  */
 export const INJECTION_PATTERNS: readonly RegExp[] = [
   // "ignore previous instructions", "disregard all prior rules", etc

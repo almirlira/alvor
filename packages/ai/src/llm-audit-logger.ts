@@ -1,13 +1,13 @@
 /**
- * LLM audit logger — item 8 do ADR-008.
+ * LLM audit logger — trilha de auditoria das chamadas ao modelo.
  *
- * Grava `llm_audit_log` conforme schema ADR-003 + retencao B.22 D-019
- * (90 dias default). Em F1 este logger e estrutural: se `db` e injetado,
+ * Grava `llm_audit_log` com retencao de 90 dias por default.
+ * O logger e estrutural: se `db` e injetado,
  * grava no banco; se nao, e no-op estruturado que apenas retorna o
  * payload que seria gravado (util para tests + para o bootstrap de
- * backend integrar em F2 sem reinventar shape).
+ * backend integrar em sem reinventar shape).
  *
- * Campos gravados (ADR-008 §2 item 8):
+ * Campos gravados:
  *   request_id, tenant_id, user_id, user_role, model_version,
  *   prompt_hash, response_hash, tokens_in, tokens_out,
  *   hallucination_check_passed, output_validation_passed,
@@ -24,9 +24,9 @@ export interface AuditPayload {
   readonly userId: string;
   readonly userRole: ActiveRole;
   readonly modelVersion: string;
-  /** Nome do provider usado (ex: `vertex-anthropic`, `mock`). B.26 / ADR-010. */
+  /** Nome do provider usado (ex: `vertex-anthropic`, `mock`). /. */
   readonly providerName?: string;
-  /** Regiao do provider (ex: `us-east5`). B.26 / ADR-010. */
+  /** Regiao do provider (ex: `us-east5`). /. */
   readonly region?: string;
   readonly promptHash: string;
   readonly responseHash: string;

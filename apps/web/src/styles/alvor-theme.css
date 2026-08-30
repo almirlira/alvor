@@ -1,6 +1,6 @@
 /*
  * alvor-theme.css — Design system ALVOR (Swiss Bento, canvas escuro) aplicado sobre os
- * componentes herdados do CROSS: os tokens md, mkv e sem sao REMAPEADOS para a paleta
+ * componentes herdados do ALVOR: os tokens md, mkv e sem sao REMAPEADOS para a paleta
  * ALVOR, entao KpiCard, ChatBubble, ExplainPanel etc. mudam de pele sem edicao.
  * Fonte: design/alvor_bento_design_system.html
  */
@@ -44,7 +44,7 @@
   --font-sans: 'Plus Jakarta Sans', sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
 
-  /* ---- Remapeamento dos tokens herdados (CROSS M3 → ALVOR dark) ---- */
+  /* ---- Remapeamento dos tokens herdados (ALVOR → ALVOR dark) ---- */
   --md-surface: var(--alvor-canvas);
   --md-surface-dim: #121111;
   --md-surface-bright: #232121;
@@ -239,7 +239,7 @@ body { background: var(--alvor-canvas); color: var(--alvor-text); font-family: v
   .sem-card-right { align-items: flex-start; text-align: left; }
 }
 
-/* ---- Contraste: regras herdadas do CROSS fixam cor escura em titulos/celulas — forca a paleta ALVOR ---- */
+/* ---- Contraste: regras herdadas do ALVOR fixam cor escura em titulos/celulas — forca a paleta ALVOR ---- */
 .dre-main, .dre-main h1, .dre-main h2, .dre-main h3, .dre-title, .section-title, .quadrant-value, .dre-card h3,
 .dre-top, .dre-top .lbl, .dre-top .val, .dre-stat b, .dre-drop-title, .dre-source-panel dd, .dre-source-panel dt { color: var(--alvor-text); }
 .dre-subtitle, .dre-eyebrow, .dre-stat span, .dre-drop-hint, .dre-source-panel dt, .section-meta { color: var(--alvor-text-2); }

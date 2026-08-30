@@ -1,10 +1,10 @@
 /**
- * Providers — ponto de entrada do adapter LLM (F2 / ADR-010 / B.26).
+ * Providers — ponto de entrada do adapter LLM.
  *
  * Factory `createLlmProvider()` seleciona a implementacao concreta com
  * base em `LLM_PROVIDER` do ambiente:
  *
- *   - `vertex-anthropic` (producao) — Claude Opus 5 (B.60 D-056) via Vertex AI
+ *   - `vertex-anthropic` (producao) — Claude Opus 5 via Vertex AI
  *   - `mock` (dev local + testes) — determinista, nao chama rede
  *
  * Guard de producao:
@@ -108,7 +108,7 @@ export interface CreateLlmProviderConfig {
 
 /**
  * Factory principal. Resolve o provider selecionado e aplica os guards
- * de producao B.20 D-013.
+ * de producao.
  */
 export function createLlmProvider(config: CreateLlmProviderConfig = {}): LlmProvider {
   const nodeEnv = config.nodeEnv ?? process.env['NODE_ENV'] ?? 'development';
@@ -119,15 +119,15 @@ export function createLlmProvider(config: CreateLlmProviderConfig = {}): LlmProv
     if (providerEnv !== 'vertex-anthropic') {
       throw new Error(
         `[LLM] fail-closed: em NODE_ENV=production, LLM_PROVIDER deve ser 'vertex-anthropic' ` +
-          `(recebido: ${providerEnv ?? 'undefined'}). B.20 D-013 obriga DPA no-training. ` +
-          `Ver ADR-010 e runbook/llm-provider.md.`,
+          `(recebido: ${providerEnv ?? 'undefined'}). O provedor de producao exige contrato com garantia de nao-treinamento. ` +
+          `Consulte a documentacao do provedor.`,
       );
     }
     if (config.vertex === undefined) {
       throw new Error(
         `[LLM] fail-closed: em producao e obrigatorio passar config.vertex ` +
           `(project, region, model, secretStore, secretName, clientFactory, logger). ` +
-          `Ver ADR-007 + ADR-010.`,
+          `Consulte a documentacao do provedor.`,
       );
     }
     return new VertexAnthropicAdapter(config.vertex);

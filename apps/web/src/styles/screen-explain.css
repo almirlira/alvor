@@ -1,5 +1,5 @@
 /*
- * screen-explain.css — Painel lateral "Explica pra mim" (F3-002)
+ * screen-explain.css — Painel lateral "Explica pra mim"
  * Componente: ExplainPanel.tsx
  * Usado em: qualquer tela que tenha KpiCard com metricKey
  * Nao toca em global.css. Usa apenas tokens de tokens.css.

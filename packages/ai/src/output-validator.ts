@@ -1,7 +1,7 @@
 /**
- * Output validator — Camada 4 do ADR-008.
+ * Output validator — Camada 4 do hardening.
  *
- * Grounding check com tolerancia de ±0,5% (B.22 D-018).
+ * Grounding check com tolerancia de ±0,5%.
  *
  * Para cada numero citado no output do LLM:
  *   1. o numero tem que ter marcador de fonte (ex: [ref:kpi_snapshot#123])
@@ -12,13 +12,13 @@
  * Callers devem persistir o resultado em `llm_audit_log` com
  * `hallucination_check_passed` apropriado.
  *
- * ## Regime DEFAULT-DENY (ADR-008 Camada 4, refino 2026-06-03 EVO-1 + EVO-2 + P-CELL 2026-06-05)
+ * ## Regime DEFAULT-DENY
  *
  * Todo numero e KPI por padrao — exige [ref:]. A unica isencao e casar
  * EXATAMENTE um padrao incidental da lista FECHADA:
  *   P-ANO / P-DATA / P-DATA-EXT / P-ORD / P-LISTA / P-HORA / P-DUR / P-PERIODO / P-CELL
  *
- * P-CONT (contagem estrutural por verbo) foi REMOVIDO (EVO-1).
+ * P-CONT (contagem estrutural por verbo) foi REMOVIDO.
  * Contagem de lojas/unidades exige [ref:entities#count] como qualquer KPI.
  *
  * REMOVIDO:
@@ -27,9 +27,9 @@
  *   - STRUCT_UNIT (unidades estruturais de rede)
  *   - P-CONT (contagem estrutural por verbo)
  *   - Excecao por magnitude (n<=50)
- *   - P-UNIT-DENOM (denominador monetario "R$ 1") — revertido EVO-2 (gate seguranca)
+ *   - P-UNIT-DENOM (denominador monetario "R$ 1") — revertido (gate seguranca)
  *
- * EVO-2 (2026-06-03 gate seguranca):
+ * (2026-06-03 gate seguranca):
  *   - P-UNIT-DENOM REVERTIDO: "R$ 1 bilhao/milhao" escapava sem fonte.
  *     ROAS "para cada R$ 1 investido" deve citar [ref:] — trade-off aceito.
  *   - ABSOLUTE_TOLERANCE_FLOOR restrito a magnitude >= 1: fracoes/razoes <1
@@ -37,13 +37,13 @@
  *   - Fix-P-ANO-GLOBAL: replace de rawDigit usa split/join (global) para
  *     evitar isencao de intervalo indevida quando rawDigit aparece 2x na janela.
  *
- * INV-VAL-1 / Security 2026-06-03:
+ * / Security 2026-06-03:
  *   Guardas NEGATIVAS tem prioridade absoluta (avaliadas antes de qualquer padrao).
- *   Avaliacao e POR TOKEN (janela imediata), nunca por sentenca (SEC-08/SEC-09).
- *   Ramo cross-tenant INTOCADO e antes do filtro (SEC-05).
+ *   Avaliacao e POR TOKEN (janela imediata), nunca por sentenca.
+ *   Ramo cross-tenant INTOCADO e antes do filtro.
  */
 
-/** Tolerancia para grounding check — B.22 D-018 (ADR-008 Secao 8). */
+/** Tolerancia para grounding check. */
 export const GROUNDING_TOLERANCE = 0.005;
 
 /** Classificacao de sensibilidade do dado para scope de papel. */
@@ -171,7 +171,7 @@ function withinTolerance(a: number, b: number, tolerance: number): boolean {
 }
 
 // ---------------------------------------------------------------------------
-// isIncidentalNumber — DEFAULT-DENY EVO-1 (ADR-008 Camada 4, 2026-06-03).
+// isIncidentalNumber — DEFAULT-DENY.
 //
 // REGRA D-DENY: todo numero e KPI por padrao e EXIGE [ref:].
 // isIncidentalNumber so retorna true se:
@@ -180,7 +180,7 @@ function withinTolerance(a: number, b: number, tolerance: number): boolean {
 //       P-ANO / P-DATA / P-DATA-EXT / P-ORD / P-LISTA / P-HORA /
 //       P-DUR / P-PERIODO / P-CELL
 //
-// P-CONT REMOVIDO (EVO-1): contagem de lojas/unidades exige [ref:entities#count].
+// P-CONT REMOVIDO: contagem de lojas/unidades exige [ref:entities#count].
 // Nao ha excecao por magnitude. Nao ha whitelist de verbos.
 // A ausencia de match incidental e KPI (default-deny).
 //
@@ -189,10 +189,10 @@ function withinTolerance(a: number, b: number, tolerance: number): boolean {
 //   1 <= n <= 20; celula original sem [ref:] proprio (verificado via rawSentence).
 //   Nao e heuristica de magnitude — e classe fechada e enumeravel (I-7).
 //
-// INV-VAL-1 / Security 2026-06-03:
+// / Security 2026-06-03:
 //   Guardas NEGATIVAS tem prioridade absoluta (avaliadas antes de qualquer padrao).
-//   Avaliacao e POR TOKEN (janela imediata), nunca por sentenca (SEC-08/SEC-09).
-//   Ramo cross-tenant INTOCADO e antes do filtro (SEC-05).
+//   Avaliacao e POR TOKEN (janela imediata), nunca por sentenca.
+//   Ramo cross-tenant INTOCADO e antes do filtro.
 // ---------------------------------------------------------------------------
 
 // KPI metric nouns — substantivos numericamente atribuiveis que sinalizam KPI.
@@ -202,7 +202,7 @@ const KPI_METRIC_NOUNS =
 /**
  * Retorna true se o numero capturado e "incidental" e NAO deve exigir fonte.
  *
- * DEFAULT-DENY EVO-1: retorna false (KPI) por padrao.
+ * DEFAULT-DENY: retorna false (KPI) por padrao.
  * So retorna true se o token casa exatamente um padrao incidental FECHADO
  * apos passarem TODAS as guardas negativas.
  *
@@ -286,11 +286,11 @@ export function isIncidentalNumber(
     return false;
 
   // =========================================================================
-  // (B) PADROES INCIDENTAIS — lista FECHADA (EVO-1).
+  // (B) PADROES INCIDENTAIS — lista FECHADA.
   // So chegam aqui tokens que passaram TODAS as guardas acima.
   // Se nenhum padrao casa => false (KPI, default-deny).
   //
-  // NOTA EVO-1: P-CONT removido. Contagem de lojas/unidades/filiais NÃO e
+  // NOTA: P-CONT removido. Contagem de lojas/unidades/filiais NÃO e
   // mais incidental por verbo. Exige [ref:entities#count] como qualquer KPI.
   // =========================================================================
 
@@ -372,7 +372,7 @@ export function isIncidentalNumber(
   // componente de data ISO. Condicao: rawDigit.length <= 2 E (borda esquerda = \d+-
   // OU borda direita = -\d+).
   //
-  // Fix-ISO-DATE-HYPHEN-RESTRICT (2026-06-03 gate-seguranca R-046):
+  // Fix-ISO-DATE-HYPHEN-RESTRICT (2026-06-03 gate-seguranca):
   // A borda de hifen (sem "/") so e valida como componente de data ISO quando ha
   // um ano gregoriano (YYYY-MM) na janela de ±30 chars. Sem essa restricao, pares
   // de 2 digitos colados por hifen sem ano (ex: "margem 12-34", "churn 8-15",
@@ -482,7 +482,7 @@ export function isIncidentalNumber(
 
   // P-CELL: posicao de tabela markdown — inteiro nu 1..20 isolado em celula.
   //
-  // P-CELL (2026-06-05 gate-seguranca, ADR-008 Camada 4):
+  // P-CELL (2026-06-05 gate-seguranca Camada 4):
   // Isenta numero de posicao de ranking quando TODAS as 4 condicoes valem:
   //   1. Passou TODAS as GN-* (garantido por estar aqui — prioridade absoluta).
   //   2. Borda de celula confirmada: beforeToken termina em "|" (0+ espacos)
@@ -511,7 +511,7 @@ export function isIncidentalNumber(
     }
   }
 
-  // Nenhum padrao incidental casou — default-deny (EVO-1 + hardening 8.5).
+  // Nenhum padrao incidental casou — default-deny.
   return false;
 }
 
@@ -562,7 +562,7 @@ export function validateLlmOutput(
 ): ValidationResult {
   // 1. Cross-tenant sanity — nenhum ref citado pode apontar a tenant diferente.
   // NOTA SEGURANCA: este bloco permanece ANTES do filtro de incidentais (INV-VAL-1 /
-  // Security 2026-06-03 SEC-05: a calibracao de numeros incidentais NAO pode tocar
+  // Security 2026-06-03: a calibracao de numeros incidentais NAO pode tocar
   // o ramo cross-tenant).
   const citedRefIds = new Set<string>();
   for (const m of output.matchAll(SOURCE_REF_RE)) {
@@ -583,7 +583,7 @@ export function validateLlmOutput(
   }
 
   // 2. Para cada numero no output, checar fonte + grounding.
-  // A heuristica F1: cada numero DEVE ter um [ref:...] dentro dos 80 chars
+  // A heuristica: cada numero DEVE ter um [ref:...] dentro dos 80 chars
   // seguintes ou em qualquer posicao da mesma sentenca (separadas por . ou \n).
   const sentences = output.split(/(?<=[.\n])\s+/);
   let found = 0;
@@ -599,7 +599,7 @@ export function validateLlmOutput(
     // para que marcadores ** e _ adjacentes a conectores temporais (ex: "em **2026**")
     // nao quebrem as guardas de contexto positivo de P-ANO/P-DATA.
     // O strip e aplicado APENAS aqui — o cross-tenant check e refsInSentence
-    // usam `sentence` original, garantindo que SEC-05 permanece intocado.
+    // usam `sentence` original, garantindo que permanece intocado.
     const sentenceForNumbers = stripMarkdownEmphasis(sentence).replace(SOURCE_REF_RE, '');
     const numbersInSentence: Array<{ value: number; raw: string }> = [];
     for (const m of sentenceForNumbers.matchAll(NUMBER_RE)) {
@@ -607,7 +607,7 @@ export function validateLlmOutput(
       if (rawDigit === undefined) continue;
       const value = parseNumber(rawDigit, m[2]);
       if (!Number.isFinite(value)) continue;
-      // DEFAULT-DENY EVO-1: isIncidentalNumber implementa INV-VAL-1.
+      // DEFAULT-DENY: isIncidentalNumber implementa.
       // Guardas negativas (R$, %, separador, metrica, label) tem prioridade absoluta.
       // So isenta se casa padrao incidental FECHADO (P-ANO..P-CELL).
       // P-CONT removido: contagem de lojas exige ref como qualquer KPI.

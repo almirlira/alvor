@@ -5,7 +5,7 @@
  * mais provavel. Retorna tambem uma funcao de cast que converte string/unknown
  * para o valor tipado.
  *
- * F2-flow-05 / ADR-015 Divergencia 1: nenhum hardcoding por cliente.
+ * / Divergencia 1: nenhum hardcoding por cliente.
  *
  * Tipos suportados:
  *   - currency    : valores monetarios (R$, $, €, ou numero com virgula/ponto)

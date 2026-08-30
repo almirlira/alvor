@@ -1,7 +1,7 @@
 /*
  * global.css — Estilos globais e classes utilitarias do app web.
- * F3 — Onda 1: reskin CROSS M3. Preserva 100% das classes existentes.
- * Todos os valores visuais passam a referenciar tokens.css (CROSS M3).
+ * — Onda 1: reskin ALVOR. Preserva 100% das classes existentes.
+ * Todos os valores visuais passam a referenciar tokens.css (ALVOR).
  * Nao alterar valores aqui diretamente — editar tokens.css e propagar.
  *
  * Convencao de legado F1/F2 mantida:
@@ -19,7 +19,7 @@
  */
 
 :root {
-  /* Aliases de compatibilidade F1/F2 — mapeados para tokens CROSS M3 */
+  /* Aliases de compatibilidade F1/F2 — mapeados para tokens ALVOR */
   --color-bg: var(--md-surface-container-lowest);
   --color-fg: var(--md-on-surface);
   --color-muted: var(--md-on-surface-variant);
@@ -194,7 +194,7 @@ h3 {
 }
 
 /* ===================================================================
-   APP SHELL — layout raiz CROSS M3 (navigation rail) — F3 fiel ao prototipo
+   APP SHELL — layout raiz ALVOR (navigation rail)
    Referencia: docs/execucao-projetos/_local/design/prototipo/radar.html
    =================================================================== */
 
@@ -238,7 +238,7 @@ h3 {
 }
 
 /* ------------------------------------------------------------------
-   rail-brand: logo CROSS (44x44px, card branco, sombra elev-2)
+   rail-brand: logo ALVOR (44x44px, card branco, sombra elev-2)
    ------------------------------------------------------------------ */
 .rail-brand {
   width: 44px;
@@ -316,7 +316,7 @@ h3 {
   background: var(--md-state-hover-surface);
 }
 
-/* Item ativo: fundo primary (roxo CROSS) */
+/* Item ativo: fundo primary (roxo ALVOR) */
 .rail-item.active .rail-item-indicator {
   background: var(--md-primary);
 }
@@ -383,7 +383,7 @@ h3 {
 }
 
 /* ------------------------------------------------------------------
-   rail-group: agrupa itens de navegacao com rotulo (D-050 + IA-NAV-PROP)
+   rail-group: agrupa itens de navegacao com rotulo
    Opcao A do Product-Designer: rotulo caixa-alta 9px acima de cada grupo.
    ------------------------------------------------------------------ */
 .rail-group {
@@ -788,7 +788,7 @@ h3 {
 }
 
 /* ------------------------------------------------------------------
-   topbar-action-chip: chip de acao contextual por rota (ex.: "Conversar com a CROSS")
+   topbar-action-chip: chip de acao contextual por rota (ex.: "Conversar com a ALVOR")
    Aparece no lado direito da topbar nas rotas de analise (dashboard/radar/mirror/insights).
    Estilo: tonal preenchido (primary-container), compacto, com icone leading.
    ------------------------------------------------------------------ */
@@ -1278,7 +1278,7 @@ h3 {
   gap: var(--cross-layout-card-gap);
 }
 
-/* KPI Card — M3 solid card CROSS */
+/* KPI Card — M3 solid card ALVOR */
 .kpi-card {
   padding: var(--mkv-space-6);
   background: var(--md-surface-container-lowest);
@@ -1365,7 +1365,7 @@ h3 {
 }
 
 /* ===================================================================
-   PAGE HEADING — H1 padrao das telas CROSS M3 (F3 Onda 2)
+   PAGE HEADING — H1 padrao das telas ALVOR
    Fonte display (Space Grotesk) peso 700, hierarquia consistente
    com os prototipos aprovados.
    =================================================================== */
@@ -1389,9 +1389,9 @@ h3 {
 }
 
 /* ===================================================================
-   SKELETON CROSS M3 (F3 Onda 2)
+   SKELETON ALVOR
    Base creme --md-surface-container, pulse suave.
-   Sem azul-frio — consistente com o tema creme quente CROSS.
+   Sem azul-frio — consistente com o tema creme quente ALVOR.
    =================================================================== */
 
 @keyframes skeleton-cross-pulse {
@@ -1936,7 +1936,7 @@ fieldset {
   box-shadow: none;
 }
 
-/* F2 — Numero com fonte citada */
+/* — Numero com fonte citada */
 .chat-number-cited-wrapper {
   position: relative;
   display: inline;
@@ -1960,7 +1960,7 @@ fieldset {
   outline: none;
 }
 
-/* F2 — Tooltip de fonte */
+/* — Tooltip de fonte */
 .chat-source-tooltip {
   position: absolute;
   bottom: calc(100% + 6px);
@@ -1996,7 +1996,7 @@ fieldset {
   font-size: var(--mkv-text-xs);
 }
 
-/* F2 — Chip ativo no painel de fontes (legacy — mantido) */
+/* — Chip ativo no painel de fontes (legacy — mantido) */
 .source-chip-clickable {
   cursor: pointer;
 }
@@ -2012,7 +2012,7 @@ fieldset {
     'opsz' 20;
 }
 
-/* F2 — Bolha de fallback (Estado C) */
+/* — Bolha de fallback (Estado C) */
 .chat-message-fallback {
   background: var(--md-tertiary-container);
   border: 1px solid var(--md-tertiary);
@@ -2056,7 +2056,7 @@ fieldset {
   font-size: var(--mkv-text-sm);
 }
 
-/* F2 — Bolha de erro (Estado D) */
+/* — Bolha de erro (Estado D) */
 .chat-message-error {
   background: var(--md-error-container);
   border: 1px solid var(--md-error);
@@ -2072,7 +2072,7 @@ fieldset {
   font-size: var(--mkv-text-sm);
 }
 
-/* F2 — Skeleton de carregamento */
+/* — Skeleton de carregamento */
 @keyframes skeleton-pulse {
   0%,
   100% {
@@ -2095,7 +2095,7 @@ fieldset {
   min-height: 5rem;
 }
 
-/* F2 — label de fontes sem margem desnecessaria */
+/* — label de fontes sem margem desnecessaria */
 .chat-message-sources-label {
   display: block;
   font-size: var(--mkv-text-xs);
@@ -2548,8 +2548,8 @@ fieldset {
 }
 
 /* ===================================================================
-   ONBOARDING — shell, barra de progresso e cards (F3 Onda 2)
-   Barra de progresso usa gradiente-assinatura CROSS (aprovado owner B.50).
+   ONBOARDING — shell, barra de progresso e cards
+   Barra de progresso usa gradiente-assinatura ALVOR (aprovado owner).
    =================================================================== */
 
 .onboarding-shell {
@@ -2586,7 +2586,7 @@ fieldset {
   letter-spacing: -0.02em;
 }
 
-/* Barra de progresso — gradiente-assinatura CROSS */
+/* Barra de progresso — gradiente-assinatura ALVOR */
 .onboarding-progress {
   width: 100%;
   display: flex;
@@ -2814,7 +2814,7 @@ fieldset {
 }
 
 /* ===================================================================
-   ESTADO VAZIO / DEGRADADO CROSS M3 (F3 Onda 2)
+   ESTADO VAZIO / DEGRADADO ALVOR
    Padrao visual consistente com prototipos aprovados.
    Icone: Material Symbol, nao emoji.
    =================================================================== */
@@ -2868,7 +2868,7 @@ fieldset {
 }
 
 /* ===================================================================
-   RADAR PAGE — estilos especificos (F3 alta fidelidade)
+   RADAR PAGE — estilos especificos
    Referencia: docs/execucao-projetos/_local/design/prototipo/radar.html
    Zero cor hardcoded — todos os valores referenciam tokens.css.
    =================================================================== */
@@ -2962,7 +2962,7 @@ fieldset {
 }
 
 /* ===================================================================
-   HERO BAND — gradiente escuro (fundo roxo/azul CROSS)
+   HERO BAND — gradiente escuro (fundo roxo/azul ALVOR)
    3 colunas: score | donut | stats
    Responsivo: empilha no mobile
    =================================================================== */
@@ -3497,7 +3497,7 @@ fieldset {
   flex-shrink: 0;
 }
 
-/* Botao "Explicar com a CROSS" */
+/* Botao "Explicar com a ALVOR" */
 .radar-alert-cta {
   background: transparent;
   color: var(--md-primary);

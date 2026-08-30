@@ -74,7 +74,7 @@ export function App(): JSX.Element {
               <Route path="/painel" element={<PainelPage />} />
               <Route path="/semaforo" element={<SemaforoPage />} />
               <Route path="/copilot" element={<CopilotPage />} />
-              {/* rotas herdadas dos componentes do CROSS */}
+              {/* apelidos de rota mantidos por compatibilidade */}
               <Route path="/chat" element={<Navigate to="/copilot" replace />} />
               <Route path="/dashboard" element={<Navigate to="/painel" replace />} />
               <Route path="/sources" element={<Navigate to="/enviar" replace />} />

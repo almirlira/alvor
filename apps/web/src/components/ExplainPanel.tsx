@@ -1,5 +1,5 @@
 /**
- * ExplainPanel — Painel lateral "Explica pra mim" (F3-002).
+ * ExplainPanel — Painel lateral "Explica pra mim".
  *
  * Abre da direita como painel inline, nao modal centrado.
  * Conteudo vem do endpoint GET /marketing-kb/kpi/:metric_key (deterministico, sem LLM).

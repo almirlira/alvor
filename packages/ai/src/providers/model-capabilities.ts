@@ -53,7 +53,7 @@ const DEFAULT_THINKING_RE = /(opus-5|sonnet-5|fable-5|mythos)/;
  * quando o modelo pensa por padrao. O caller continua declarando quanto quer
  * de resposta VISIVEL; a reserva e transparente para ele.
  *
- * 4.000 e dimensionado para as tarefas do CROSS (consulta com dados prontos no
+ * 4.000 e dimensionado para as tarefas do ALVOR (consulta com dados prontos no
  * prompt, effort `low`), com folga sobre o observado. Ajustar aqui, nunca nos
  * callers.
  */

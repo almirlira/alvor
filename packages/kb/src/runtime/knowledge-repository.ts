@@ -2,7 +2,7 @@
  * KnowledgeRepository — loads dist/knowledge_base.json into memory.
  * Provides typed getters by id, type, kpi, problem_type.
  *
- * NO writes at runtime (C-018-07: TCB). NO tenant data. Global, versioned.
+ * NO writes at runtime. NO tenant data. Global, versioned.
  */
 
 import { readFileSync, existsSync } from 'node:fs';

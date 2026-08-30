@@ -1,13 +1,13 @@
 /*
- * tokens.css — Design tokens CROSS M3 (v3.0)
+ * tokens.css — Design tokens ALVOR (v3.0)
  * Fonte da verdade: docs/execucao-projetos/_local/design/sistema-visual/design-tokens.new.md
- * Gerado para: src/apps/web (F3 — Onda 1)
+ * Gerado para: src/apps/web
  * Nao editar manualmente — sincronizar com design-tokens.new.md
  */
 
 :root {
   /* ===================================================================
-     1. PALETA DE MARCA CROSS (identidade)
+     1. PALETA DE MARCA ALVOR (identidade)
      =================================================================== */
   --cross-purple: #3F2570;
   --cross-blue:   #0079DC;
@@ -15,17 +15,17 @@
   --cross-cream:  #F3F2EE;
 
   /* ===================================================================
-     2. SISTEMA DE COR M3 CROSS (tema claro)
+     2. SISTEMA DE COR M3 ALVOR (tema claro)
      =================================================================== */
 
-  /* 2.1 Primary — Roxo profundo CROSS */
+  /* 2.1 Primary — Roxo profundo ALVOR */
   /* Contraste branco/roxo: 12.1:1 — AAA */
   --md-primary:                  #3F2570;
   --md-on-primary:               #FFFFFF;
   --md-primary-container:        #EADDFF;
   --md-on-primary-container:     #21005D;
 
-  /* 2.2 Secondary — Azul CROSS */
+  /* 2.2 Secondary — Azul ALVOR */
   /* #0079DC: 3.9:1 — AA-lg; container para texto pequeno */
   --md-secondary:                #0079DC;
   --md-on-secondary:             #FFFFFF;
@@ -36,7 +36,7 @@
   /* Uso: links inline, CTAs de texto, referencias citadas no chat e relatorio */
   --cross-link:                  #0061B0;
 
-  /* 2.3 Tertiary — Rosa CROSS (acento de energia) */
+  /* 2.3 Tertiary — Rosa ALVOR (acento de energia) */
   /* #F9005C: 3.5:1 — AA-lg; container para texto pequeno */
   --md-tertiary:                 #F9005C;
   --md-on-tertiary:              #FFFFFF;
@@ -50,7 +50,7 @@
   --md-error-container:          #FFDAD6;
   --md-on-error-container:       #410002;
 
-  /* 2.5 Surface — familia creme quente CROSS */
+  /* 2.5 Surface — familia creme quente ALVOR */
   /* #1C1B19 sobre #FBFAF7: 17.6:1 — AAA */
   --md-surface:                        #FBFAF7;
   --md-surface-dim:                    #F3F2EE;
@@ -88,7 +88,7 @@
      3. GRADIENTES NOMEADOS
      =================================================================== */
 
-  /* 3.1 Gradiente-assinatura CROSS (tricolor) */
+  /* 3.1 Gradiente-assinatura ALVOR (tricolor) */
   --cross-gradient-brand:        linear-gradient(90deg,  #3F2570 0%, #0079DC 50%, #F9005C 100%);
   --cross-gradient-brand-135:    linear-gradient(135deg, #3F2570 0%, #0079DC 55%, #F9005C 100%);
   --cross-gradient-brand-180:    linear-gradient(180deg, #3F2570 0%, #0079DC 55%, #F9005C 100%);
@@ -108,7 +108,7 @@
   --mkv-font-display:  'Space Grotesk', 'Roboto Flex', sans-serif;
   --mkv-font-mono:     'JetBrains Mono', ui-monospace, 'Courier New', monospace;
 
-  /* 4.2 Escala tipografica M3 CROSS */
+  /* 4.2 Escala tipografica M3 ALVOR */
   --mkv-text-xs:   11px;  /* metadata, timestamps, label "via Instagram" */
   --mkv-text-sm:   13px;  /* label de campo, badge, descricao muted, nav item */
   --mkv-text-base: 15px;  /* texto de corpo, mensagem de chat */
@@ -137,7 +137,7 @@
   --md-elev-3:     0 4px 8px 3px rgba(0,0,0,.07), 0 1px 3px rgba(0,0,0,.10);
   --md-elev-modal: 0 6px 10px 4px rgba(0,0,0,.09), 0 2px 3px rgba(0,0,0,.12);
 
-  /* Sombras soft glass complementares (tint roxo CROSS) */
+  /* Sombras soft glass complementares (tint roxo ALVOR) */
   --mkv-shadow-float:       0 2px 8px 0 rgba(63,37,112,0.06), 0 1px 3px 0 rgba(15,23,42,0.04);
   --mkv-shadow-float-hover: 0 8px 24px 0 rgba(63,37,112,0.10), 0 2px 8px 0 rgba(15,23,42,0.06);
   --mkv-shadow-soft-inner:  inset 0 2px 4px 0 rgba(63,37,112,0.05);
@@ -204,7 +204,7 @@
 }
 
 /* ===================================================================
-   9.5 prefers-reduced-motion (obrigatorio F3)
+   9.5 prefers-reduced-motion (obrigatorio)
    =================================================================== */
 @media (prefers-reduced-motion: reduce) {
   *,

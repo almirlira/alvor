@@ -1,4 +1,4 @@
-// Leitor generico de planilha (copiado do CROSS — xlsx/csv → matriz)
+// Leitor generico de planilha (copiado do ALVOR — xlsx/csv → matriz)
 export { xlsxMatrixFromWorkbook, type PreParsedXlsxWorkbook, type XlsxUtils } from './sheet-parser.js';
 
 // Modelo, detector e KPIs da DRE (novos)

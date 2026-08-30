@@ -12,7 +12,7 @@
  *     o caller realmente pedir o factory real. Se faltar o pacote, o erro
  *     e explicito e acontece no momento do boot do provider, nao no tc.
  *
- * Politica (B.20 D-013 + ADR-010): o DPA "no training" e inerente ao
+ * Politica: o DPA "no training" e inerente ao
  * contrato GCP enterprise usado em `brainora-prod`. Nao existe header por
  * requisicao que liga/desliga treinamento — a garantia vive no contrato
  * comercial. O unico papel do factory e instanciar corretamente o client
@@ -234,7 +234,7 @@ async function defaultSdkLoader(): Promise<VertexSdkModule> {
     throw new Error(
       `[vertex-client-factory] nao foi possivel carregar '@anthropic-ai/vertex-sdk': ${detail}. ` +
         'Instale o SDK (`pnpm add @anthropic-ai/vertex-sdk -w`) ou use LLM_PROVIDER=mock ' +
-        'em dev. Ver ADR-010 e F2-009.',
+        'em dev.',
     );
   }
 }
@@ -251,7 +251,7 @@ async function defaultGoogleAuthLoader(): Promise<GoogleAuthModule> {
     throw new Error(
       `[vertex-client-factory] nao foi possivel carregar 'google-auth-library': ${detail}. ` +
         'Instale a biblioteca (`pnpm add google-auth-library -w`) ou use LLM_PROVIDER=mock ' +
-        'em dev. Ver ADR-010 e F2-009.',
+        'em dev.',
     );
   }
 }

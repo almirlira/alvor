@@ -1,8 +1,8 @@
 /**
- * ChatBubble.tsx — Componente de mensagem fiel ao prototipo chat.html (F3).
+ * ChatBubble.tsx — Componente de mensagem fiel ao prototipo chat.html.
  *
  * ISOLAMENTO CRITICO:
- * - Este arquivo nao importa nem altera ChatMessage.tsx (componente F2 compartilhado).
+ * - Este arquivo nao importa nem altera ChatMessage.tsx (componente compartilhado).
  * - CSS exclusivo via screen-chat.css (prefixo .cbubble-).
  * - Reutiliza tipos e logica de ChatMessage.tsx sem re-exportar nada de la.
  * - Toda logica de grounding/fontes/fallback/retry preservada do ChatMessage.tsx.
@@ -25,11 +25,11 @@ import {
 } from './ChatMessage';
 
 // ---------------------------------------------------------------------------
-// SVG inline do simbolo CROSS (cata-vento) — viewBox 0 0 1080 1080
+// SVG inline do simbolo ALVOR (cata-vento) — viewBox 0 0 1080 1080
 // Identico ao prototipo chat.html. aria-hidden por padrao (decorativo).
 // ---------------------------------------------------------------------------
 function CrossSymbol({ size = 20 }: { readonly size?: number }): JSX.Element {
-  // Simbolo ALVOR (design system) — substitui o cata-vento do CROSS.
+  // Simbolo ALVOR (design system) — substitui o cata-vento do ALVOR.
   return (
     <svg viewBox="0 0 316 226" xmlns="http://www.w3.org/2000/svg" width={size} height={Math.round(size * 0.72)} aria-hidden="true">
       <path d="M187.422 112.463L282.399 47.835L315.737 96.8271L213.72 166.245H102.017L0 96.8271L33.3369 47.835L128.163 112.359V0H187.422V112.463Z" fill="#FF5500" />
@@ -39,7 +39,7 @@ function CrossSymbol({ size = 20 }: { readonly size?: number }): JSX.Element {
 }
 
 // ---------------------------------------------------------------------------
-// Avatar — CROSS (logo SVG) ou usuario (icone person)
+// Avatar — ALVOR (logo SVG) ou usuario (icone person)
 // ---------------------------------------------------------------------------
 interface BubbleAvatarProps {
   readonly isUser: boolean;
@@ -431,7 +431,7 @@ function FallbackBubble({
 }
 
 // ---------------------------------------------------------------------------
-// ChatBubble — componente principal (F3, fiel ao prototipo)
+// ChatBubble — componente principal
 // Interface identica ao ChatMessage para substituicao direta no ChatIaPage.
 // ---------------------------------------------------------------------------
 export interface ChatBubbleProps {
@@ -611,7 +611,7 @@ export function ChatBubble({
 }
 
 // ---------------------------------------------------------------------------
-// TypingBubble — estado "CROSS esta pensando" (fiel ao prototipo)
+// TypingBubble — estado "ALVOR esta pensando" (fiel ao prototipo)
 // ---------------------------------------------------------------------------
 export function TypingBubble(): JSX.Element {
   return (

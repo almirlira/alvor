@@ -3,7 +3,7 @@
  *
  * Escolha da aba: nome que bate /dre|resultado|demonstra/i; senao a primeira
  * aba em que o parser encontra um cabecalho de meses.
- * SheetJS com formulas desligadas (mesma politica do CROSS, C-016-03).
+ * SheetJS com formulas desligadas (mesma politica do ALVOR).
  */
 
 import { parseDreMatrix, type DreStatement } from './dre-profile.js';

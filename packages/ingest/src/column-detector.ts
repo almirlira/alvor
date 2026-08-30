@@ -5,7 +5,7 @@
  * espaco virou underscore) e mapeia cada header para um CanonicalColumn
  * quando possivel, baseado em sinonimos.
  *
- * F2-flow-05 / ADR-015 Divergencia 1: engenharia generica, SEM hardcoding
+ * / Divergencia 1: engenharia generica, SEM hardcoding
  * por cliente. Nenhum nome de cliente, sheet ou loja pode aparecer aqui.
  *
  * Confianca:

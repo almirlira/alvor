@@ -1,5 +1,5 @@
 /**
- * llm.ts — cria o provedor de IA a partir do ambiente (mesma logica do chat-ia/wire.ts do CROSS).
+ * llm.ts — cria o provedor de IA a partir do ambiente (mesma logica do chat-ia/wire.ts do ALVOR).
  *
  *   LLM_PROVIDER      anthropic-direct | mock   (default: mock se nao houver chave)
  *   ANTHROPIC_API_KEY chave da Anthropic (nunca no codigo)

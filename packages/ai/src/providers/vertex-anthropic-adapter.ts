@@ -1,31 +1,31 @@
 /**
  * VertexAnthropicAdapter — producao.
  *
- * **POLITICA VINCULANTE (B.20 D-013):** o Vertex AI Model Garden no projeto
+ * **POLITICA VINCULANTE:** o Vertex AI Model Garden no projeto
  * `brainora-prod` opera sob DPA enterprise GCP com clausula "no training on
  * customer data". Esta e a UNICA forma autorizada de chamar LLM em producao.
  * Qualquer fallback para API direta da Anthropic exige re-aprovacao formal
- * do owner (ver ADR-010). A politica prende o PROVEDOR, nao o modelo — o
- * modelo oficial e Claude Opus 5 desde 2026-08-11 (B.60 D-056).
+ * do owner (ver). A politica prende o PROVEDOR, nao o modelo — o
+ * modelo oficial e Claude Opus 5 desde 2026-08-11.
  *
  * Ancoragem:
- *   - ADR-008 (LLM hardening) — as camadas 1-4 rodam fora deste adapter
- *   - ADR-010 (provider LLM) — modelo/regiao default
- *   - B.22 D-019 — retencao de `llm_audit_log` = 180 dias
- *   - B.26 — decisao de adocao via Vertex
+ *   - (LLM hardening) — as camadas 1-4 rodam fora deste adapter
+ *   - (provider LLM) — modelo/regiao default
+ *   - — retencao de `llm_audit_log` = 180 dias
+ *   - — decisao de adocao via Vertex
  *
  * Caracteristicas:
- *   - Auth por Google service account (`gcp-service-account-mktvibe-v2`)
+ *   - Auth por Google service account (`gcp-service-account-ALVOR`)
  *     carregada via `SecretStore.get()`
- *   - Modelo default: `claude-opus-5` (desde 2026-08-11 — B.60 D-056;
+ *   - Modelo default: `claude-opus-5` (desde 2026-08-11
  *     antes `claude-sonnet-4-6`). A POLITICA de DPA no-training e do
  *     PROVEDOR, nao do modelo — trocar de modelo dentro do mesmo contrato
- *     nao altera B.20 D-013.
+ *     nao altera.
  *   - Regiao default: `us-east5` (fallback: `us-central1`)
  *   - Retry com backoff exponencial em 429/5xx (max 3 tentativas)
  *   - Retry stop em 401/403 (erro de auth nao e retriable)
  *   - Timeout hard por chamada (default 30s, override em opts)
- *   - Log estruturado via logger injetado (`@mktvibe/observability`)
+ *   - Log estruturado via logger injetado (`@alvor/observability`)
  *   - NAO grava audit log diretamente — caller e quem orquestra
  *     `LlmAuditLogger.record()`. Adapter retorna payload que alimenta
  *     o audit.
@@ -51,7 +51,7 @@ import {
   type LlmStreamChunk,
 } from './provider-interface.js';
 
-/** Logger duck-typed compativel com `@mktvibe/observability` Logger. */
+/** Logger duck-typed compativel com `@alvor/observability` Logger. */
 export interface AdapterLogger {
   readonly info: (obj: unknown, msg?: string) => void;
   readonly warn: (obj: unknown, msg?: string) => void;
@@ -59,7 +59,7 @@ export interface AdapterLogger {
   readonly debug: (obj: unknown, msg?: string) => void;
 }
 
-/** SecretStore minimo (ADR-007). */
+/** SecretStore minimo. */
 export interface SecretStore {
   get(name: string): Promise<string>;
 }
@@ -265,8 +265,8 @@ export class VertexAnthropicAdapter implements LlmProvider {
   }
 
   async *stream(messages: LlmMessages, opts?: LlmGenerateOptions): AsyncIterable<LlmStreamChunk> {
-    // F2 minimo: fallback para generate + 1 chunk.
-    // Streaming nativo entra em followup quando chat IA (F2-009) precisar.
+    // minimo: fallback para generate + 1 chunk.
+    // Streaming nativo entra em followup quando chat IA precisar.
     const full = await this.generate(messages, opts);
     yield { deltaText: full.text, done: true };
   }
@@ -303,7 +303,7 @@ export class VertexAnthropicAdapter implements LlmProvider {
       throw new VertexAdapterError(
         `SecretStore nao entregou '${this.secretName}': ${detail}. ` +
           `Fail-closed: adapter '${this.name}' nao pode instanciar cliente sem service account ` +
-          `(B.20 D-013 + ADR-007).`,
+          `(exige contrato com garantia de nao-treinamento).`,
         undefined,
         false,
         err,
@@ -394,7 +394,7 @@ export class VertexAnthropicAdapter implements LlmProvider {
     const statusCode = this.extractStatusCode(err);
     const message = this.extractMessage(err);
 
-    // 401/403: erro de auth — NAO retriable (B.20 D-013 + ADR-007).
+    // 401/403: erro de auth — NAO retriable.
     if (statusCode === 401 || statusCode === 403) {
       return new VertexAdapterError(
         `auth rejeitada (${statusCode}): ${message}`,

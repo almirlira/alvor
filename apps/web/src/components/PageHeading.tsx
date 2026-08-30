@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 
 /**
- * PageHeading — H1 padrao das telas CROSS M3 (F3 Onda 2).
+ * PageHeading — H1 padrao das telas ALVOR.
  *
  * Garante hierarquia consistente com os prototipos:
  *   - fonte display (Space Grotesk) peso 700

@@ -1,7 +1,7 @@
 /**
  * account-detector.ts — Detector heuristico de LINHAS da DRE.
  *
- * Mesma tecnica do column-detector do CROSS, aplicada a rotulos de linha:
+ * Mesma tecnica do column-detector do ALVOR, aplicada a rotulos de linha:
  * normaliza (minusculas, sem acento, sem numeracao "3.1.2", sem marcadores
  * "(-)" "(+)" "(=)"), e compara com uma tabela de sinonimos pt-BR.
  *

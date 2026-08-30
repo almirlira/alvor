@@ -1,21 +1,21 @@
 /**
- * ContextBuilder — Camada 1 do ADR-008.
+ * ContextBuilder — Camada 1 do hardening.
  *
  * Dado `{tenantId, userId, activeRole, memberships}`, monta um
  * `SanitizedContext` contendo apenas os dados que esse usuario, com esse
  * papel ativo, nesse tenant, pode ler via endpoint direto.
  *
- * Regra dura (ADR-008 §2 Camada 1):
+ * Regra dura:
  *   - ContextBuilder e a UNICA porta de entrada de dados para o prompt.
  *   - Prompt builders NUNCA acessam o banco diretamente.
  *   - Scope de papel e aplicado AQUI, nao dentro do prompt.
  *
- * F1 entrega o esqueleto de interface + uma implementacao default que
+ * entrega o esqueleto de interface + uma implementacao default que
  * delega para um `ContextRepository` injetado. A implementacao real que
- * consulta Postgres com `SET LOCAL app.current_tenant` vive em F2 dentro
+ * consulta Postgres com `SET LOCAL app.current_tenant` vive em dentro
  * do backend (apps/api), conforme contrato definido aqui.
  *
- * ## Extensao EVO-1 (2026-06-03)
+ * ## Extensao (2026-06-03)
  *
  * `ScopedDataItem` ganha campo opcional `entity` (id + label de loja).
  * O ContextBuilder popula `entity` deserializando o campo `note` JSON
@@ -30,13 +30,13 @@
 
 import type { SourceRef } from './output-validator.js';
 
-/** Papel ativo do usuario dentro do tenant atual (ADR-002 §6-bis, ADR-005). */
+/** Papel ativo do usuario dentro do tenant atual. */
 export type ActiveRole = 'owner' | 'admin' | 'editor' | 'viewer';
 
 export interface Membership {
   readonly tenantId: string;
   readonly role: ActiveRole;
-  /** Nivel na hierarquia (ADR-002 §6-bis): org | franqueadora | franqueado | loja. */
+  /** Nivel na hierarquia: org | franqueadora | franqueado | loja. */
   readonly level?: 'org' | 'franqueadora' | 'franqueado' | 'loja' | 'tenant';
 }
 
@@ -50,7 +50,7 @@ export interface Membership {
  *   - Efemero por request — nao persistido como estado novo.
  *   - Derivado pelo ChatService a partir do historico da sessao corrente (tenant-safe).
  *
- * ADR-019 addendum (2026-06-07): suporta carry-over de periodo e lista de
+ * addendum (2026-06-07): suporta carry-over de periodo e lista de
  * produtos para habilitar follow-ups de comparacao multi-produto e heranca
  * de periodo sem que o usuario repita o filtro.
  */
@@ -84,7 +84,7 @@ export interface ContextRequest {
   readonly activeRole: ActiveRole;
   readonly memberships: readonly Membership[];
   /** Intent resolvido upstream pelo classificador (ex: "vendas_mes").
-   *  Em F2 o ChatService passa a pergunta real do usuario para que o
+   *  Em o ChatService passa a pergunta real do usuario para que o
    *  classificador de loja (PgContextRepository) funcione corretamente.
    */
   readonly intent: string;
@@ -105,7 +105,7 @@ export interface ContextRequest {
  * Decisao 2.1 do parecer grounding-por-loja 2026-06-03.
  */
 export interface DataItemEntity {
-  /** Identificador estavel da loja (ex: "lj01", ou entity_id quando O1-006 ativar). */
+  /** Identificador estavel da loja (ex: "lj01", ou entity_id quando ativar). */
   readonly id: string;
   /** Nome de exibicao da loja (ex: "Loja Centro") — rotulo estrutural, nao PII. */
   readonly label: string;
@@ -115,11 +115,11 @@ export interface DataItemEntity {
  * Fato numerico com fonte rastreavel — cada item vira um `<<<DATA>>>` block
  * no user message, com source_ref citavel no output.
  *
- * EVO-1: campo `entity` opcional carrega a dimensao de loja quando o item
+ *: campo `entity` opcional carrega a dimensao de loja quando o item
  * representa um KPI de uma loja especifica. Populado pelo ContextBuilder
  * a partir do campo `note` JSON injetado pelo PgContextRepository.
  *
- * EVO-2 (2026-06-03 — chat padrao ouro): campo `period` opcional carrega
+ * (2026-06-03 — chat padrao ouro): campo `period` opcional carrega
  * o periodo ISO do dado. Populado pelo ContextBuilder a partir dos campos
  * `periodStart`/`periodEnd` do note JSON. O PromptAssembler emite o periodo
  * explicitamente em cada bloco <<<DATA>>> para que o LLM nunca atribua
@@ -133,13 +133,13 @@ export interface ScopedDataItem {
   /** Texto descritivo/contextual ja sanitizado pelo repositorio. */
   readonly note?: string;
   /**
-   * Dimensao de loja (EVO-1). Presente quando o item representa um KPI
+   * Dimensao de loja. Presente quando o item representa um KPI
    * de uma loja especifica, ausente para agregados de rede.
    * Nunca contem PII — so rotulo estrutural da loja.
    */
   readonly entity?: DataItemEntity;
   /**
-   * Periodo do dado (EVO-2 — chat padrao ouro 2026-06-03).
+   * Periodo do dado.
    * Extraido dos campos `periodStart`/`periodEnd` do note JSON.
    * Ausente em items legados ou quando o repositorio nao envia periodo.
    */
@@ -168,13 +168,13 @@ export interface SanitizedContext {
   /** Itens removidos por falta de permissao — rastreavel em audit. */
   readonly droppedBecauseOfRole: number;
   /**
-   * Escopo de granularidade do contexto (EVO-1).
+   * Escopo de granularidade do contexto.
    * Propagado do PgContextRepository via StoreContextResult.
    * Undefined quando o repositorio nao retorna esse metadado (repos legados).
    */
   readonly intentScope?: IntentScope;
   /**
-   * Motivo de fallback quando o contexto nao tem dado suficiente (EVO-1).
+   * Motivo de fallback quando o contexto nao tem dado suficiente.
    * O caller usa isso para distinguir no_data / out_of_scope / ambiguous
    * e servir a copy honesta correta (content 2026-06-03).
    * Undefined quando ha dado suficiente.
@@ -183,7 +183,7 @@ export interface SanitizedContext {
 }
 
 /**
- * Repositorio abstrato de dados scoped. A implementacao concreta em F2
+ * Repositorio abstrato de dados scoped. A implementacao concreta em
  * usa o mesmo repository layer do dashboard (Flow 04) com `SET LOCAL
  * app.current_tenant` ativo + filtro de RBAC por conteudo.
  */
@@ -195,13 +195,13 @@ export interface ContextRepository {
  * Regras de scope de papel aplicadas em cima dos dados retornados pelo
  * repositorio — camada de defesa em profundidade.
  *
- * Regras F1:
+ * Regras:
  *   - viewer: nunca recebe items marcados com `sourceRef.classification === 'pii'`
  *   - viewer: nunca recebe items com `label` contendo tokens de PII individual
  *   - editor: recebe tudo exceto audit log
  *   - admin/owner: recebe tudo
  *
- * F2 amplia para regras por categoria de dado configuraveis por tenant.
+ * amplia para regras por categoria de dado configuraveis por tenant.
  */
 const PII_LABEL_HINTS = [
   'cpf',
@@ -299,7 +299,7 @@ export class ContextBuilder {
 
     const raw = await this.repo.fetchForIntent(request);
 
-    // Extrai metadados EVO-1 do resultado do repositorio via propriedades
+    // Extrai metadados do resultado do repositorio via propriedades
     // nao-enumeradas injetadas pelo PgContextRepository (StoreContextResult).
     // Fail-safe: repositorios legados nao tem esses campos — undefined e ok.
     const rawWithMeta = raw as unknown as {
@@ -322,8 +322,8 @@ export class ContextBuilder {
         continue;
       }
 
-      // EVO-1: popula entity a partir do note JSON (stopgap F2).
-      // EVO-2: popula period a partir do note JSON (chat padrao ouro 2026-06-03).
+      //: popula entity a partir do note JSON (stopgap).
+      //: popula period a partir do note JSON (chat padrao ouro 2026-06-03).
       // Se o item ja tem entity/period (passado diretamente), preserva.
       // Se nao, tenta deserializar do note.
       const { entity: parsedEntity, period: parsedPeriod } = parseMetadataFromNote(item.note);

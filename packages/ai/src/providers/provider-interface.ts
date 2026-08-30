@@ -1,17 +1,17 @@
 /**
- * LlmProvider — interface comum de acesso a modelos LLM (F2).
+ * LlmProvider — interface comum de acesso a modelos LLM.
  *
- * **POLITICA VINCULANTE (B.20 D-013):** qualquer implementacao concreta desta
+ * **POLITICA VINCULANTE:** qualquer implementacao concreta desta
  * interface OBRIGA contrato DPA "no training" com o provider. Nenhum adapter
  * que nao satisfaca essa condicao pode ser registrado no factory.
  *
- * Decisao de provider oficial (B.26 / ADR-010): Vertex AI Model Garden no
+ * Decisao de provider oficial: Vertex AI Model Garden no
  * projeto `brainora-prod`. Modelo oficial: **Claude Opus 5** desde 2026-08-11
- * (B.60 D-056); antes era Claude Sonnet 4.6. A interface e provider-agnostic
+ *; antes era Claude Sonnet 4.6. A interface e provider-agnostic
  * por design — trocar de provider no futuro significa escrever um novo
  * adapter, nao mudar os callers; trocar de MODELO e so configuracao.
  *
- * O adapter NUNCA bypassa as camadas 1-5 do ADR-008:
+ * O adapter NUNCA bypassa as camadas 1-5 do:
  *   - ContextBuilder ja aplicou scope antes de chamar `assemble()`
  *   - PromptAssembler ja separou system/user e injetou refs
  *   - InputSanitizer ja limpou payload externo
