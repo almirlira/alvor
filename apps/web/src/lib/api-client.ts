@@ -52,10 +52,14 @@ export const apiClient = {
     return handle<T>(res);
   },
   async post<T>(path: string, body?: unknown): Promise<T> {
+    const hasBody = body !== undefined;
     const res = await fetch(`${BASE}${path}`, {
       method: 'POST',
-      headers: await headers({ 'Content-Type': 'application/json', Accept: 'application/json' }),
-      body: body === undefined ? undefined : JSON.stringify(body),
+      headers: await headers({
+        Accept: 'application/json',
+        ...(hasBody ? { 'Content-Type': 'application/json' } : {}),
+      }),
+      body: hasBody ? JSON.stringify(body) : undefined,
     });
     return handle<T>(res);
   },
