@@ -38,31 +38,41 @@ export function AlphaReportPage(): JSX.Element {
     <section>
       <PageHeading
         id="alpha-title"
-        title="Alpha"
-        subtitle="Acompanhamento rapido do uso e dos relatos por fundador."
+        title="Gestão da alpha"
+        subtitle="Acompanhe a atividade individual, os relatos enviados e a DRE disponível em cada acesso."
       >
         <button className="dre-btn secondary" type="button" onClick={() => void load()}>Atualizar</button>
       </PageHeading>
 
       {error !== null && <p className="dre-err">{error}</p>}
-      {report === null && error === null ? <p className="dre-empty">Carregando relatorio...</p> : null}
+      {report === null && error === null ? <p className="dre-empty">Carregando relatório...</p> : null}
       {report !== null && (
-        <div className="alpha-report-grid">
-          {report.participants.map((item) => (
-            <article className="dre-card alpha-report-card" key={item.participantId}>
-              <div>
-                <span className="dre-eyebrow">{item.participantId}{item.organizer ? ' · organizador' : ''}</span>
-                <h3>{item.name}</h3>
-              </div>
-              <dl>
-                <div><dt>Uso</dt><dd>{item.usageCount}</dd></div>
-                <div><dt>Relatos</dt><dd>{item.feedbackCount}</dd></div>
-                <div><dt>DRE</dt><dd>{item.hasDre ? 'carregada' : 'pendente'}</dd></div>
-                <div><dt>Ultimo acesso</dt><dd>{item.lastSeen === null ? 'sem acesso' : new Date(item.lastSeen).toLocaleString('pt-BR')}</dd></div>
-              </dl>
-            </article>
-          ))}
-        </div>
+        <>
+          <div className="alpha-report-summary" aria-label="Resumo da alpha">
+            <div><span>Acessos convidados</span><strong>{report.participants.length}</strong></div>
+            <div><span>Com atividade</span><strong>{report.participants.filter((item) => item.lastSeen !== null).length}</strong></div>
+            <div><span>Relatos recebidos</span><strong>{report.participants.reduce((sum, item) => sum + item.feedbackCount, 0)}</strong></div>
+          </div>
+          <div className="alpha-report-grid">
+            {report.participants.map((item) => (
+              <article className="dre-card alpha-report-card" key={item.participantId}>
+                <header className="alpha-report-identity">
+                  <span className={`alpha-activity-dot${item.lastSeen === null ? '' : ' is-active'}`} aria-hidden="true" />
+                  <div>
+                    <span className="dre-eyebrow">{item.participantId}{item.organizer ? ' · organizador' : ''}</span>
+                    <h3>{item.name}</h3>
+                  </div>
+                </header>
+                <dl>
+                  <div><dt title="Ações autenticadas registradas neste acesso">Interações</dt><dd>{item.usageCount}</dd></div>
+                  <div><dt>Relatos</dt><dd>{item.feedbackCount}</dd></div>
+                  <div><dt>DRE</dt><dd><span className={`alpha-dre-status ${item.hasDre ? 'is-ready' : ''}`}>{item.hasDre ? 'Carregada' : 'Pendente'}</span></dd></div>
+                  <div><dt>Última atividade</dt><dd className="alpha-last-seen">{item.lastSeen === null ? 'Sem acesso' : new Date(item.lastSeen).toLocaleString('pt-BR')}</dd></div>
+                </dl>
+              </article>
+            ))}
+          </div>
+        </>
       )}
     </section>
   );

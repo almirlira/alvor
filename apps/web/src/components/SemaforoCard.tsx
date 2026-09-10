@@ -29,19 +29,19 @@ export interface SemaforoCardData {
 }
 
 export const LEVEL_LABEL: Readonly<Record<SemaforoLevel, string>> = {
-  verde: 'VERDE · VOCE RESOLVE',
+  verde: 'VERDE · VOCÊ RESOLVE',
   amarelo: 'AMARELO · VALIDAR',
   vermelho: 'VERMELHO · PARECER',
 };
 
 export const LEVEL_MEANING: Readonly<Record<SemaforoLevel, string>> = {
-  verde: 'O dono executa sozinho — renegociar fornecedor, cortar assinatura, ajustar preco.',
-  amarelo: 'Exige validacao do contador ou do gerente do banco antes de agir.',
-  vermelho: 'Nunca sai daqui sem parecer profissional — regime, reclassificacao, retroativo.',
+  verde: 'O dono executa sozinho — renegociar fornecedor, cortar assinatura, ajustar preço.',
+  amarelo: 'Exige validação do contador ou do gerente do banco antes de agir.',
+  vermelho: 'Nunca sai daqui sem parecer profissional — regime, reclassificação, retroativo.',
 };
 
 const WHO_LABEL: Readonly<Record<SemaforoCardData['who'], string>> = {
-  voce: 'voce resolve',
+  voce: 'você resolve',
   contador: 'contador',
   'gerente do banco': 'gerente do banco',
   'contador ou consultor tributario': 'contador / tributarista',
@@ -114,10 +114,12 @@ export function SemaforoCard({ card, expanded = false, onToggle, compact = false
   }
 
   return (
-    <div className={`sem-card sem-card-${card.level}`} role="button" tabIndex={0} aria-expanded={expanded} onClick={onToggle} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onToggle?.(); } }}>
-      {head}
+    <div className={`sem-card sem-card-${card.level}`}>
+      <button type="button" className="sem-card-toggle" aria-expanded={expanded} onClick={onToggle}>
+        {head}
+      </button>
       {expanded && (
-        <div className="sem-card-body" onClick={(e) => e.stopPropagation()}>
+        <div className="sem-card-body">
           <div className="sem-block">
             <h4>De onde saiu (trilha)</h4>
             <ul className="sem-evidence">
@@ -128,12 +130,12 @@ export function SemaforoCard({ card, expanded = false, onToggle, compact = false
             {card.triggeredRule !== null && <p style={{ fontSize: 12.5, opacity: .8, marginTop: 8 }}>Regra que disparou: <code>{card.triggeredRule}</code></p>}
           </div>
           <div className="sem-block">
-            <h4>{card.who === 'voce' ? 'O que fazer' : 'O que fazer (e o que nao fazer sozinho)'}</h4>
+            <h4>{card.who === 'voce' ? 'O que fazer' : 'O que fazer (e o que não fazer sozinho)'}</h4>
             <ul>{card.actions.map((a) => <li key={a}>{a}</li>)}</ul>
           </div>
           {card.validationRequest !== null && (
             <div className="sem-block" style={{ gridColumn: '1 / -1' }}>
-              <h4>Pedido de validacao pronto para enviar ao {WHO_LABEL[card.who]}</h4>
+              <h4>Pedido de validação pronto para enviar ao {WHO_LABEL[card.who]}</h4>
               <div className="sem-request">{card.validationRequest}</div>
               <div className="sem-request-actions">
                 <button type="button" className="pill-btn pill-dark" onClick={() => void copy()}>{copied ? 'Copiado' : 'Copiar pedido'}</button>
@@ -142,19 +144,19 @@ export function SemaforoCard({ card, expanded = false, onToggle, compact = false
           )}
           {card.norma !== null && (
             <div className="sem-block" style={{ gridColumn: '1 / -1' }}>
-              <h4>Base da sugestao (os 4 campos obrigatorios)</h4>
+              <h4>Base da sugestão (os 4 campos obrigatórios)</h4>
               <dl className="sem-norma">
                 <dt>Norma citada</dt><dd>{card.norma.citada}{card.norma.fonte_url !== undefined && <> · <a href={card.norma.fonte_url} target="_blank" rel="noreferrer">fonte oficial</a></>}</dd>
-                <dt>Vigencia</dt><dd>{card.norma.vigencia}</dd>
-                <dt>Confianca</dt><dd>{card.confidence}</dd>
-                <dt>Semaforo</dt><dd>{LEVEL_LABEL[card.level]}</dd>
+                <dt>Vigência</dt><dd>{card.norma.vigencia}</dd>
+                <dt>Confiança</dt><dd>{card.confidence}</dd>
+                <dt>Semáforo</dt><dd>{LEVEL_LABEL[card.level]}</dd>
               </dl>
             </div>
           )}
           {card.norma === null && (
             <div className="sem-block">
-              <h4>Confianca</h4>
-              <p style={{ margin: 0, fontSize: 14 }}>{card.confidence} — hipotese fundamentada nos numeros acima, nao parecer.</p>
+              <h4>Confiança</h4>
+              <p style={{ margin: 0, fontSize: 14 }}>{card.confidence} — hipótese fundamentada nos números acima, não parecer.</p>
             </div>
           )}
         </div>

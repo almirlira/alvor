@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react';
 import { t } from '../lib/i18n';
+import { AppIcon, type AppIconName } from './AppIcon';
 
 export type FallbackReason = 'no_data' | 'out_of_scope' | 'ambiguous';
 
@@ -288,27 +289,27 @@ function sourceTypeLabel(sourceType: string | undefined): string {
   }
 }
 
-/** Icone Material Symbols por sourceType (product-spec §5.2). */
-function sourceTypeIcon(sourceType: string | undefined): string {
+/** Ícone local por tipo de fonte; não depende de fonte externa. */
+function sourceTypeIcon(sourceType: string | undefined): AppIconName {
   switch (sourceType) {
     case 'google_drive':
-      return 'description';
+      return 'upload';
     case 'instagram':
-      return 'photo_camera';
+      return 'eye';
     case 'meta_ads':
-      return 'campaign';
+      return 'target';
     case 'google_analytics':
-      return 'bar_chart';
+      return 'chart';
     case 'whatsapp':
-      return 'chat';
+      return 'send';
     case 'manual':
-      return 'edit_note';
+      return 'help';
     case 'pdv':
-      return 'point_of_sale';
+      return 'store';
     case 'crm':
-      return 'contacts';
+      return 'person';
     default:
-      return 'dataset';
+      return 'chart';
   }
 }
 
@@ -514,9 +515,7 @@ function SourcesFooter({ sources, activeRef, onChipClick }: SourcesFooterProps):
                 aria-pressed={isActive}
                 onClick={() => onChipClick(source)}
               >
-                <span className="material-symbols-outlined source-chip-icon" aria-hidden="true">
-                  {icon}
-                </span>
+                <AppIcon name={icon} className="source-chip-icon" />
                 <span>{truncLabel}</span>
               </button>
             </li>

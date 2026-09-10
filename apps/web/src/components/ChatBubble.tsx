@@ -12,6 +12,7 @@
 
 import { useRef, useState } from 'react';
 import { t } from '../lib/i18n';
+import { AppIcon } from './AppIcon';
 import {
   type ChatMessageData,
   type ChatSource,
@@ -53,7 +54,7 @@ function BubbleAvatar({ isUser }: BubbleAvatarProps): JSX.Element {
         aria-hidden="true"
         title={t('chat.senderYou')}
       >
-        <span className="material-symbols-rounded">person</span>
+        <AppIcon name="person" />
       </div>
     );
   }
@@ -365,7 +366,7 @@ function FallbackBubble({
             className="cbubble-fallback-chip"
             onClick={() => onSuggestion(t('chat.fallback.ambiguous.suggestionSales'))}
           >
-            <span className="material-symbols-rounded">trending_up</span>
+            <AppIcon name="trend" />
             {t('chat.fallback.ambiguous.suggestionSales')}
           </button>
           <button
@@ -373,7 +374,7 @@ function FallbackBubble({
             className="cbubble-fallback-chip"
             onClick={() => onSuggestion(t('chat.fallback.ambiguous.suggestionAds'))}
           >
-            <span className="material-symbols-rounded">ads_click</span>
+            <AppIcon name="target" />
             {t('chat.fallback.ambiguous.suggestionAds')}
           </button>
         </div>
@@ -391,7 +392,7 @@ function FallbackBubble({
             className="cbubble-fallback-chip"
             onClick={() => onSuggestion(t('chat.fallback.ambiguous.suggestionSales'))}
           >
-            <span className="material-symbols-rounded">storefront</span>
+            <AppIcon name="store" />
             {t('chat.fallback.ambiguous.suggestionSales')}
           </button>
           <button
@@ -399,7 +400,7 @@ function FallbackBubble({
             className="cbubble-fallback-chip"
             onClick={() => onSuggestion(t('chat.fallback.ambiguous.suggestionInstagram'))}
           >
-            <span className="material-symbols-rounded">visibility</span>
+            <AppIcon name="eye" />
             {t('chat.fallback.ambiguous.suggestionInstagram')}
           </button>
           <button
@@ -407,7 +408,7 @@ function FallbackBubble({
             className="cbubble-fallback-chip"
             onClick={() => onSuggestion(t('chat.fallback.ambiguous.suggestionAds'))}
           >
-            <span className="material-symbols-rounded">ads_click</span>
+            <AppIcon name="target" />
             {t('chat.fallback.ambiguous.suggestionAds')}
           </button>
         </div>
@@ -422,7 +423,7 @@ function FallbackBubble({
       <p className="cbubble-note">{t('chat.fallback.no_data.body')}</p>
       <div className="cbubble-fallback-chips">
         <button type="button" className="cbubble-fallback-chip" onClick={onConnectSources}>
-          <span className="material-symbols-rounded">electrical_services</span>
+          <AppIcon name="plug" />
           {t('chat.fallback.connectSources')}
         </button>
       </div>
@@ -499,7 +500,7 @@ export function ChatBubble({
         <BubbleAvatar isUser={false} />
         <div className="cbubble-bubble cbubble-bubble-error">
           <div className="cbubble-error-header" aria-hidden="true">
-            <span className="material-symbols-rounded">error_outline</span>
+            <AppIcon name="error" />
             {t('chat.errorHeader')}
           </div>
           <p className="cbubble-error-sub">{t('chat.errorBody')}</p>
@@ -510,7 +511,7 @@ export function ChatBubble({
               aria-label={t('chat.retryAriaLabel')}
               onClick={onRetry}
             >
-              <span className="material-symbols-rounded">refresh</span>
+              <AppIcon name="refresh" />
               {t('chat.errorRetry')}
             </button>
           ) : null}

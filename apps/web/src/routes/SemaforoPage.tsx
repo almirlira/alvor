@@ -62,9 +62,9 @@ export function SemaforoPage(): JSX.Element {
     <>
       <div className="dre-head">
         <div>
-          <div className="dre-eyebrow">Semaforo de autonomia</div>
+          <div className="dre-eyebrow">Semáforo de autonomia</div>
           <h1 className="dre-title">O que fazer — e com quem — em {monthLong(selected)}</h1>
-          <p className="dre-subtitle">Cada card e uma hipotese fundamentada nos numeros da sua DRE, nunca um parecer. A cor diz ate onde voce vai sozinho.</p>
+          <p className="dre-subtitle">Cada card é uma hipótese baseada nos números da sua DRE. A cor mostra até onde você pode avançar sozinho.</p>
         </div>
         <label>
           <span className="dre-eyebrow" style={{ display: 'block', marginBottom: 4 }}>Mes</span>
@@ -80,7 +80,7 @@ export function SemaforoPage(): JSX.Element {
         <div><b style={{ color: 'var(--alarm-red)' }}>VERMELHO</b>{LEVEL_MEANING.vermelho}</div>
       </div>
 
-      <div className="sem-filters" role="tablist" aria-label="Filtrar por nivel">
+      <div className="sem-filters" role="tablist" aria-label="Filtrar por nível">
         <button type="button" role="tab" aria-selected={filter === 'todos'} className={`sem-filter${filter === 'todos' ? ' active' : ''}`} onClick={() => setF('todos')}>Todos <span>{total}</span></button>
         {(['vermelho', 'amarelo', 'verde'] as const).map((lvl) => (
           <button key={lvl} type="button" role="tab" aria-selected={filter === lvl} className={`sem-filter f-${lvl}${filter === lvl ? ' active' : ''}`} onClick={() => setF(lvl)}>
@@ -91,7 +91,7 @@ export function SemaforoPage(): JSX.Element {
 
       {error !== null && <div className="dre-err">{error}</div>}
 
-      {result !== null && visible.length === 0 && <div className="sem-empty">Nenhum card neste nivel para {monthShort(selected)}.</div>}
+      {result !== null && visible.length === 0 && <div className="sem-empty">Nenhum card neste nível para {monthShort(selected)}.</div>}
 
       <div className="sem-stack">
         {visible.map((c) => (

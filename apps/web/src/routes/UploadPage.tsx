@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { apiClient } from '../lib/api-client';
 import { useDre, type DreImport } from '../lib/dre-context';
 import { monthShort } from '../lib/format';
+import { AppIcon } from '../components/AppIcon';
 
 export function UploadPage(): JSX.Element {
   const { data, setData } = useDre();
@@ -54,7 +55,7 @@ export function UploadPage(): JSX.Element {
     <>
       <div className="dre-head">
         <div>
-          <div className="dre-eyebrow">Fontes de dados</div>
+          <div className="dre-eyebrow">Fonte de dados</div>
           <h1 className="dre-title">Enviar arquivos</h1>
           <p className="dre-subtitle">Solte a planilha que o contador mandou. Contas nas linhas, meses nas colunas.</p>
         </div>
@@ -71,9 +72,9 @@ export function UploadPage(): JSX.Element {
         onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') inputRef.current?.click(); }}
         aria-label="Enviar arquivo da DRE"
       >
-        <span className="material-symbols-rounded" aria-hidden="true">upload_file</span>
+        <AppIcon name="upload" className="dre-drop-icon" />
         <p className="dre-drop-title">{busy ? 'Lendo a planilha…' : 'Arraste a DRE aqui ou clique para escolher'}</p>
-        <p className="dre-drop-hint">XLSX ou CSV · ate 20 MB</p>
+        <p className="dre-drop-hint">XLSX ou CSV · até 20 MB</p>
         <input
           ref={inputRef}
           type="file"
@@ -98,7 +99,7 @@ export function UploadPage(): JSX.Element {
             <div className="dre-stat-row">
               <div className="dre-stat"><b>{s.summary.months}</b><span>meses ({monthShort(s.months[0] ?? '')} a {monthShort(s.months[s.months.length - 1] ?? '')})</span></div>
               <div className="dre-stat"><b>{s.summary.linesMapped}</b><span>linhas reconhecidas</span></div>
-              <div className="dre-stat"><b>{s.summary.linesUnmapped}</b><span>nao classificadas</span></div>
+              <div className="dre-stat"><b>{s.summary.linesUnmapped}</b><span>não classificadas</span></div>
             </div>
             {s.reconciliation.length === 0 ? (
               <div className="dre-ok">Subtotais da planilha conferidos: batem com o recalculado, centavo a centavo.</div>
@@ -107,7 +108,7 @@ export function UploadPage(): JSX.Element {
             )}
             {s.summary.unmappedLabels.length > 0 && (
               <>
-                <p className="dre-subtitle" style={{ marginTop: 12 }}>Fora dos totais (nao reconhecidas):</p>
+                <p className="dre-subtitle" style={{ marginTop: 12 }}>Fora dos totais (não reconhecidas):</p>
                 <div className="dre-chip-list">
                   {s.summary.unmappedLabels.map((l) => <span key={l} className="dre-chip">{l}</span>)}
                 </div>
@@ -119,7 +120,7 @@ export function UploadPage(): JSX.Element {
           </section>
           <section className="dre-card">
             <h3>Avisos da leitura</h3>
-            {s.warnings.length === 0 ? <p className="dre-subtitle">Nenhum aviso.</p> : (
+            {s.warnings.length === 0 ? <p className="dre-subtitle">Nenhum aviso encontrado.</p> : (
               <ul style={{ margin: 0, paddingLeft: 18 }}>
                 {s.warnings.map((w, i) => <li key={i} style={{ marginBottom: 6 }}>{w}</li>)}
               </ul>

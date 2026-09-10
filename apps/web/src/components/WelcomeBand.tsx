@@ -25,13 +25,13 @@ export function WelcomeBand({ month, months, onMonthChange, fileName, resultadoL
   const sozinho = counts?.verde ?? 0;
 
   const resumo = (): JSX.Element => {
-    if (counts === null) return <>Sua DRE de {monthLong(month)} esta carregada e pronta para leitura.</>;
-    if (pendentes === 0 && sozinho === 0) return <>Nenhum alerta em {monthLong(month)} — os indicadores acompanhados estao dentro do esperado.</>;
+    if (counts === null) return <>Sua DRE de {monthLong(month)} está carregada e pronta para leitura.</>;
+    if (pendentes === 0 && sozinho === 0) return <>Nenhum alerta em {monthLong(month)} — os indicadores acompanhados estão dentro do esperado.</>;
     return (
       <>
         {vermelho ? `${monthLong(month)} fechou no vermelho` : `${monthLong(month)} fechou no azul`}
-        {sozinho > 0 && <>, e ha <b>{sozinho}</b> {sozinho === 1 ? 'coisa que voce resolve sozinho' : 'coisas que voce resolve sozinho'}</>}
-        {pendentes > 0 && <> — {sozinho > 0 ? 'mais ' : 'ha '}<b>{pendentes}</b> {pendentes === 1 ? 'que pede validacao profissional' : 'que pedem validacao profissional'}</>}.
+        {sozinho > 0 && <>, e há <b>{sozinho}</b> {sozinho === 1 ? 'ponto que você resolve sozinho' : 'pontos que você resolve sozinho'}</>}
+        {pendentes > 0 && <> — {sozinho > 0 ? 'mais ' : 'há '}<b>{pendentes}</b> {pendentes === 1 ? 'que pede validação profissional' : 'que pedem validação profissional'}</>}.
       </>
     );
   };
@@ -46,7 +46,7 @@ export function WelcomeBand({ month, months, onMonthChange, fileName, resultadoL
       </div>
       <div className="wb-side">
         <label className="wb-month">
-          <span className="dre-eyebrow">Mes em analise</span>
+          <span className="dre-eyebrow">Mês em análise</span>
           <select className="dre-month-select" value={month} onChange={(e) => onMonthChange(e.target.value)}>
             {months.map((m) => <option key={m} value={m}>{monthShortFn(m)}</option>)}
           </select>
@@ -54,7 +54,7 @@ export function WelcomeBand({ month, months, onMonthChange, fileName, resultadoL
         <div className="wb-file" title={fileName}>{fileName}</div>
         {pendentes > 0 && (
           <button type="button" className="pill-btn pill-light" onClick={() => navigate('/semaforo')}>
-            Ver o que precisa de atencao
+            Ver o que precisa de atenção
           </button>
         )}
       </div>

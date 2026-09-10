@@ -94,6 +94,7 @@ export function AlphaFeedbackPanel(): JSX.Element {
   const [draft, setDraft] = useState<Draft>(() => loadJson(draftKey, emptyDraft()));
   const panelTitle = useRef<HTMLHeadingElement>(null);
   const trigger = useRef<HTMLButtonElement>(null);
+  const returnFocus = useRef<HTMLElement | null>(null);
 
   const currentArea = areaForPath(location.pathname);
   const currentTaskId = taskForArea(currentArea);
@@ -122,10 +123,11 @@ export function AlphaFeedbackPanel(): JSX.Element {
 
   function close(): void {
     setOpen(false);
-    trigger.current?.focus({ preventScroll: true });
+    (returnFocus.current ?? trigger.current)?.focus({ preventScroll: true });
   }
 
   function openPanel(taskId = currentTaskId): void {
+    returnFocus.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
     if (sent || !draftExists) {
       const selected = alphaTasks.find((task) => task.id === taskId);
       setDraft(emptyDraft(selected?.area ?? currentArea, taskId, data !== null, location.pathname));
@@ -134,6 +136,12 @@ export function AlphaFeedbackPanel(): JSX.Element {
     }
     setOpen(true);
   }
+
+  useEffect(() => {
+    const handleOpen = (): void => openPanel();
+    window.addEventListener('alvor:open-feedback', handleOpen);
+    return () => window.removeEventListener('alvor:open-feedback', handleOpen);
+  });
 
   function updateRatings(key: keyof FeedbackRatings, value: string): void {
     const ratings = { ...(draft.details.ratings ?? {}) };
@@ -176,11 +184,12 @@ export function AlphaFeedbackPanel(): JSX.Element {
         <span>Alpha fundadores · {completed}/{alphaTasks.length} tarefas avaliadas</span>
         <button ref={trigger} className="dre-btn secondary" type="button" onClick={() => openPanel()} aria-expanded={open} aria-controls="alpha-feedback-panel">
           <FeedbackIcon kind="review" />
-          {draftExists && !sent ? 'Retomar relato' : 'Enviar relato'}
+          <span className="alpha-feedback-cta-label">{draftExists && !sent ? 'Retomar relato' : 'Enviar relato'}</span>
         </button>
       </div>
       {storageError !== null && <p className="dre-err alpha-storage-error">{storageError}</p>}
-      <aside id="alpha-feedback-panel" className="alpha-feedback-panel" hidden={!open} aria-labelledby="alpha-feedback-title" onKeyDown={(event) => { if (event.key === 'Escape') close(); }}>
+      {open && <div className="alpha-feedback-backdrop" aria-hidden="true" onClick={close} />}
+      <aside id="alpha-feedback-panel" className="alpha-feedback-panel" hidden={!open} role="dialog" aria-modal="true" aria-labelledby="alpha-feedback-title" onKeyDown={(event) => { if (event.key === 'Escape') close(); }}>
         <header>
           <div>
             <span className="dre-eyebrow">Relato de uso</span>

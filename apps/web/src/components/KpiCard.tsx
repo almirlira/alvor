@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react';
 import { t } from '../lib/i18n';
+import { AppIcon } from './AppIcon';
 import { Sparkline } from './Sparkline';
 import { ExplainPanel } from './ExplainPanel';
 
@@ -92,13 +93,7 @@ export function KpiCard({
         data-active={explainOpen ? 'true' : undefined}
         tabIndex={0}
       >
-        <span
-          className="material-symbols-rounded"
-          aria-hidden="true"
-          style={{ fontSize: 16, lineHeight: 1 }}
-        >
-          help
-        </span>
+        <AppIcon name="help" />
       </button>
     ) : null;
 

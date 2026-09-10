@@ -6,6 +6,7 @@ import type { ChatMessageData, ChatSource } from '../components/ChatMessage';
 import { apiClient, ApiError } from '../lib/api-client';
 import { useDre } from '../lib/dre-context';
 import { formatBRL, monthLong, monthShort } from '../lib/format';
+import { AppIcon } from '../components/AppIcon';
 
 export type CopilotSource = ChatSource & {
   readonly value?: number;
@@ -131,7 +132,7 @@ export function CopilotPage(): JSX.Element {
         <div>
           <div className="dre-eyebrow">Copilot financeiro</div>
           <h1 className="dre-title">Copilot — {monthLong(lastMonth)}</h1>
-          <p className="dre-subtitle">Todo numero citado tem fonte na sua DRE. Se nao tem o dado, ele diz que nao tem.</p>
+          <p className="dre-subtitle">Todo número citado tem fonte na sua DRE. Se o dado não existe, o Copilot informa isso.</p>
         </div>
         <button type="button" className="dre-btn" disabled={generating} onClick={() => void generate()}>
           {generating ? 'Lendo a DRE…' : insight ? 'Gerar de novo' : 'Gerar insights do mes'}
@@ -143,7 +144,7 @@ export function CopilotPage(): JSX.Element {
       <div className="dre-copilot">
         <div>
           <section className="dre-card">
-            <h3>Leitura do mes</h3>
+            <h3>Leitura do mês</h3>
             {generating && (
               <>
                 <TypingBubble />
@@ -151,7 +152,7 @@ export function CopilotPage(): JSX.Element {
               </>
             )}
             {!generating && insightMessage === null && (
-              <p className="dre-subtitle">Clique em "Gerar insights do mes": o Copilot roda as regras de diagnostico sobre a DRE e escreve a leitura com as fontes.</p>
+              <p className="dre-subtitle">Clique em “Gerar insights do mês”. O Copilot analisa a DRE e apresenta a leitura com as fontes.</p>
             )}
             {!generating && insightMessage !== null && insight !== null && (
               <>
@@ -199,7 +200,7 @@ export function CopilotPage(): JSX.Element {
                 />
               </div>
               <button type="submit" className="cs-send-btn" disabled={asking || question.trim().length === 0} aria-label="Enviar">
-                <span className="material-symbols-rounded" aria-hidden="true">send</span>
+                <AppIcon name="send" />
               </button>
             </form>
           </section>

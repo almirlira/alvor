@@ -32,6 +32,7 @@ import { apiClient } from '../lib/api-client';
 import { ApiError } from '../lib/api-client';
 import { t } from '../lib/i18n';
 import { Skeleton } from './Skeleton';
+import { AppIcon } from './AppIcon';
 
 /* ================================================================
    TIPOS — contrato GET /marketing-kb/kpi/:metric_key
@@ -325,9 +326,7 @@ export function ExplainPanel({
             onClick={handleClose}
             aria-label={t('explain.closeBtnLabel')}
           >
-            <span className="material-symbols-rounded" aria-hidden="true" style={{ fontSize: 20 }}>
-              close
-            </span>
+            <AppIcon name="close" />
           </button>
         </div>
 
@@ -375,12 +374,7 @@ export function ExplainPanel({
           {/* Estado: sem-definicao */}
           {panelState.kind === 'sem-definicao' ? (
             <div className="explain-panel-sem-definicao">
-              <span
-                className="material-symbols-rounded explain-panel-state-icon"
-                aria-hidden="true"
-              >
-                help_outline
-              </span>
+              <AppIcon name="help" className="explain-panel-state-icon" />
               <p className="explain-panel-sem-definicao-text">{t('explain.semDefinicaoText')}</p>
               <Link to={`/chat?context=kpi:${metricKey ?? ''}`} className="explain-panel-cta-btn">
                 {t('explain.askCrossCta', { metric: metricLabel })}
@@ -391,12 +385,7 @@ export function ExplainPanel({
           {/* Estado: error */}
           {panelState.kind === 'error' ? (
             <div className="explain-panel-error" role="alert">
-              <span
-                className="material-symbols-rounded explain-panel-state-icon"
-                aria-hidden="true"
-              >
-                error_outline
-              </span>
+              <AppIcon name="error" className="explain-panel-state-icon" />
               <p className="explain-panel-error-text">{t('explain.errorText')}</p>
               <button type="button" className="explain-panel-cta-btn" onClick={handleRetry}>
                 {t('explain.retryCta')}
@@ -491,9 +480,7 @@ function ReadyContent({ data, showCurrentValue, metricKey }: ReadyContentProps):
       {/* Estado no-value: "sem dados honestos" */}
       {!showCurrentValue ? (
         <div className="explain-panel-no-value">
-          <span className="material-symbols-rounded explain-panel-no-value-icon" aria-hidden="true">
-            data_usage
-          </span>
+          <AppIcon name="chart" className="explain-panel-no-value-icon" />
           <p className="explain-panel-no-value-text">{t('explain.noDataText')}</p>
           <Link to="/sources" className="explain-panel-cta-link">
             {t('explain.connectSourceCta')}
@@ -508,16 +495,12 @@ function ReadyContent({ data, showCurrentValue, metricKey }: ReadyContentProps):
         <p className="explain-panel-ctas-label">{t('explain.ctasLabel')}</p>
 
         <Link to={`/chat?context=kpi:${metricKey}`} className="explain-panel-cta-btn">
-          <span className="material-symbols-rounded" aria-hidden="true" style={{ fontSize: 16 }}>
-            forum
-          </span>
+          <AppIcon name="send" />
           {t('explain.askCrossCta', { metric: data.name_pt })}
         </Link>
 
         <Link to={`/dashboard?metric=${metricKey}`} className="explain-panel-cta-secondary">
-          <span className="material-symbols-rounded" aria-hidden="true" style={{ fontSize: 16 }}>
-            bar_chart
-          </span>
+          <AppIcon name="chart" />
           {t('explain.viewHistoryCta')}
         </Link>
       </div>

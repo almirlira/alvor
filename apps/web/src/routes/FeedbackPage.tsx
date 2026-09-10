@@ -41,13 +41,13 @@ export function FeedbackPage(): JSX.Element {
       <PageHeading
         id="feedback-title"
         title="Relatos"
-        subtitle="Historico dos relatos enviados durante a alpha dos fundadores."
+        subtitle="Histórico das observações enviadas durante os testes do ALVOR."
       />
 
       <div className="feedback-list feedback-list-full" aria-live="polite">
         {error !== null && <p className="dre-err">{error}</p>}
         {loading ? <p className="dre-empty">Carregando relatos...</p> : null}
-        {!loading && notes.length === 0 ? <p className="dre-empty">Ainda nao ha relatos neste acesso. Use o botao Enviar relato durante o teste.</p> : null}
+        {!loading && notes.length === 0 ? <p className="dre-empty">Você ainda não enviou relatos neste acesso. Use o botão “Relato” enquanto testa qualquer tela.</p> : null}
         {notes.map((item) => {
           const task = alphaTasks.find((entry) => entry.id === item.task_id);
           return (

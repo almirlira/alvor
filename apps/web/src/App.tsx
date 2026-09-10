@@ -12,8 +12,6 @@ import { LoginPage } from './routes/LoginPage';
 import { AlphaReportPage } from './routes/AlphaReportPage';
 import { TickerBar } from './components/TickerBar';
 import { AlphaFeedbackPanel } from './components/AlphaFeedbackPanel';
-import './styles/screen-dre.css';
-import './styles/alvor-theme.css';
 
 export const APP_NAME = 'ALVOR';
 
@@ -120,12 +118,12 @@ function Rail(): JSX.Element {
   const item = (to: string, icon: RailIconName, label: string, badge?: number | null): JSX.Element => (
     <NavLink to={to} className={({ isActive }) => `dre-rail-item${isActive ? ' active' : ''}`}>
       <RailIcon name={icon} />
-      {label}
-      {badge !== undefined && badge !== null && badge > 0 && <span className="dre-rail-count" aria-label={`${badge} itens que pedem validacao`}>{badge}</span>}
+      <span className="dre-rail-label">{label}</span>
+      {badge !== undefined && badge !== null && badge > 0 && <span className="dre-rail-count" aria-label={`${badge} itens que pedem validação`}>{badge}</span>}
     </NavLink>
   );
   return (
-    <nav className="dre-rail" aria-label="Navegacao">
+    <nav className={`dre-rail${auth.organizer ? ' organizer' : ''}`} aria-label="Navegação principal">
       <div className="dre-rail-logo"><AlvorMark /><span>ALVOR</span></div>
       {auth.enabled && auth.participantName !== null && (
         <div className="alpha-user-chip">
@@ -134,11 +132,15 @@ function Rail(): JSX.Element {
         </div>
       )}
       {item('/painel', 'grid', 'Painel')}
-      {item('/semaforo', 'traffic', 'Semaforo', alerts)}
+      {item('/semaforo', 'traffic', 'Semáforo', alerts)}
       {item('/copilot', 'forum', 'Copilot')}
-      {item('/enviar', 'upload', 'Enviar arquivos')}
+      {item('/enviar', 'upload', 'Arquivos')}
       {item('/relatos', 'list', 'Relatos')}
       {auth.organizer && item('/gestao', 'monitoring', 'Gestão')}
+      <button className="dre-rail-item rail-feedback" type="button" onClick={() => window.dispatchEvent(new CustomEvent('alvor:open-feedback'))}>
+        <RailIcon name="forum" />
+        <span className="dre-rail-label">Dar relato</span>
+      </button>
       {auth.enabled && (
         <button className="dre-rail-item rail-logout" type="button" onClick={() => void auth.signOut()}>
           <RailIcon name="logout" />
@@ -146,6 +148,28 @@ function Rail(): JSX.Element {
         </button>
       )}
     </nav>
+  );
+}
+
+function MobileHeader(): JSX.Element {
+  const auth = useAuth();
+  if (!auth.enabled || auth.participantName === null) return <></>;
+  return (
+    <header className="dre-mobile-header">
+      <div className="dre-mobile-brand" aria-label="ALVOR"><AlvorMark /><span>ALVOR</span></div>
+      <div className="dre-mobile-user">
+        <span>{auth.participantId}</span>
+        <strong>{auth.participantName}</strong>
+      </div>
+      <button className="dre-mobile-feedback" type="button" onClick={() => window.dispatchEvent(new CustomEvent('alvor:open-feedback'))} aria-label="Enviar relato sobre o teste">
+        <RailIcon name="forum" />
+        <span>Relato</span>
+      </button>
+      <button className="dre-mobile-logout" type="button" onClick={() => void auth.signOut()} aria-label="Sair do ALVOR">
+        <RailIcon name="logout" />
+        <span>Sair</span>
+      </button>
+    </header>
   );
 }
 
@@ -157,6 +181,7 @@ function ProductShell(): JSX.Element {
   return (
     <DreProvider>
       <div className="dre-shell">
+        <MobileHeader />
         <Rail />
         <main className="dre-main">
           <Routes>
