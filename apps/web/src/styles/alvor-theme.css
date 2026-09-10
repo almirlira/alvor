@@ -706,14 +706,24 @@ body { background: var(--alvor-canvas); color: var(--alvor-text); font-family: v
   }
 
   .alpha-feedback-bar {
-    left: 10px;
     right: 10px;
+    left: auto;
     bottom: calc(86px + env(safe-area-inset-bottom));
-    justify-content: space-between;
+    justify-content: flex-end;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
   }
   .alpha-feedback-bar span:first-child {
-    max-width: 46vw;
-    line-height: 1.45;
+    display: none;
+  }
+  .alpha-feedback-bar .dre-btn {
+    min-height: 48px;
+    padding: 10px 15px;
+    border-radius: 999px;
+    background: rgba(38, 36, 36, .96);
+    box-shadow: 0 14px 42px rgba(0,0,0,.42);
   }
 
   .alpha-feedback-panel {
