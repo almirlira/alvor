@@ -128,7 +128,9 @@ function Rail(): JSX.Element {
       {auth.enabled && auth.participantName !== null && (
         <div className="alpha-user-chip">
           <span>{auth.participantId}</span>
-          <strong>{auth.participantName}</strong>
+          <strong className={auth.participantName === 'ADM_MASTER' ? 'alpha-admin-name' : undefined}>
+            {auth.participantName}
+          </strong>
         </div>
       )}
       {item('/painel', 'grid', 'Painel')}

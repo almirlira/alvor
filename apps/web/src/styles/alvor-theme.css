@@ -648,6 +648,10 @@ body { background: var(--alvor-canvas); color: var(--alvor-text); font-family: v
   font-size: 12px;
   line-height: 1.25;
 }
+.alpha-user-chip .alpha-admin-name {
+  font-weight: 420;
+  letter-spacing: -0.01em;
+}
 .feedback-list-full {
   display: grid;
   gap: 12px;
