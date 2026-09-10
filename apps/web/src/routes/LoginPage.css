@@ -1,0 +1,588 @@
+/* Root + component selectors deliberately outrank global.css, loaded last.
+   Controls also own hover, focus and disabled states; no shared auth/dre classes. */
+.alvor-access {
+  --access-orange: var(--alvor-orange, #ff5500);
+  --access-canvas: var(--alvor-canvas, #161515);
+  --access-cream: var(--alvor-cream, #f4f1ea);
+  --access-muted: #615e58;
+  --access-line: #827d74;
+  --access-success: var(--alvor-emerald, #034d35);
+  --access-error: #a12f18;
+  --access-display: 'Space Grotesk', 'Plus Jakarta Sans', sans-serif;
+  --access-body: 'Plus Jakarta Sans', sans-serif;
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(0, 1fr);
+  grid-template-rows: auto 1fr auto;
+  grid-template-areas: 'brand entry' 'story entry' 'note entry';
+  column-gap: clamp(32px, 5vw, 88px);
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100svh;
+  margin: 0;
+  padding: 24px 24px 24px clamp(32px, 5vw, 88px);
+  background: var(--access-canvas);
+  color: var(--access-cream);
+  font-family: var(--access-body);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  color-scheme: dark;
+}
+
+.alvor-access *,
+.alvor-access *::before,
+.alvor-access *::after {
+  box-sizing: border-box;
+}
+
+.alvor-access :where(h1, h2, p) {
+  margin: 0;
+}
+
+.alvor-access .alvor-access__brand {
+  grid-area: brand;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 20px 28px;
+  padding-block: 28px;
+}
+
+.alvor-access .alvor-access__lockup {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  color: var(--access-cream);
+  font-family: var(--access-display);
+  font-size: 25px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  line-height: 1;
+}
+
+.alvor-access .alvor-access__lockup svg {
+  display: block;
+  width: 50px;
+  height: auto;
+  flex: none;
+}
+
+.alvor-access .alvor-access__edition {
+  max-width: 15ch;
+  padding-left: 24px;
+  border-left: 1px solid var(--alvor-border, #322f2f);
+  color: var(--alvor-mint, #a3b8ad);
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.alvor-access .alvor-access__story {
+  grid-area: story;
+  align-self: center;
+  min-width: 0;
+  padding-block: 64px 72px;
+}
+
+.alvor-access .alvor-access__eyebrow {
+  color: var(--access-muted);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  line-height: 1.6;
+  text-transform: uppercase;
+}
+
+.alvor-access .alvor-access__story > .alvor-access__eyebrow {
+  margin-bottom: 26px;
+  color: var(--alvor-mint, #a3b8ad);
+}
+
+.alvor-access .alvor-access__statement {
+  width: fit-content;
+  max-width: 100%;
+  color: var(--access-cream);
+  font-family: var(--access-display);
+  font-size: clamp(48px, 5.65vw, 88px);
+  font-weight: 500;
+  letter-spacing: -0.065em;
+  line-height: 1.06;
+}
+
+.alvor-access .alvor-access__statement span {
+  display: inline-block;
+  padding-bottom: 0.13em;
+  border-bottom: 0.065em solid currentColor;
+  color: var(--access-orange);
+}
+
+.alvor-access .alvor-access__story-copy {
+  max-width: 37ch;
+  margin-top: 32px;
+  color: var(--alvor-mint, #a3b8ad);
+  font-size: 16px;
+  line-height: 1.85;
+}
+
+.alvor-access .alvor-access__reading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-top: 36px;
+  color: var(--access-cream);
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.alvor-access .alvor-access__reading svg {
+  width: 18px;
+  height: 18px;
+  color: var(--access-orange);
+  flex: none;
+}
+
+.alvor-access .alvor-access__note {
+  grid-area: note;
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding-block: 24px 16px;
+  border-top: 1px solid var(--alvor-border, #322f2f);
+  font-size: 12px;
+  line-height: 1.8;
+}
+
+.alvor-access .alvor-access__note-mark {
+  flex: none;
+  width: 28px;
+  height: 7px;
+  margin-top: 8px;
+  background: var(--access-orange);
+}
+
+.alvor-access .alvor-access__note p > span {
+  color: var(--alvor-mint, #a3b8ad);
+}
+
+.alvor-access .alvor-access__entry {
+  grid-area: entry;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 48px;
+  min-width: 0;
+  padding: 34px clamp(28px, 4.1vw, 64px) 26px;
+  border-radius: 28px;
+  background: var(--access-cream);
+  color: var(--access-canvas);
+  color-scheme: light;
+}
+
+.alvor-access .alvor-access__entry-heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--access-muted);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.alvor-access .alvor-access__entry-heading svg {
+  width: 24px;
+  height: 24px;
+  color: var(--access-canvas);
+  flex: none;
+}
+
+.alvor-access .alvor-access__entry-body {
+  width: 100%;
+  max-width: 420px;
+  margin-inline: auto;
+}
+
+.alvor-access .alvor-access__title {
+  margin-top: 12px;
+  color: var(--access-canvas);
+  font-family: var(--access-display);
+  font-size: clamp(32px, 3.05vw, 46px);
+  font-weight: 500;
+  letter-spacing: -0.055em;
+  line-height: 1.12;
+}
+
+.alvor-access .alvor-access__intro {
+  max-width: 34ch;
+  margin-top: 18px;
+  color: var(--access-muted);
+  font-size: 15px;
+  line-height: 1.75;
+}
+
+.alvor-access .alvor-access__form {
+  margin: 32px 0 0;
+  padding: 0;
+}
+
+.alvor-access .alvor-access__label {
+  display: block;
+  margin: 0 0 10px;
+  color: var(--access-canvas);
+  font-family: var(--access-body);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.alvor-access .alvor-access__input {
+  display: block;
+  appearance: none;
+  width: 100%;
+  min-width: 0;
+  max-width: none;
+  min-height: 60px;
+  margin: 0;
+  padding: 16px 18px;
+  border: 1px solid var(--access-line);
+  border-radius: 12px;
+  background: var(--access-cream);
+  color: var(--access-canvas);
+  caret-color: var(--access-canvas);
+  font-family: var(--access-body);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.5;
+  letter-spacing: 0;
+  box-shadow: none;
+  transition: border-color 150ms ease, background-color 150ms ease;
+}
+
+.alvor-access .alvor-access__input::placeholder {
+  color: var(--access-muted);
+  opacity: 1;
+  font-weight: 400;
+}
+
+.alvor-access .alvor-access__input:hover:not([disabled]):not([readonly]) {
+  border-color: var(--access-canvas);
+}
+
+.alvor-access .alvor-access__input[aria-invalid='true'] {
+  border-color: var(--access-error);
+}
+
+.alvor-access .alvor-access__input:focus {
+  border: 1px solid var(--access-canvas);
+  outline: 2px solid var(--access-canvas);
+  outline-offset: 3px;
+  box-shadow: none;
+}
+
+.alvor-access .alvor-access__input[readonly] {
+  cursor: progress;
+}
+
+.alvor-access .alvor-access__input:autofill {
+  -webkit-text-fill-color: var(--access-canvas);
+  box-shadow: inset 0 0 0 100px var(--access-cream);
+}
+
+.alvor-access .alvor-access__hint {
+  margin-top: 10px;
+  color: var(--access-muted);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.alvor-access .alvor-access__submit {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+  min-height: 58px;
+  margin: 24px 0 0;
+  padding: 16px 20px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  background: var(--access-orange);
+  color: var(--access-canvas);
+  font-family: var(--access-body);
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.5;
+  text-align: left;
+  box-shadow: none;
+  cursor: pointer;
+  transition: background-color 150ms ease, color 150ms ease;
+}
+
+.alvor-access .alvor-access__submit svg {
+  flex: none;
+  width: 22px;
+  height: 22px;
+}
+
+/* Match the global hover selector's pseudo-classes as well as its specificity. */
+.alvor-access .alvor-access__submit:hover:not([disabled]):not([aria-disabled='true']) {
+  background: var(--access-canvas);
+  color: var(--access-cream);
+  box-shadow: none;
+}
+
+.alvor-access .alvor-access__submit:focus-visible {
+  outline: 2px solid var(--access-canvas);
+  outline-offset: 4px;
+  box-shadow: none;
+}
+
+.alvor-access .alvor-access__submit:disabled {
+  background: var(--access-orange);
+  color: var(--access-canvas);
+  opacity: 1;
+  box-shadow: none;
+  cursor: progress;
+}
+
+.alvor-access .alvor-access__spinner {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: alvor-access-spin 800ms linear infinite;
+}
+
+.alvor-access .alvor-access__feedback {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  overflow-wrap: anywhere;
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+.alvor-access .alvor-access__feedback:not(:empty) {
+  margin-top: 16px;
+}
+
+.alvor-access .alvor-access__feedback svg {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  margin-top: 1px;
+}
+
+.alvor-access .alvor-access__feedback--error {
+  color: var(--access-error);
+}
+
+.alvor-access .alvor-access__feedback--status {
+  color: var(--access-success);
+}
+
+.alvor-access .alvor-access__help {
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid color-mix(in srgb, var(--access-line) 35%, transparent);
+  color: var(--access-muted);
+  font-size: 12px;
+  line-height: 1.8;
+}
+
+.alvor-access .alvor-access__help-title {
+  margin-bottom: 5px;
+  color: var(--access-canvas);
+  font-weight: 600;
+}
+
+.alvor-access .alvor-access__entry-footer {
+  color: var(--access-muted);
+  font-size: 11px;
+  line-height: 1.7;
+  text-align: center;
+}
+
+@keyframes alvor-access-spin {
+  to { transform: rotate(360deg); }
+}
+
+@media (min-width: 1800px) {
+  .alvor-access {
+    padding-inline: max(88px, calc((100vw - 1624px) / 2));
+  }
+}
+
+@media (max-width: 1100px) and (min-width: 801px) {
+  .alvor-access {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    column-gap: 32px;
+    padding-left: 32px;
+  }
+
+  .alvor-access .alvor-access__edition {
+    display: none;
+  }
+
+  .alvor-access .alvor-access__statement {
+    font-size: clamp(42px, 5.3vw, 58px);
+  }
+
+  .alvor-access .alvor-access__entry {
+    padding-inline: 28px;
+  }
+}
+
+@media (max-width: 800px) {
+  .alvor-access {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto auto auto auto;
+    grid-template-areas: 'brand' 'entry' 'story' 'note';
+    gap: 0;
+    padding: 0 24px 24px;
+  }
+
+  .alvor-access .alvor-access__brand {
+    justify-content: space-between;
+    padding-block: 24px;
+  }
+
+  .alvor-access .alvor-access__entry {
+    gap: 32px;
+    padding: 28px 40px 24px;
+    border-radius: 24px;
+  }
+
+  .alvor-access .alvor-access__entry-heading {
+    width: 100%;
+    max-width: 420px;
+    margin-inline: auto;
+  }
+
+  .alvor-access .alvor-access__title {
+    font-size: 40px;
+  }
+
+  .alvor-access .alvor-access__story {
+    width: 100%;
+    max-width: 500px;
+    margin-inline: auto;
+    padding-block: 56px 40px;
+  }
+
+  .alvor-access .alvor-access__statement {
+    font-size: clamp(42px, 8vw, 62px);
+  }
+
+  .alvor-access .alvor-access__story-copy {
+    max-width: 42ch;
+    font-size: 14px;
+  }
+
+  .alvor-access .alvor-access__note {
+    width: 100%;
+    max-width: 500px;
+    margin-inline: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .alvor-access {
+    padding: 0 12px 20px;
+  }
+
+  .alvor-access .alvor-access__brand {
+    padding: 22px 12px;
+  }
+
+  .alvor-access .alvor-access__lockup {
+    gap: 10px;
+    font-size: 21px;
+  }
+
+  .alvor-access .alvor-access__lockup svg {
+    width: 40px;
+  }
+
+  .alvor-access .alvor-access__edition {
+    display: none;
+  }
+
+  .alvor-access .alvor-access__entry {
+    gap: 24px;
+    padding: 24px 20px;
+    border-radius: 20px;
+  }
+
+  .alvor-access .alvor-access__entry-body > .alvor-access__eyebrow {
+    display: none;
+  }
+
+  .alvor-access .alvor-access__title {
+    margin-top: 0;
+    font-size: clamp(30px, 8.5vw, 38px);
+  }
+
+  .alvor-access .alvor-access__intro {
+    margin-top: 14px;
+    font-size: 14px;
+  }
+
+  .alvor-access .alvor-access__form {
+    margin-top: 24px;
+  }
+
+  .alvor-access .alvor-access__input {
+    min-height: 56px;
+    padding: 14px;
+  }
+
+  .alvor-access .alvor-access__submit {
+    margin-top: 20px;
+    padding-inline: 16px;
+  }
+
+  .alvor-access .alvor-access__help {
+    margin-top: 24px;
+    padding-top: 20px;
+  }
+
+  .alvor-access .alvor-access__story {
+    padding: 48px 12px 32px;
+  }
+
+  .alvor-access .alvor-access__story > .alvor-access__eyebrow {
+    margin-bottom: 20px;
+  }
+
+  .alvor-access .alvor-access__statement {
+    font-size: clamp(38px, 10.5vw, 48px);
+  }
+
+  .alvor-access .alvor-access__reading {
+    gap: 8px;
+    margin-top: 24px;
+    font-size: 11px;
+  }
+
+  .alvor-access .alvor-access__reading svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .alvor-access .alvor-access__note {
+    width: calc(100% - 24px);
+    font-size: 11px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .alvor-access .alvor-access__input,
+  .alvor-access .alvor-access__submit {
+    transition: none;
+  }
+
+  .alvor-access .alvor-access__spinner {
+    animation: none;
+  }
+}
