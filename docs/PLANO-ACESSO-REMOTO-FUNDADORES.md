@@ -1,5 +1,10 @@
 # Plano de acesso remoto para fundadores — ALVOR
 
+> Atualização de 10/09/2026: a alpha passou a usar a VPS já contratada, sob
+> `https://brainora.ai/alvor/`, com convites individuais e nomes identificados.
+> Consulte [acesso e operação atuais](./ACESSO-REMOTO.md). O diagnóstico e as
+> alternativas abaixo registram o plano inicial, anterior à implementação.
+
 ## Objetivo
 
 Colocar a versao atual do ALVOR em uma URL acessivel remotamente pela equipe de fundadores, com login individual, dados isolados por usuario e uso real do produto para gerar observacoes de evolucao.

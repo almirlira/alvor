@@ -34,7 +34,7 @@ const Ctx = createContext<AuthContextValue | null>(null);
 
 export function AuthProvider({ children }: { readonly children: ReactNode }): JSX.Element {
   const [session, setSession] = useState<Session | InviteSession | null>(null);
-  const [loading, setLoading] = useState(supabaseEnabled);
+  const [loading, setLoading] = useState(supabaseEnabled || inviteAuthEnabled);
 
   useEffect(() => {
     if (inviteAuthEnabled) {
@@ -103,7 +103,7 @@ export function AuthProvider({ children }: { readonly children: ReactNode }): JS
           email: value,
           options: {
             shouldCreateUser: false,
-            emailRedirectTo: window.location.origin,
+            emailRedirectTo: new URL(import.meta.env.BASE_URL, window.location.origin).href,
           },
         });
         if (error !== null) throw error;

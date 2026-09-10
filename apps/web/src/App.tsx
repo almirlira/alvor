@@ -69,8 +69,8 @@ function Rail(): JSX.Element {
       {item('/semaforo', 'traffic', 'Semaforo', alerts)}
       {item('/copilot', 'forum', 'Copilot')}
       {item('/enviar', 'upload_file', 'Enviar arquivos')}
-      {item('/observacoes', 'list_alt', 'Relatos')}
-      {auth.organizer && item('/alpha', 'monitoring', 'Alpha')}
+      {item('/relatos', 'list_alt', 'Relatos')}
+      {auth.organizer && item('/gestao', 'monitoring', 'Gestão')}
       {auth.enabled && (
         <button className="dre-rail-item rail-logout" type="button" onClick={() => void auth.signOut()}>
           <span className="material-symbols-rounded" aria-hidden="true">logout</span>
@@ -97,9 +97,12 @@ function ProductShell(): JSX.Element {
             <Route path="/painel" element={<PainelPage />} />
             <Route path="/semaforo" element={<SemaforoPage />} />
             <Route path="/copilot" element={<CopilotPage />} />
-            <Route path="/observacoes" element={<FeedbackPage />} />
-            <Route path="/alpha" element={<AlphaReportPage />} />
+            <Route path="/fundadores" element={<RootIndex />} />
+            <Route path="/relatos" element={<FeedbackPage />} />
+            <Route path="/gestao" element={<AlphaReportPage />} />
             {/* apelidos de rota mantidos por compatibilidade */}
+            <Route path="/observacoes" element={<Navigate to="/relatos" replace />} />
+            <Route path="/alpha" element={<Navigate to="/gestao" replace />} />
             <Route path="/chat" element={<Navigate to="/copilot" replace />} />
             <Route path="/dashboard" element={<Navigate to="/painel" replace />} />
             <Route path="/sources" element={<Navigate to="/enviar" replace />} />
@@ -115,7 +118,7 @@ function ProductShell(): JSX.Element {
 
 export function App(): JSX.Element {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={import.meta.env.BASE_URL}>
       <AuthProvider>
         <ProductShell />
       </AuthProvider>

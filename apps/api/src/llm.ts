@@ -6,7 +6,7 @@
  *   ANTHROPIC_MODEL   claude-opus-5 (default) | claude-sonnet-5
  */
 
-import { createLlmProvider, type AdapterLogger, type LlmProvider } from '@dre/ai';
+import { createLlmProvider, MockLlmProviderAdapter, type AdapterLogger, type LlmProvider } from '@dre/ai';
 
 export interface LlmSetup {
   readonly provider: LlmProvider;
@@ -23,7 +23,7 @@ export function createLlm(logger: AdapterLogger): LlmSetup {
   if (requested === 'anthropic-direct' || (requested === undefined && apiKey !== undefined && apiKey.length > 10)) {
     if (apiKey === undefined || apiKey.length < 10 || apiKey.startsWith('cole-aqui')) {
       logger.warn({}, '[llm] LLM_PROVIDER=anthropic-direct sem ANTHROPIC_API_KEY valida — usando mock.');
-      return { provider: createLlmProvider({ provider: 'mock' }), providerName: 'mock', model: 'mock' };
+      return { provider: new MockLlmProviderAdapter(), providerName: 'mock', model: 'mock' };
     }
     const provider = createLlmProvider({
       provider: 'anthropic-direct',
@@ -35,5 +35,6 @@ export function createLlm(logger: AdapterLogger): LlmSetup {
   }
 
   logger.info({}, '[llm] provedor mock ativo (sem chamadas reais)');
-  return { provider: createLlmProvider({ provider: 'mock' }), providerName: 'mock', model: 'mock' };
+  // A alpha hospedada também pode usar o simulador determinístico, sem rede.
+  return { provider: new MockLlmProviderAdapter(), providerName: 'mock', model: 'mock' };
 }

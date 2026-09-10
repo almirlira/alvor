@@ -7,7 +7,7 @@ import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
-export const DATA_DIR = join(ROOT, 'data');
+export const DATA_DIR = process.env['ALVOR_DATA_DIR'] || join(ROOT, 'data');
 export const KB_DIR = join(ROOT, 'packages', 'kb', 'content');
 export const SAMPLES_DIR = join(ROOT, 'samples');
 

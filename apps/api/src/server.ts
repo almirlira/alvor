@@ -15,6 +15,10 @@ import { recordUsage } from './audit.js';
 
 export const APP_NAME = 'ALVOR';
 
+if (process.env['NODE_ENV'] === 'production' && !inviteAuthEnabled && !supabaseAuthEnabled) {
+  throw new Error('ALVOR em produção exige autenticação configurada.');
+}
+
 const app = Fastify({ logger: { level: 'info' } });
 
 const allowedOrigins = (process.env['ALLOWED_ORIGINS'] ?? process.env['APP_ORIGIN'] ?? '')

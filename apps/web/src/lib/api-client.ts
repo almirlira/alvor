@@ -1,6 +1,5 @@
 /**
- * API client fino sobre fetch — ALVOR (protótipo, sem autenticação).
- * Todas as chamadas vão para /api/* e o Vite encaminha para a API local (:3800).
+ * API client autenticado — usa a API sob o mesmo caminho base do produto.
  */
 
 export class ApiError extends Error {
@@ -15,7 +14,7 @@ export class ApiError extends Error {
   }
 }
 
-const BASE = (import.meta.env['VITE_API_BASE_URL'] as string | undefined) ?? '/api';
+const BASE = (import.meta.env['VITE_API_BASE_URL'] as string | undefined) || `${import.meta.env.BASE_URL}api`;
 let tokenProvider: (() => Promise<string | null>) | null = null;
 
 export function setAuthTokenProvider(provider: () => Promise<string | null>): void {
