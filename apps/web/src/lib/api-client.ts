@@ -15,7 +15,20 @@ export class ApiError extends Error {
   }
 }
 
-const BASE = '/api';
+const BASE = (import.meta.env['VITE_API_BASE_URL'] as string | undefined) ?? '/api';
+let tokenProvider: (() => Promise<string | null>) | null = null;
+
+export function setAuthTokenProvider(provider: () => Promise<string | null>): void {
+  tokenProvider = provider;
+}
+
+async function headers(extra?: HeadersInit): Promise<HeadersInit> {
+  const token = tokenProvider === null ? null : await tokenProvider();
+  return {
+    ...(extra ?? {}),
+    ...(token === null ? {} : { Authorization: `Bearer ${token}` }),
+  };
+}
 
 async function handle<T>(res: Response): Promise<T> {
   if (res.ok) {
@@ -36,13 +49,13 @@ async function handle<T>(res: Response): Promise<T> {
 
 export const apiClient = {
   async get<T>(path: string): Promise<T> {
-    const res = await fetch(`${BASE}${path}`, { headers: { Accept: 'application/json' } });
+    const res = await fetch(`${BASE}${path}`, { headers: await headers({ Accept: 'application/json' }) });
     return handle<T>(res);
   },
   async post<T>(path: string, body?: unknown): Promise<T> {
     const res = await fetch(`${BASE}${path}`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+      headers: await headers({ 'Content-Type': 'application/json', Accept: 'application/json' }),
       body: body === undefined ? undefined : JSON.stringify(body),
     });
     return handle<T>(res);
@@ -50,7 +63,7 @@ export const apiClient = {
   async postFile<T>(path: string, file: File): Promise<T> {
     const form = new FormData();
     form.append('file', file, file.name);
-    const res = await fetch(`${BASE}${path}`, { method: 'POST', body: form });
+    const res = await fetch(`${BASE}${path}`, { method: 'POST', body: form, headers: await headers() });
     return handle<T>(res);
   },
 };

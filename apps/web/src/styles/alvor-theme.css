@@ -403,3 +403,292 @@ body { background: var(--alvor-canvas); color: var(--alvor-text); font-family: v
   .wb-side { align-items: flex-start; }
   .wb-greet { font-size: 27px; }
 }
+
+/* ---- Alpha fundadores: relatos no padrao VOKO V2 ---- */
+.alpha-feedback-bar {
+  position: fixed;
+  right: 18px;
+  bottom: 94px;
+  z-index: 55;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border: 1px solid var(--alvor-border);
+  border-radius: 14px;
+  background: rgba(22, 21, 21, .94);
+  box-shadow: 0 18px 60px rgba(0,0,0,.38);
+}
+.alpha-feedback-bar span:first-child {
+  color: var(--alvor-text-2);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+}
+.alpha-feedback-bar .dre-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 36px;
+  padding: 8px 12px;
+}
+.alpha-feedback-panel {
+  position: fixed;
+  top: 22px;
+  right: 18px;
+  bottom: 94px;
+  z-index: 54;
+  width: min(390px, calc(100vw - 36px));
+  overflow-y: auto;
+  padding: 18px;
+  border: 1px solid var(--alvor-border);
+  border-radius: var(--radius-bento);
+  background: var(--alvor-card);
+  box-shadow: 0 22px 70px rgba(0,0,0,.46);
+}
+.dre-shell:has(.alpha-feedback-panel:not([hidden])) .dre-main {
+  margin-right: 420px;
+}
+.alpha-feedback-panel header {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: flex-start;
+  margin-bottom: 14px;
+}
+.alpha-feedback-panel h2 {
+  margin: 4px 0 0;
+  font-family: var(--font-display);
+  font-size: 24px;
+  color: var(--alvor-text);
+}
+.alpha-icon-button {
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--alvor-border);
+  border-radius: 12px;
+  background: var(--alvor-card-elev);
+  color: var(--alvor-text);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+.alpha-feedback-fields,
+.alpha-feedback-fields fieldset {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+}
+.alpha-feedback-fields {
+  display: grid;
+  gap: 13px;
+}
+.alpha-feedback-fields label,
+.feedback-form label {
+  display: grid;
+  gap: 7px;
+  color: var(--alvor-text-2);
+  font-size: 13px;
+}
+.alpha-feedback-fields input,
+.alpha-feedback-fields select,
+.alpha-feedback-fields textarea,
+.feedback-form select,
+.feedback-form textarea {
+  width: 100%;
+  border: 1px solid var(--alvor-border);
+  border-radius: 12px;
+  background: var(--alvor-card-elev);
+  color: var(--alvor-text);
+  font: inherit;
+  padding: 10px 11px;
+}
+.alpha-feedback-fields textarea {
+  resize: vertical;
+}
+.alpha-task-card {
+  padding: 12px;
+  border: 1px solid var(--alvor-border);
+  border-radius: 14px;
+  background: #201f1f;
+}
+.alpha-task-card strong {
+  display: block;
+  color: var(--alvor-text);
+  margin-bottom: 6px;
+}
+.alpha-task-card p,
+.alpha-task-card small,
+.alpha-draft-note,
+.alpha-quality p,
+.alpha-feedback-fields small,
+.alpha-thanks p {
+  color: var(--alvor-text-2);
+  line-height: 1.45;
+}
+.alpha-rating {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 6px;
+}
+.alpha-rating label {
+  display: block;
+}
+.alpha-rating input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+.alpha-rating span {
+  display: grid;
+  place-items: center;
+  height: 36px;
+  border: 1px solid var(--alvor-border);
+  border-radius: 10px;
+  color: var(--alvor-text-2);
+  background: var(--alvor-card-elev);
+  cursor: pointer;
+}
+.alpha-rating input:checked + span {
+  background: var(--alvor-orange);
+  color: #fff;
+  border-color: var(--alvor-orange);
+}
+.alpha-feedback-fields fieldset > small,
+.alpha-quality p {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 8px;
+  font-size: 12px;
+}
+.alpha-quality {
+  border-top: 1px solid var(--alvor-border);
+  border-bottom: 1px solid var(--alvor-border);
+  padding: 10px 0;
+}
+.alpha-quality summary {
+  color: var(--alvor-text);
+  cursor: pointer;
+}
+.alpha-quality label {
+  margin-top: 10px;
+}
+.alpha-optional {
+  color: var(--alvor-muted);
+}
+.alpha-thanks {
+  display: grid;
+  gap: 12px;
+}
+.alpha-thanks > .material-symbols-rounded {
+  color: var(--sem-verde);
+  font-size: 34px;
+}
+.alpha-storage-error {
+  position: fixed;
+  right: 18px;
+  bottom: 150px;
+  z-index: 56;
+}
+.alpha-user-chip {
+  display: grid;
+  gap: 3px;
+  margin: 4px 0 12px;
+  padding: 10px 8px;
+  border: 1px solid var(--alvor-border);
+  border-radius: 14px;
+  background: var(--alvor-card);
+  text-align: center;
+}
+.alpha-user-chip span {
+  color: var(--alvor-muted);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+}
+.alpha-user-chip strong {
+  color: var(--alvor-text);
+  font-size: 12px;
+  line-height: 1.25;
+}
+.feedback-list-full {
+  display: grid;
+  gap: 12px;
+}
+.feedback-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.feedback-meta span {
+  border: 1px solid var(--alvor-border);
+  border-radius: 999px;
+  padding: 3px 8px;
+  color: var(--alvor-text-2);
+  font-size: 12px;
+}
+.feedback-item {
+  padding: 16px;
+}
+.feedback-item p {
+  margin: 0;
+  color: var(--alvor-text);
+  line-height: 1.5;
+}
+.alpha-report-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 14px;
+}
+.alpha-report-card {
+  padding: 18px;
+  display: grid;
+  gap: 16px;
+}
+.alpha-report-card h3 {
+  margin: 4px 0 0;
+  color: var(--alvor-text);
+}
+.alpha-report-card dl {
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+.alpha-report-card dt {
+  color: var(--alvor-muted);
+  font-size: 12px;
+}
+.alpha-report-card dd {
+  margin: 3px 0 0;
+  color: var(--alvor-text);
+  font-weight: 700;
+}
+
+@media (max-width: 1120px) {
+  .dre-shell:has(.alpha-feedback-panel:not([hidden])) .dre-main {
+    margin-right: 0;
+  }
+  .alpha-feedback-panel {
+    top: auto;
+    left: 12px;
+    right: 12px;
+    bottom: 88px;
+    width: auto;
+    max-height: min(72vh, 650px);
+  }
+}
+@media (max-width: 720px) {
+  .alpha-feedback-bar {
+    left: 10px;
+    right: 10px;
+    bottom: 78px;
+    justify-content: space-between;
+  }
+  .alpha-feedback-bar span:first-child {
+    max-width: 44vw;
+  }
+}

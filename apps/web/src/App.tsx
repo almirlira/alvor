@@ -2,11 +2,16 @@ import { useEffect, useState } from 'react';
 import { BrowserRouter, Navigate, NavLink, Route, Routes } from 'react-router-dom';
 import { DreProvider, useDre } from './lib/dre-context';
 import { apiClient } from './lib/api-client';
+import { AuthProvider, useAuth } from './lib/auth-context';
 import { UploadPage } from './routes/UploadPage';
 import { PainelPage } from './routes/PainelPage';
 import { CopilotPage } from './routes/CopilotPage';
 import { SemaforoPage, type SemaforoResult } from './routes/SemaforoPage';
+import { FeedbackPage } from './routes/FeedbackPage';
+import { LoginPage } from './routes/LoginPage';
+import { AlphaReportPage } from './routes/AlphaReportPage';
 import { TickerBar } from './components/TickerBar';
+import { AlphaFeedbackPanel } from './components/AlphaFeedbackPanel';
 import './styles/screen-dre.css';
 import './styles/alvor-theme.css';
 
@@ -30,6 +35,7 @@ function AlvorMark(): JSX.Element {
 
 function Rail(): JSX.Element {
   const { data } = useDre();
+  const auth = useAuth();
   const [alerts, setAlerts] = useState<number | null>(null);
   useEffect(() => {
     if (data === null) { setAlerts(null); return; }
@@ -53,37 +59,66 @@ function Rail(): JSX.Element {
   return (
     <nav className="dre-rail" aria-label="Navegacao">
       <div className="dre-rail-logo"><AlvorMark /><span>ALVOR</span></div>
+      {auth.enabled && auth.participantName !== null && (
+        <div className="alpha-user-chip">
+          <span>{auth.participantId}</span>
+          <strong>{auth.participantName}</strong>
+        </div>
+      )}
       {item('/painel', 'grid_view', 'Painel')}
       {item('/semaforo', 'traffic', 'Semaforo', alerts)}
       {item('/copilot', 'forum', 'Copilot')}
       {item('/enviar', 'upload_file', 'Enviar arquivos')}
+      {item('/observacoes', 'list_alt', 'Relatos')}
+      {auth.organizer && item('/alpha', 'monitoring', 'Alpha')}
+      {auth.enabled && (
+        <button className="dre-rail-item rail-logout" type="button" onClick={() => void auth.signOut()}>
+          <span className="material-symbols-rounded" aria-hidden="true">logout</span>
+          Sair
+        </button>
+      )}
     </nav>
+  );
+}
+
+function ProductShell(): JSX.Element {
+  const auth = useAuth();
+  if (auth.enabled && auth.loading) return <div className="dre-empty">Carregando acesso...</div>;
+  if (auth.enabled && auth.session === null) return <LoginPage />;
+
+  return (
+    <DreProvider>
+      <div className="dre-shell">
+        <Rail />
+        <main className="dre-main">
+          <Routes>
+            <Route path="/" element={<RootIndex />} />
+            <Route path="/enviar" element={<UploadPage />} />
+            <Route path="/painel" element={<PainelPage />} />
+            <Route path="/semaforo" element={<SemaforoPage />} />
+            <Route path="/copilot" element={<CopilotPage />} />
+            <Route path="/observacoes" element={<FeedbackPage />} />
+            <Route path="/alpha" element={<AlphaReportPage />} />
+            {/* apelidos de rota mantidos por compatibilidade */}
+            <Route path="/chat" element={<Navigate to="/copilot" replace />} />
+            <Route path="/dashboard" element={<Navigate to="/painel" replace />} />
+            <Route path="/sources" element={<Navigate to="/enviar" replace />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </main>
+        <AlphaFeedbackPanel />
+        <TickerBar />
+      </div>
+    </DreProvider>
   );
 }
 
 export function App(): JSX.Element {
   return (
     <BrowserRouter>
-      <DreProvider>
-        <div className="dre-shell">
-          <Rail />
-          <main className="dre-main">
-            <Routes>
-              <Route path="/" element={<RootIndex />} />
-              <Route path="/enviar" element={<UploadPage />} />
-              <Route path="/painel" element={<PainelPage />} />
-              <Route path="/semaforo" element={<SemaforoPage />} />
-              <Route path="/copilot" element={<CopilotPage />} />
-              {/* apelidos de rota mantidos por compatibilidade */}
-              <Route path="/chat" element={<Navigate to="/copilot" replace />} />
-              <Route path="/dashboard" element={<Navigate to="/painel" replace />} />
-              <Route path="/sources" element={<Navigate to="/enviar" replace />} />
-              <Route path="*" element={<Navigate to="/" replace />} />
-            </Routes>
-          </main>
-          <TickerBar />
-        </div>
-      </DreProvider>
+      <AuthProvider>
+        <ProductShell />
+      </AuthProvider>
     </BrowserRouter>
   );
 }

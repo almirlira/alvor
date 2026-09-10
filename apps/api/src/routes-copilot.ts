@@ -10,7 +10,7 @@ import type { FastifyInstance } from 'fastify';
 import { buildContext, monthLabel, toUiSources, type SourceDetail } from './context.js';
 import { generateGrounded, normalise, retrieveForQuestion } from './engine.js';
 import { getCurrentImport } from './routes-dre.js';
-import { readJson, writeJson } from './store.js';
+import { readState, writeState } from './state.js';
 import type { LlmSetup } from './llm.js';
 
 interface ChatMessage {
@@ -70,15 +70,15 @@ function fallbackText(details: ReadonlyMap<string, SourceDetail>, ym: string): s
 }
 
 export async function copilotRoutes(app: FastifyInstance, llm: LlmSetup): Promise<void> {
-  app.get('/copilot/history', async () => readJson<ChatMessage[]>('chat', []));
+  app.get('/copilot/history', async (req) => readState<ChatMessage[]>(req.auth, 'chat', []));
 
   app.post<{ Body: { question?: string } }>('/copilot/ask', async (req, reply) => {
     const question = (req.body?.question ?? '').trim();
     if (question.length === 0) return reply.code(400).send({ message: 'Pergunta vazia.' });
-    const data = getCurrentImport();
+    const data = await getCurrentImport(req.auth);
     if (data === null) return reply.code(404).send({ message: 'Envie uma DRE primeiro.' });
 
-    const history = readJson<ChatMessage[]>('chat', []);
+    const history = await readState<ChatMessage[]>(req.auth, 'chat', []);
     const available = data.statement.months;
     const last = available[available.length - 1]!;
 
@@ -112,7 +112,7 @@ export async function copilotRoutes(app: FastifyInstance, llm: LlmSetup): Promis
       : { id: randomUUID(), role: 'assistant', content: fallbackText(built.details, focusMonth), sources: toUiSources(built.details), meta: { months, model: grounded.model, latencyMs: grounded.latencyMs, rejection: grounded.rejectionReason, fallback: 'no_data' } };
 
     const userMsg: ChatMessage = { id: randomUUID(), role: 'user', content: question, meta: { months } };
-    writeJson('chat', [...history, userMsg, message].slice(-40));
+    await writeState(req.auth, 'chat', [...history, userMsg, message].slice(-40));
     return reply.send({ message });
   });
 }

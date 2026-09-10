@@ -10,7 +10,7 @@ import type { FastifyInstance } from 'fastify';
 import { buildContext, monthLabel, toUiSources } from './context.js';
 import { deterministicInsightText, generateGrounded, knowledgeBlocks, runRules } from './engine.js';
 import { getCurrentImport } from './routes-dre.js';
-import { readJson, writeJson } from './store.js';
+import { readState, writeState } from './state.js';
 import type { LlmSetup } from './llm.js';
 
 export interface InsightResult {
@@ -29,14 +29,14 @@ export interface InsightResult {
 }
 
 export async function insightsRoutes(app: FastifyInstance, llm: LlmSetup): Promise<void> {
-  app.get('/insights/current', async (_req, reply) => {
-    const cur = readJson<InsightResult | null>('insights', null);
+  app.get('/insights/current', async (req, reply) => {
+    const cur = await readState<InsightResult | null>(req.auth, 'insights', null);
     if (cur === null) return reply.code(404).send({ message: 'Nenhum insight gerado ainda.' });
     return reply.send(cur);
   });
 
   app.post<{ Body: { month?: string } }>('/insights/generate', async (req, reply) => {
-    const data = getCurrentImport();
+    const data = await getCurrentImport(req.auth);
     if (data === null) return reply.code(404).send({ message: 'Envie uma DRE primeiro.' });
     const months = data.statement.months;
     const month = req.body?.month && months.includes(req.body.month) ? req.body.month : months[months.length - 1]!;
@@ -100,7 +100,7 @@ export async function insightsRoutes(app: FastifyInstance, llm: LlmSetup): Promi
       latencyMs: grounded.latencyMs,
       rejectionReason: grounded.rejectionReason,
     };
-    writeJson('insights', result);
+    await writeState(req.auth, 'insights', result);
     return reply.send(result);
   });
 }

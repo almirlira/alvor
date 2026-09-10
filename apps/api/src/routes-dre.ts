@@ -10,20 +10,21 @@ import type { FastifyInstance } from 'fastify';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { readDreFromBuffer, type DreImport } from '@dre/ingest';
-import { readJson, writeJson, SAMPLES_DIR } from './store.js';
+import { SAMPLES_DIR } from './store.js';
+import { readState, writeState, type StateScope } from './state.js';
 
 export const SAMPLE_FILE = 'dre_exemplo_12m.xlsx';
 
-export function getCurrentImport(): DreImport | null {
-  return readJson<DreImport | null>('statement', null);
+export async function getCurrentImport(scope: StateScope): Promise<DreImport | null> {
+  return readState<DreImport | null>(scope, 'statement', null);
 }
 
-export async function importBuffer(buffer: Buffer, fileName: string): Promise<DreImport> {
+export async function importBuffer(scope: StateScope, buffer: Buffer, fileName: string): Promise<DreImport> {
   const result = await readDreFromBuffer(buffer, { fileName });
-  writeJson('statement', result);
+  await writeState(scope, 'statement', result);
   // Insights e chat anteriores pertencem a outra DRE — limpa.
-  writeJson('insights', null);
-  writeJson('chat', []);
+  await writeState(scope, 'insights', null);
+  await writeState(scope, 'chat', []);
   return result;
 }
 
@@ -36,7 +37,7 @@ export async function dreRoutes(app: FastifyInstance): Promise<void> {
     const buffer = await file.toBuffer();
     if (buffer.length === 0) return reply.code(400).send({ message: 'Arquivo vazio.' });
     try {
-      const result = await importBuffer(buffer, file.filename);
+      const result = await importBuffer(req.auth, buffer, file.filename);
       return reply.send(result);
     } catch (err) {
       req.log.warn({ err }, 'falha ao ler DRE');
@@ -45,7 +46,7 @@ export async function dreRoutes(app: FastifyInstance): Promise<void> {
   });
 
   app.get('/dre/current', async (_req, reply) => {
-    const current = getCurrentImport();
+    const current = await getCurrentImport(_req.auth);
     if (current === null) return reply.code(404).send({ message: 'Nenhuma DRE enviada ainda.' });
     return reply.send(current);
   });
@@ -53,7 +54,7 @@ export async function dreRoutes(app: FastifyInstance): Promise<void> {
   app.post('/dre/load-sample', async (req, reply) => {
     try {
       const buffer = readFileSync(join(SAMPLES_DIR, SAMPLE_FILE));
-      const result = await importBuffer(buffer, SAMPLE_FILE);
+      const result = await importBuffer(req.auth, buffer, SAMPLE_FILE);
       return reply.send(result);
     } catch (err) {
       req.log.warn({ err }, 'falha ao carregar exemplo');

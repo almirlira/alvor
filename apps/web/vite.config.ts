@@ -7,6 +7,7 @@ export default defineConfig({
   server: {
     port: 5180,
     strictPort: false,
+    allowedHosts: ['.trycloudflare.com'],
     proxy: {
       '/api': { target: 'http://localhost:3800', changeOrigin: true, rewrite: (p) => p.replace(/^\/api/, '') },
     },

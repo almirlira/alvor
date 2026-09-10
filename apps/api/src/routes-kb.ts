@@ -12,6 +12,7 @@ import type { MonthKpis } from '@dre/ingest';
 import { kb } from './engine.js';
 import { monthLabel } from './context.js';
 import { getCurrentImport } from './routes-dre.js';
+import type { StateScope } from './state.js';
 
 const FIELD_BY_KPI: Readonly<Record<string, { key: keyof MonthKpis; unit: string }>> = {
   kpi_receita_liquida: { key: 'receita_liquida', unit: 'BRL' },
@@ -32,10 +33,10 @@ function fmt(v: number, unit: string): string {
 }
 
 export async function kbRoutes(app: FastifyInstance): Promise<void> {
-  const handler = async (metricKey: string): Promise<Record<string, unknown> | null> => {
+  const handler = async (metricKey: string, scope: StateScope): Promise<Record<string, unknown> | null> => {
     const item = kb().getKpiById(metricKey);
     if (item === undefined) return null;
-    const data = getCurrentImport();
+    const data = await getCurrentImport(scope);
     const field = FIELD_BY_KPI[metricKey];
     let current_value: Record<string, unknown> | null = null;
     if (data !== null && field !== undefined) {
@@ -62,7 +63,7 @@ export async function kbRoutes(app: FastifyInstance): Promise<void> {
 
   for (const path of ['/marketing-kb/kpi/:metric_key', '/kb/kpi/:metric_key']) {
     app.get<{ Params: { metric_key: string } }>(path, async (req, reply) => {
-      const out = await handler(req.params.metric_key);
+      const out = await handler(req.params.metric_key, req.auth);
       if (out === null) return reply.code(404).send({ message: 'KPI sem definicao na base.' });
       return reply.send(out);
     });

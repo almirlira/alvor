@@ -9,7 +9,7 @@ import { getCurrentImport } from './routes-dre.js';
 
 export async function semaforoRoutes(app: FastifyInstance): Promise<void> {
   app.get<{ Querystring: { month?: string } }>('/semaforo', async (req, reply) => {
-    const data = getCurrentImport();
+    const data = await getCurrentImport(req.auth);
     if (data === null) return reply.code(404).send({ message: 'Envie uma DRE primeiro.' });
     return reply.send(buildSemaforo(data, req.query.month));
   });

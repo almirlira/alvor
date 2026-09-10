@@ -3,6 +3,7 @@ dist/
 dist-types/
 .env
 data/*.json
+private/
 samples/*
 !samples/.gitkeep
 !samples/dre_exemplo_12m.xlsx
