@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { dataPorExtenso, fraseDoDia, OWNER_NAME, saudacao } from '../lib/owner';
+import { dataPorExtenso, fraseDoDia, saudacao } from '../lib/owner';
 import { monthLong } from '../lib/format';
 import type { SemaforoLevel } from './SemaforoCard';
 
@@ -11,13 +11,14 @@ interface Props {
   readonly resultadoLiquido: number;
   readonly counts: Readonly<Record<SemaforoLevel, number>> | null;
   readonly monthShortFn: (ym: string) => string;
+  readonly displayName: string;
 }
 
 /**
  * Faixa de boas-vindas do painel: saudacao pelo horario, data por extenso,
  * uma linha honesta sobre o que espera o dono hoje e a frase do dia.
  */
-export function WelcomeBand({ month, months, onMonthChange, fileName, resultadoLiquido, counts, monthShortFn }: Props): JSX.Element {
+export function WelcomeBand({ month, months, onMonthChange, fileName, resultadoLiquido, counts, monthShortFn, displayName }: Props): JSX.Element {
   const navigate = useNavigate();
   const vermelho = resultadoLiquido < 0;
   const pendentes = counts === null ? 0 : counts.vermelho + counts.amarelo;
@@ -39,7 +40,7 @@ export function WelcomeBand({ month, months, onMonthChange, fileName, resultadoL
     <section className="wb" aria-label="Boas-vindas">
       <div className="wb-main">
         <div className="wb-date">{dataPorExtenso()}</div>
-        <h1 className="wb-greet">{saudacao()}, {OWNER_NAME}.</h1>
+        <h1 className="wb-greet">{saudacao()}, {displayName}.</h1>
         <p className="wb-resumo">{resumo()}</p>
         <p className="wb-frase">“{fraseDoDia(vermelho)}”</p>
       </div>

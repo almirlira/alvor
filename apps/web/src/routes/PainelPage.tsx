@@ -8,11 +8,13 @@ import { SemaforoCard } from '../components/SemaforoCard';
 import { WelcomeBand } from '../components/WelcomeBand';
 import type { SemaforoResult } from './SemaforoPage';
 import { apiClient } from '../lib/api-client';
+import { useAuth } from '../lib/auth-context';
 import { useDre } from '../lib/dre-context';
 import { formatBRL, formatPct, monthShort } from '../lib/format';
 
 export function PainelPage(): JSX.Element {
   const { data, loading } = useDre();
+  const auth = useAuth();
   const navigate = useNavigate();
   const months = data?.statement.months ?? [];
   const [selected, setSelected] = useState<string | null>(null);
@@ -61,6 +63,7 @@ export function PainelPage(): JSX.Element {
         resultadoLiquido={k.resultado_liquido}
         counts={sem?.counts ?? null}
         monthShortFn={monthShort}
+        displayName={auth.participantName ?? 'fundador'}
       />
 
       {/* HERO BENTO */}
