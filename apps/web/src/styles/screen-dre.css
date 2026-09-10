@@ -31,6 +31,7 @@
 }
 .dre-rail-item {
   width: 72px;
+  border: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -42,11 +43,28 @@
   font-size: 11.5px;
   font-weight: 500;
   text-align: center;
+  line-height: 1.15;
+  font-family: inherit;
+  cursor: pointer;
+  background: transparent;
 }
-.dre-rail-item .material-symbols-rounded { font-size: 24px; }
+.dre-rail-icon {
+  width: 24px;
+  height: 24px;
+  flex: 0 0 auto;
+  display: block;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
 .dre-rail-item:hover { background: var(--md-surface-container-high); color: var(--md-on-surface); }
 .dre-rail-item.active { background: var(--md-primary); color: var(--md-on-primary); }
 .dre-rail-item:focus-visible { outline: 2px solid var(--md-secondary); outline-offset: 2px; }
+.rail-logout {
+  margin-top: auto;
+}
 
 .dre-main { padding: 28px 32px 64px; max-width: 1240px; width: 100%; min-width: 0; }
 .dre-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 20px; }
@@ -118,6 +136,82 @@
 @media (max-width: 980px) { .dre-copilot { grid-template-columns: 1fr; } }
 .dre-insight { white-space: pre-wrap; line-height: 1.6; }
 .dre-source-panel { position: sticky; top: 20px; }
+
+@media (max-width: 760px) {
+  .dre-shell {
+    display: block;
+    min-height: 100vh;
+  }
+
+  .dre-rail {
+    position: fixed;
+    top: auto;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 70;
+    width: auto;
+    height: 76px;
+    flex-direction: row;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 6px;
+    padding: 8px 10px calc(8px + env(safe-area-inset-bottom));
+    overflow-x: auto;
+    overflow-y: hidden;
+    border-right: 0;
+    border-top: 1px solid var(--md-outline-variant);
+    box-shadow: 0 -18px 50px rgba(0, 0, 0, .36);
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .dre-rail-logo {
+    display: none;
+  }
+
+  .alpha-user-chip {
+    flex: 0 0 82px;
+    margin: 0;
+    align-self: stretch;
+    place-content: center;
+  }
+
+  .dre-rail-item {
+    flex: 0 0 66px;
+    width: 66px;
+    min-height: 58px;
+    justify-content: center;
+    padding: 6px 4px;
+    border-radius: 14px;
+    font-size: 10.5px;
+  }
+
+  .dre-rail-icon {
+    width: 21px;
+    height: 21px;
+  }
+
+  .dre-rail-count {
+    position: absolute;
+    top: 4px;
+    right: 8px;
+    margin: 0;
+  }
+
+  .rail-logout {
+    margin-top: 0;
+  }
+
+  .dre-main {
+    width: 100%;
+    max-width: none;
+    padding: 18px 14px 172px;
+  }
+
+  .dre-grid-2 {
+    grid-template-columns: 1fr;
+  }
+}
 .dre-source-panel dl { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 6px 12px; font-size: 14px; }
 .dre-source-panel dt { color: var(--md-on-surface-variant); }
 .dre-source-panel dd { margin: 0; font-weight: 600; }

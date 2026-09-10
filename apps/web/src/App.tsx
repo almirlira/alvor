@@ -33,6 +33,74 @@ function AlvorMark(): JSX.Element {
   );
 }
 
+type RailIconName = 'grid' | 'traffic' | 'forum' | 'upload' | 'list' | 'monitoring' | 'logout';
+
+function RailIcon({ name }: { readonly name: RailIconName }): JSX.Element {
+  const common = { vectorEffect: 'non-scaling-stroke' as const };
+  const paths: Record<RailIconName, JSX.Element> = {
+    grid: (
+      <>
+        <rect x="4" y="4" width="7" height="7" rx="1.5" {...common} />
+        <rect x="13" y="4" width="7" height="7" rx="1.5" {...common} />
+        <rect x="4" y="13" width="7" height="7" rx="1.5" {...common} />
+        <rect x="13" y="13" width="7" height="7" rx="1.5" {...common} />
+      </>
+    ),
+    traffic: (
+      <>
+        <rect x="8" y="3" width="8" height="18" rx="4" {...common} />
+        <circle cx="12" cy="8" r="1.2" fill="currentColor" />
+        <circle cx="12" cy="12" r="1.2" fill="currentColor" />
+        <circle cx="12" cy="16" r="1.2" fill="currentColor" />
+      </>
+    ),
+    forum: (
+      <>
+        <path d="M5 6.5A2.5 2.5 0 0 1 7.5 4h6A2.5 2.5 0 0 1 16 6.5V10a2.5 2.5 0 0 1-2.5 2.5H10L6.5 15v-2.5A2.5 2.5 0 0 1 5 10V6.5Z" {...common} />
+        <path d="M13 15h2.5l2 2v-2A2.5 2.5 0 0 0 20 12.5V10a2.5 2.5 0 0 0-2-2.45" {...common} />
+      </>
+    ),
+    upload: (
+      <>
+        <path d="M12 15V4" {...common} />
+        <path d="m7.5 8.5 4.5-4.5 4.5 4.5" {...common} />
+        <path d="M5 16.5v1A2.5 2.5 0 0 0 7.5 20h9a2.5 2.5 0 0 0 2.5-2.5v-1" {...common} />
+      </>
+    ),
+    list: (
+      <>
+        <path d="M8 6h12" {...common} />
+        <path d="M8 12h12" {...common} />
+        <path d="M8 18h12" {...common} />
+        <circle cx="4.5" cy="6" r="1" fill="currentColor" />
+        <circle cx="4.5" cy="12" r="1" fill="currentColor" />
+        <circle cx="4.5" cy="18" r="1" fill="currentColor" />
+      </>
+    ),
+    monitoring: (
+      <>
+        <path d="M4 19h16" {...common} />
+        <path d="M7 16v-5" {...common} />
+        <path d="M12 16V6" {...common} />
+        <path d="M17 16v-8" {...common} />
+      </>
+    ),
+    logout: (
+      <>
+        <path d="M10 6H7.5A2.5 2.5 0 0 0 5 8.5v7A2.5 2.5 0 0 0 7.5 18H10" {...common} />
+        <path d="M13 8l4 4-4 4" {...common} />
+        <path d="M17 12H9" {...common} />
+      </>
+    ),
+  };
+
+  return (
+    <svg className="dre-rail-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      {paths[name]}
+    </svg>
+  );
+}
+
 function Rail(): JSX.Element {
   const { data } = useDre();
   const auth = useAuth();
@@ -49,9 +117,9 @@ function Rail(): JSX.Element {
     })();
   }, [data]);
 
-  const item = (to: string, icon: string, label: string, badge?: number | null): JSX.Element => (
+  const item = (to: string, icon: RailIconName, label: string, badge?: number | null): JSX.Element => (
     <NavLink to={to} className={({ isActive }) => `dre-rail-item${isActive ? ' active' : ''}`}>
-      <span className="material-symbols-rounded" aria-hidden="true">{icon}</span>
+      <RailIcon name={icon} />
       {label}
       {badge !== undefined && badge !== null && badge > 0 && <span className="dre-rail-count" aria-label={`${badge} itens que pedem validacao`}>{badge}</span>}
     </NavLink>
@@ -65,15 +133,15 @@ function Rail(): JSX.Element {
           <strong>{auth.participantName}</strong>
         </div>
       )}
-      {item('/painel', 'grid_view', 'Painel')}
+      {item('/painel', 'grid', 'Painel')}
       {item('/semaforo', 'traffic', 'Semaforo', alerts)}
       {item('/copilot', 'forum', 'Copilot')}
-      {item('/enviar', 'upload_file', 'Enviar arquivos')}
-      {item('/relatos', 'list_alt', 'Relatos')}
+      {item('/enviar', 'upload', 'Enviar arquivos')}
+      {item('/relatos', 'list', 'Relatos')}
       {auth.organizer && item('/gestao', 'monitoring', 'Gestão')}
       {auth.enabled && (
         <button className="dre-rail-item rail-logout" type="button" onClick={() => void auth.signOut()}>
-          <span className="material-symbols-rounded" aria-hidden="true">logout</span>
+          <RailIcon name="logout" />
           Sair
         </button>
       )}

@@ -51,6 +51,37 @@ function hasDraft(draft: Draft): boolean {
   return Boolean(draft.comment.trim() || draft.ease || draft.outcome || Object.keys(draft.details.ratings ?? {}).length > 0);
 }
 
+function FeedbackIcon({ kind }: { readonly kind: 'review' | 'close' | 'check' }): JSX.Element {
+  const common = { vectorEffect: 'non-scaling-stroke' as const };
+  const paths = {
+    review: (
+      <>
+        <path d="M5 5.5A2.5 2.5 0 0 1 7.5 3h9A2.5 2.5 0 0 1 19 5.5v8A2.5 2.5 0 0 1 16.5 16H11l-4 3v-3.1A2.5 2.5 0 0 1 5 13.5v-8Z" {...common} />
+        <path d="M9 8h6" {...common} />
+        <path d="M9 11h4" {...common} />
+      </>
+    ),
+    close: (
+      <>
+        <path d="M7 7l10 10" {...common} />
+        <path d="M17 7 7 17" {...common} />
+      </>
+    ),
+    check: (
+      <>
+        <circle cx="12" cy="12" r="8" {...common} />
+        <path d="m8.5 12.5 2.2 2.2 4.8-5.2" {...common} />
+      </>
+    ),
+  };
+
+  return (
+    <svg className="alpha-feedback-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      {paths[kind]}
+    </svg>
+  );
+}
+
 export function AlphaFeedbackPanel(): JSX.Element {
   const location = useLocation();
   const { data } = useDre();
@@ -144,7 +175,7 @@ export function AlphaFeedbackPanel(): JSX.Element {
       <div className="alpha-feedback-bar" role="region" aria-label="Coleta de relatos da alpha">
         <span>Alpha fundadores · {completed}/{alphaTasks.length} tarefas avaliadas</span>
         <button ref={trigger} className="dre-btn secondary" type="button" onClick={() => openPanel()} aria-expanded={open} aria-controls="alpha-feedback-panel">
-          <span className="material-symbols-rounded" aria-hidden="true">rate_review</span>
+          <FeedbackIcon kind="review" />
           {draftExists && !sent ? 'Retomar relato' : 'Enviar relato'}
         </button>
       </div>
@@ -156,13 +187,13 @@ export function AlphaFeedbackPanel(): JSX.Element {
             <h2 id="alpha-feedback-title" ref={panelTitle} tabIndex={-1}>{sent ? 'Relato recebido' : 'Como foi a experiencia?'}</h2>
           </div>
           <button className="alpha-icon-button" type="button" aria-label="Recolher relato e continuar navegando" onClick={close}>
-            <span className="material-symbols-rounded" aria-hidden="true">close</span>
+            <FeedbackIcon kind="close" />
           </button>
         </header>
 
         {sent ? (
           <div className="alpha-thanks">
-            <span className="material-symbols-rounded" aria-hidden="true">check_circle</span>
+            <FeedbackIcon kind="check" />
             <p>{selectedTask ? `${taskStatusLabels[draft.outcome as AlphaTaskStatus]}: ${selectedTask.title}. ` : ''}Seu relato foi recebido.</p>
             <button className="dre-btn" type="button" onClick={() => { setDraft(emptyDraft(currentArea, currentTaskId, data !== null, location.pathname)); setSent(false); }}>
               Novo relato
@@ -252,4 +283,3 @@ export function AlphaFeedbackPanel(): JSX.Element {
     </>
   );
 }
-

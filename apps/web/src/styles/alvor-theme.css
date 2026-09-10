@@ -432,6 +432,16 @@ body { background: var(--alvor-canvas); color: var(--alvor-text); font-family: v
   min-height: 36px;
   padding: 8px 12px;
 }
+.alpha-feedback-icon {
+  width: 20px;
+  height: 20px;
+  flex: 0 0 auto;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
 .alpha-feedback-panel {
   position: fixed;
   top: 22px;
@@ -582,9 +592,10 @@ body { background: var(--alvor-canvas); color: var(--alvor-text); font-family: v
   display: grid;
   gap: 12px;
 }
-.alpha-thanks > .material-symbols-rounded {
+.alpha-thanks > .alpha-feedback-icon {
   color: var(--sem-verde);
-  font-size: 34px;
+  width: 34px;
+  height: 34px;
 }
 .alpha-storage-error {
   position: fixed;
@@ -682,13 +693,30 @@ body { background: var(--alvor-canvas); color: var(--alvor-text); font-family: v
   }
 }
 @media (max-width: 720px) {
+  .tk-bar {
+    display: none;
+  }
+
+  .dre-main {
+    padding-bottom: 172px;
+  }
+
+  .dre-rail {
+    height: calc(76px + env(safe-area-inset-bottom));
+  }
+
   .alpha-feedback-bar {
     left: 10px;
     right: 10px;
-    bottom: 78px;
+    bottom: calc(86px + env(safe-area-inset-bottom));
     justify-content: space-between;
   }
   .alpha-feedback-bar span:first-child {
-    max-width: 44vw;
+    max-width: 46vw;
+    line-height: 1.45;
+  }
+
+  .alpha-feedback-panel {
+    bottom: calc(90px + env(safe-area-inset-bottom));
   }
 }
